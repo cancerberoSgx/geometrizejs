@@ -1,0 +1,68 @@
+{
+  "name": "geometrizejs-cli",
+  "version": "0.0.1",
+  "description": "Command line interface for geometrizejs: JavaScript types & API for https://github.com/Tw1ddle/geometrize-haxe",
+  "main": "dist/src/index.js",
+  "types": "dist/src/index.d.ts",
+  "bin": {
+    "geometrize": "bin/geometrizejs-cli.js"
+  },
+  "scripts": {
+    "test": "ava",
+    "test-browser": "exit 0; npx ava test-browser/*Test.ts",
+    "test-js": " npx ava ./dist/test/*Test.js",
+    "clean": "rm -rf dist tmp",
+    "build": "npm run clean && tsc",
+    "prepare": "npm run build",
+    "format": "npx ts-refactor format \"src/**/*.ts*\" \"test/**/*.ts*\" ./formatCodeSettings.json --tsConfigPath ./tsconfig.json --dontAsk",
+    "organizeImports": "npx ts-refactor organizeImports \"src/**/*.ts*\" \"test/**/*.ts*\"  ./formatCodeSettings.json --tsConfigPath ./tsconfig.json  --dontAsk ",
+    "lint": "npm run organizeImports && npm run format",
+    "all": "npm run clean && npm run lint && npm run build && npm run test && npm run test-js && npm run test-browser && npm run clean",
+    "all-publish": "npm run all && git commit -a -m \"version patch\" && npm version patch && npm publish"
+  },
+  "devDependencies": {
+    "@types/glob": "^7.1.1",
+    "@types/node": "^12.0.8",
+    "ava": "^2.1.0",
+    "ts-refactor": "0.0.6",
+    "ts-node": "^8.3.0",
+    "typescript": "^3.5.2"
+  },
+  "homepage": "https://www.npmjs.com/package/geometrizejs-cli",
+  "dependencies": {
+    "geometrizejs": "0.0.3",
+    "glob": "^7.1.4",
+    "minimist": "^1.2.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cancerberoSgx/univac.git"
+  },
+  "keywords": [
+    "image",
+    "tracer",
+    "tracing",
+    "vector",
+    "raster",
+    "vectorize",
+    "vectorizing",
+    "convert",
+    "conversion",
+    "converting",
+    "tracing",
+    "bitmap",
+    "svg",
+    "bmp",
+    "png",
+    "cli",
+    "command line",
+    "jpg",
+    "jpeg",
+    "gif"
+  ],
+  "author": "Sebastián Gurin",
+  "license": "Unlicense",
+  "bugs": {
+    "url": "https://github.com/cancerberosgx/univac/issues"
+  }
+}
