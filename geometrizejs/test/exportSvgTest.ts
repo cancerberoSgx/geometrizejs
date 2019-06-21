@@ -4,7 +4,7 @@ import { Bitmap, ImageRunner, ShapeTypes, SvgExporter } from '../src'
 
 test('should export SVG', async t => {
   const image = await Jimp.read('test/assets/logo.png')
-  const bitmap = Bitmap.createFromRawBytes(image.bitmap.width, image.bitmap.height, image.bitmap.data)
+  const bitmap = Bitmap.createFromByteArray(image.bitmap.width, image.bitmap.height, image.bitmap.data)
   const runner = new ImageRunner(bitmap)
   const options = {
     shapeTypes: [ShapeTypes.CIRCLE],

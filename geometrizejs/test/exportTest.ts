@@ -13,7 +13,7 @@ test('should export enum ShapeTypes', async t => {
 
 test('should export class Bitmap', async t => {
   t.deepEqual(typeof Bitmap.prototype.constructor, 'function')
-  t.deepEqual(typeof Bitmap.createFromRawBytes, 'function')
+  t.deepEqual(typeof Bitmap.createFromByteArray, 'function')
 })
 
 test('should export class SvgExporter', async t => {

@@ -26,7 +26,7 @@ import { Bitmap, ImageRunner, ShapeTypes, SvgExporter } from 'geometrizejs'
 
   // load png/jpeg/gif,bmp/tiff image from url, file path or Buffer using jimp:
   const image = await Jimp.read('test/assets/logo.png')
-  const bitmap = Bitmap.createFromRawBytes(image.bitmap.width, image.bitmap.height, image.bitmap.data)
+  const bitmap = Bitmap.createFromByteArray(image.bitmap.width, image.bitmap.height, image.bitmap.data)
   const runner = new ImageRunner(bitmap)
   const options = {
     shapeTypes: [ShapeTypes.CIRCLE, ShapeTypes.TRIANGLE],

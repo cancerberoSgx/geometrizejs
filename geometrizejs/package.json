@@ -43,9 +43,9 @@
   "homepage": "https://www.npmjs.com/package/geometrizejs",
   "repository": {
     "type": "git",
-    "url": "https://github.com/cancerberoSgx/univac.git"
+    "url": "https://github.com/cancerberoSgx/geometrizejs.git"
   },
   "bugs": {
-    "url": "https://github.com/cancerberoSgx/univac/tree/master/geometrizejs"
+    "url": "https://github.com/cancerberoSgx/geometrizejs"
   }
 }
