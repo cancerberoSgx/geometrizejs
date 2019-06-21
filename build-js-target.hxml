@@ -1,13 +1,6 @@
-# -cp . 
-
 -lib sure 
 
 -cp geometrize-haxe
-
-# Enable full dead code elimination
-# -dce full
-
-# --each 
 
 geometrize.bitmap.Bitmap
 geometrize.bitmap.Rgba
