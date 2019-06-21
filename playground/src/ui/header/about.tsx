@@ -6,7 +6,7 @@ export class About extends AbstractComponent {
     return (
       <>
         <h3>About</h3>
-        <p>Welcome to Univac Playground, a place to generate and visualize common programming languages Abstract Syntax Trees.</p>
+        <p>Welcome to geometrizejs Playground, a place experiment with [geometrize](https://www.geometrize.co.uk/)ad </p>
         <p>TODO</p>
       </>
     )

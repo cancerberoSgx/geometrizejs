@@ -1,4 +1,4 @@
-import { Bitmap, ImageRunner, ShapeTypes, SvgExporter } from 'geometrizer-js'
+import { Bitmap, ImageRunner, ShapeTypes, SvgExporter } from 'geometrizejs'
 import Jimp from 'jimp'
 import { enumNoValueKeys, sleep } from 'misc-utils-of-mine-generic'
 import * as React from 'react'
@@ -7,6 +7,15 @@ import { blobToBuffer, BufferClass } from '../../app/buffer'
 import { getStore } from '../../app/store'
 import { AbstractComponent } from '../component'
 
+enum ShapeTypesEnum {
+  Circle = ShapeTypes.CIRCLE,
+  Rectangle = ShapeTypes.RECTANGLE,
+  Triangle = ShapeTypes.TRIANGLE,
+  Ellipse = ShapeTypes.ELLIPSE,
+  Line = ShapeTypes.LINE,
+  ['Rotated Ellipse'] = ShapeTypes.ROTATED_ELLIPSE,
+  ['Rotated Rectangle'] = ShapeTypes.ROTATED_RECTANGLE,
+}
 export class Options extends AbstractComponent {
   svg: string = ''
 
@@ -44,7 +53,7 @@ export class Options extends AbstractComponent {
         <label>Shapes: <br /><select multiple onChange={e => {
           this.setState({ shapeTypes: Array.from(e.currentTarget.selectedOptions).map(o => parseInt(o.value)) })
         }}>
-          {enumNoValueKeys(ShapeTypes).map((shape, i) => <option value={i} selected={this.state.shapeTypes.includes(i)}>{shape}</option>)}
+          {enumNoValueKeys(ShapeTypesEnum).map((shape, i) => <option value={i} selected={this.state.shapeTypes.includes(i)}>{shape}</option>)}
         </select></label><br />
         <Button onClick={async e => {
           this.setState({ working: true })
@@ -81,7 +90,7 @@ export class Options extends AbstractComponent {
 async function geometrize(onStep?: (svg: string) => void) {
   const state = getStore().getState()
   const image = await Jimp.read(state.input.content)
-  const bitmap = Bitmap.createFromRawBytes(image.bitmap.width, image.bitmap.height, image.bitmap.data)
+  const bitmap = Bitmap.createFromByteArray(image.bitmap.width, image.bitmap.height, image.bitmap.data)
   const runner = new ImageRunner(bitmap)
   const svgData = []
   for (let i = 0;i < state.iterations && getStore().getState().working;i++) {

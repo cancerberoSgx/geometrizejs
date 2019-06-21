@@ -1,13 +1,16 @@
 # geometrizejs
 
-[Repository](https://github.com/cancerberoSgx/univac/tree/master/geometrizejs).
+See the [playground](https://cancerberosgx.github.io/demos/geometrizejs-playground/) to understand what's this is all about.
 
- * [geometrize](https://www.geometrize.co.uk/) JavaScript API.
+
+ * [geometrize](https://www.geometrize.co.uk/) JavaScript API. Original idea is from [primitive](https://github.com/fogleman/primitive).
  * Generated directly from [official geometrize-haxe](https://github.com/Tw1ddle/geometrize-haxe) code.
  * For node.js and browsers.
- * TypeScript typings
+ * TypeScript typings.
  * Zero dependencies.
  * No implementation, just typings for generated JavaScript library.
+ * [Repository](https://github.com/cancerberoSgx/geometrizejs).
+ * [playground](https://cancerberosgx.github.io/demos/geometrizejs-playground/).
 
 ## Usage
 
@@ -58,7 +61,7 @@ import { Bitmap, ImageRunner, ShapeTypes, SvgExporter } from 'geometrizejs'
 
 TODO
 
-## Build gemoetrize.js
+## Build geometrize.js
 
 ```sh
 git clone --recurse-submodules https://github.com/cancerberoSgx/geometrizejs.git
@@ -66,4 +69,4 @@ cd geometrizejs
 sh generate-geometrize-js.sh
 ```
 
-That should replace `geometrizejs/src/geometrize.js`.
+That should re-generate `geometrizejs/src/geometrize.js`.
