@@ -4,7 +4,7 @@
 
  * [geometrize](https://www.geometrize.co.uk/) JavaScript API.
  * Generated directly from [official geometrize-haxe](https://github.com/Tw1ddle/geometrize-haxe) code.
- * for node.js and browsers.
+ * For node.js and browsers.
  * TypeScript typings
  * Zero dependencies.
  * No implementation, just typings for generated JavaScript library.
