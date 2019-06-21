@@ -61,12 +61,9 @@ TODO
 ## Build gemoetrize.js
 
 ```sh
-git clone https://github.com/Tw1ddle/geometrize-haxe.git
-cp this-folder/build/build-js-target.hxml geometrize-haxe
-cd geometrize-haxe
-haxe build-js-target.hxml
+git clone --recurse-submodules https://github.com/cancerberoSgx/geometrizejs.git
+cd geometrizejs
+sh generate-geometrize-js.sh
 ```
 
-That should generate `geometrize-haxe/build/geometrize.js` which should be copied to this project's `src` folder.
-
-Finally include [geometrize-haxe license](https://raw.githubusercontent.com/Tw1ddle/geometrize-haxe/master/LICENSE) in a `/*! */` comment at the beginning of the file.
+That should replace `geometrizejs/src/geometrize.js`.

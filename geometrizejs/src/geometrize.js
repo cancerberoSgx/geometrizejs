@@ -28,7 +28,6 @@ SOFTWARE.
 (function ($hx_exports, $global) { "use strict";
 $hx_exports["geometrize"] = $hx_exports["geometrize"] || {};
 $hx_exports["geometrize"]["shape"] = $hx_exports["geometrize"]["shape"] || {};
-$hx_exports["geometrize"]["shape"]["_ShapeType"] = $hx_exports["geometrize"]["shape"]["_ShapeType"] || {};
 ;$hx_exports["geometrize"]["runner"] = $hx_exports["geometrize"]["runner"] || {};
 ;$hx_exports["geometrize"]["exporter"] = $hx_exports["geometrize"]["exporter"] || {};
 ;$hx_exports["geometrize"]["bitmap"] = $hx_exports["geometrize"]["bitmap"] || {};
@@ -704,8 +703,7 @@ geometrize_bitmap_Bitmap.createFromByteArray = function(w,h,bytes) {
 		i1 += 4;
 		++x;
 	}
-	var bitmap1 = bitmap;
-	return bitmap1;
+	return bitmap;
 };
 geometrize_bitmap_Bitmap.prototype = {
 	getPixel: function(x,y) {
@@ -1875,6 +1873,8 @@ geometrize_shape_ShapeFactory.randomShapeOf = function(types,xBound,yBound) {
 	}
 	return geometrize_shape_ShapeFactory.create(types[Math.floor((upper + 1) * Math.random())],xBound,yBound);
 };
+var geometrize_shape_ShapeTypes = $hx_exports["geometrize"]["shape"]["ShapeTypes"] = function() { };
+geometrize_shape_ShapeTypes.__name__ = true;
 var geometrize_shape_Triangle = function(xBound,yBound) {
 	this.x1 = Std.random(xBound);
 	this.y1 = Std.random(yBound);
@@ -2347,6 +2347,13 @@ if(ArrayBuffer.prototype.slice == null) {
 }
 var Uint8Array = $global.Uint8Array || js_html_compat_Uint8Array._new;
 geometrize_exporter_SvgExporter.SVG_STYLE_HOOK = "::svg_style_hook::";
+geometrize_shape_ShapeTypes.RECTANGLE = 0;
+geometrize_shape_ShapeTypes.ROTATED_RECTANGLE = 1;
+geometrize_shape_ShapeTypes.TRIANGLE = 2;
+geometrize_shape_ShapeTypes.ELLIPSE = 3;
+geometrize_shape_ShapeTypes.ROTATED_ELLIPSE = 4;
+geometrize_shape_ShapeTypes.CIRCLE = 5;
+geometrize_shape_ShapeTypes.LINE = 6;
 js_Boot.__toStr = ({ }).toString;
 js_html_compat_Uint8Array.BYTES_PER_ELEMENT = 1;
 })(typeof exports != "undefined" ? exports : typeof window != "undefined" ? window : typeof self != "undefined" ? self : this, typeof window != "undefined" ? window : typeof global != "undefined" ? global : typeof self != "undefined" ? self : this);
