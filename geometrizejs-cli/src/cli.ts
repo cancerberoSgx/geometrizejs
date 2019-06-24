@@ -11,7 +11,7 @@ export async function traceImage(options: CliOptions) {
   preconditions(options)
   if (options.shapeTypes) {
     // user pass shape types as strings comma separated
-    const st: string[] = (options.shapeTypes+'').split(',').map(s=>s)
+    const st: string[] = (options.shapeTypes + '').split(',').map(s => s)
     options.shapeTypes = st.map(s => (ShapeTypes as any)[s.toUpperCase()])
   }
   options.debug && console.log(`CLI Options: ${JSON.stringify({ ...options, input: null })}`)
