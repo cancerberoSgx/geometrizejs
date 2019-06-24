@@ -1,4 +1,3 @@
-import { TODO } from './util'
 
 /**
  * Helper class for working with bitmap data.
@@ -78,5 +77,14 @@ export declare class Bitmap {
 
 }
 
-export type Bytes = TODO
-export type Rgba = TODO
+export interface Bytes {
+  /**
+   * Four-channel (rgba) image data as Uint8Array. This is an internal API and could change in the future. 
+   */
+  b: Uint8Array
+}
+
+/**
+ * Color representation in red, green, blue, alpha format. 
+ */
+export type Rgba = number

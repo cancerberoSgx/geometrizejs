@@ -1,6 +1,6 @@
 {
   "name": "geometrizejs-cli",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Command line interface for geometrizejs: JavaScript types & API for https://github.com/Tw1ddle/geometrize-haxe",
   "main": "dist/src/index.js",
   "types": "dist/src/index.d.ts",
