@@ -6,7 +6,7 @@ test.before('should build', async t => {
   t.notThrows(() => execSync('npm run build', { stdio: 'pipe' }))
 })
 
-test('should render png  triangle,rectangle', async t => {
+test('should render a png to svg triangle,rectangle', async t => {
   t.false(existsSync('tmp/1/panda.png.svg'))
   const r = execSync('node bin/geometrize.js --input test/assets/panda.png --noOptimize  --format svg --output tmp/1 --shapeTypes triangle,rectangle --iterations 100', { stdio: 'pipe' })
   const s = readFileSync('tmp/1/panda.png.svg').toString();
@@ -17,7 +17,7 @@ test('should render png  triangle,rectangle', async t => {
 })
 
 
-test('should render jpg ellipse,circle', async t => {
+test('should render a jpg tp svg ellipse,circle', async t => {
   t.false(existsSync('tmp/2/bluebells.jpg.svg'))
   const r = execSync('node bin/geometrize.js --input test/assets/bluebells.jpg --noOptimize --format svg --output tmp/2 --shapeTypes circle,ellipse --iterations 100', { stdio: 'pipe' })
   const s = readFileSync('tmp/2/bluebells.jpg.svg').toString();
@@ -26,7 +26,7 @@ test('should render jpg ellipse,circle', async t => {
   })
 })
 
-test('should optimize by default', async t => {
+test('should optimize svg by default', async t => {
   t.false(existsSync('tmp/3/bluebells.jpg.svg'))
   execSync('node bin/geometrize.js --input test/assets/bluebells.jpg  --format svg --output tmp/3 --shapeTypes rectangle --iterations 1', { stdio: 'pipe' })
   const s = readFileSync('tmp/3/bluebells.jpg.svg').toString();

@@ -40,7 +40,7 @@ bitmap2vector --input "foo/imgs/**/*.png" --output bar/imgs-svg
 
 
 ## TODO
-
+- [ ] users cannot use ImageRunner or Bitmap as types
 - [x] document src/options.ts
 - [x] options in readme
 - [x] tests

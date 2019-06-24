@@ -30,7 +30,7 @@
   },
   "homepage": "https://www.npmjs.com/package/geometrizejs-cli",
   "dependencies": {
-    "geometrizejs": "0.0.8",
+    "geometrizejs": "0.0.9",
     "glob": "^7.1.4",
     "jimp": "^0.6.4",
     "svgo": "github:cancerberoSgx/svgo#browser",
