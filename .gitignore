@@ -11,3 +11,4 @@ coverage
 tmp.?*
 .antlr
 /tmp*
+simplify-svg-path

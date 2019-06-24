@@ -6,7 +6,7 @@ export class About extends AbstractComponent {
     return (
       <>
         <h3>About</h3>
-        <p>Welcome to geometrizejs Playground, a place experiment with [geometrize](https://www.geometrize.co.uk/)ad </p>
+        <p>Welcome to geometrizejs Playground, a place experiment with [geometrize](https://www.geometrize.co.uk/). </p>
         <p>TODO</p>
       </>
     )

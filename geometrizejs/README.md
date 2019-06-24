@@ -70,3 +70,22 @@ sh generate-geometrize-js.sh
 ```
 
 That should re-generate `geometrizejs/src/geometrize.js`.
+
+## TODO / Roadmap
+
+- [ ] sourcemaps https://haxe.org/manual/debugging-source-map.html
+- [ ] browser tests
+- [ ] bitmap output tests
+- [ ] JSON output tests
+- [ ] performance tests. use different options and input image sizes and generate timings and output image diffs (as numbers - for example using imagemagick) - so we can better understand how options/image size/output quality relationships are. See https://github.com/Tw1ddle/geometrize-haxe-web/issues/3#issuecomment-504424092
+
+## Extras / ideas 
+
+The following are features not supported by haxe implementation. If implemented it will be in a separate project so this project keeps being zero-implementation:
+
+- [ ] high level API to export current models to svg, png/jpg, json (so users dont have to build bitmap and iterate manually)
+- [ ]
+- [ ] notify listeners between N iterations passing current models  (format agnostic) (so they can take interval screenshots)
+- [ ] Be able to change options while the iteration is still running
+- [ ] be able to change iterations value ( while is running)
+- [ ] Be able to pause an iteration and serialize its state (options and model, current iteration, iterations value) so later, in another process, we can load it and resume it (even increase iterations value)
