@@ -7,7 +7,7 @@ export interface GeometrizeOptions extends ImageRunnerOptions {
   /**
    * Output format. Default: 'svg'
    */
-  format?: 'svg'|'png'|'jpg'|'tiff'|'gif'|'bmp'
+  format?: 'svg' | 'png' | 'jpg' | 'tiff' | 'gif' | 'bmp'
 
   /**
    * Don't optimize SVG.

@@ -1,19 +1,18 @@
 
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs'
+import { ShapeTypes } from 'geometrizejs'
 import { sync as glob } from 'glob'
 import { basename, join } from 'path'
+import { geometrize } from './geometrize'
 import { CliOptions } from './types'
 import { serial } from './util'
-import { geometrize } from './geometrize';
-import { ShapeTypes } from 'geometrizejs';
 
 export async function traceImage(options: CliOptions) {
   preconditions(options)
-  if(options.shapeTypes){
+  if (options.shapeTypes) {
     // user pass shape types as strings comma separated
-    const st:string[] = (options.shapeTypes as any).split(',')
-    options.shapeTypes = st.map(s=>(ShapeTypes as any)[s.toUpperCase()])
-    console.log(options.shapeTypes);    
+    const st: string[] = (options.shapeTypes+'').split(',').map(s=>s)
+    options.shapeTypes = st.map(s => (ShapeTypes as any)[s.toUpperCase()])
   }
   options.debug && console.log(`CLI Options: ${JSON.stringify({ ...options, input: null })}`)
   const input = (typeof options.input === 'string' ? glob(options.input).filter(existsSync) : [])
@@ -31,7 +30,7 @@ export async function traceImage(options: CliOptions) {
     try {
       options.debug && console.log('Rendering ' + input.name)
       const { content, error } = await geometrize({ ...options, image: input.content })
-      if(content){
+      if (content) {
         if (options.output) {
           const outputFilePath = join(options.output, basename(input.name + '.' + (options.format || 'svg')))
           writeFileSync(outputFilePath, content)
@@ -40,7 +39,7 @@ export async function traceImage(options: CliOptions) {
           process.stdout.write(content.toString('binary'))
         }
       }
-      if(error) {
+      if (error) {
         throw error
       }
     } catch (error) {
