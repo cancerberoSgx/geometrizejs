@@ -20,7 +20,7 @@
 //   create(o:Options):void
 // }
 // interface SeriesOptions extends Options{
-  
+
 // }
 
 // export class Series implements Anim  {

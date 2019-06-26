@@ -9,14 +9,14 @@ import { CliOptions } from './types'
 
 export async function cli(options: CliOptions) {
   let fileConfig = {}
-  if(options.configFile){
+  if (options.configFile) {
     try {
       fileConfig = JSON.parse(readFileSync(options.configFile).toString())
     } catch (error) {
-      fail('Cannot parse given config file '+options.configFile+'. Aborting. ')
+      fail('Cannot parse given config file ' + options.configFile + '. Aborting. ')
     }
   }
-  options = {...fileConfig, ...options}
+  options = { ...fileConfig, ...options }
   preconditions(options)
   if (options.shapeTypes) {
     // user pass shape types as strings comma separated
