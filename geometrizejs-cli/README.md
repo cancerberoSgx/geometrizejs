@@ -1,11 +1,11 @@
-# geometrize-cli
+# geometrizejs-cli
 
 Command line interface for [geometrizejs](https://github.com/cancerberoSgx/geometrizejs). 
 
 ## Install
 
 ```sg
-npm install -g geometrize 
+npm install -g geometrizejs-cli 
 ```
 
 ## Usage
@@ -31,13 +31,17 @@ in current folder.
  * `--candidateShapesPerStep: number;`: The number of candidate shapes to try per model step.
  * `--shapeMutationsPerStep: number;`: The number of times to mutate each candidate shape.
 
+## Related Projects
 
+ * [geometrizejs](https://github.com/cancerberoSgx/geometrizejs)
+ * [svg-png-converter](https://www.npmjs.com/package/svg-png-converter)
+ * [magica](https://www.npmjs.com/package/magica)
+ 
 ## TODO
+
 - [ ] users cannot use ImageRunner or Bitmap as types
 - [x] document src/options.ts
 - [x] options in readme
 - [x] tests
+- [ ] --
 
-## Related Projects
-
- * [](svg-png-converter)
