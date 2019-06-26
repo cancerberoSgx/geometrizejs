@@ -26,7 +26,7 @@ Command line interface for [geometrizejs](https://github.com/cancerberoSgx/geome
  * SVG, JSON, JPEG, PNG output formats
  * config json file
  * input file globs
- * <a href="https://cancerberosgx.github.io/demos/geometrizejs-cli/index.html">Easy series generation</a>)
+ * <a href="https://cancerberosgx.github.io/demos/geometrizejs-cli/index.html">Easy series generation</a>
 
 ## Install
 
@@ -42,18 +42,21 @@ geometrize --input test/assets/panda.png --noOptimize --format svg --output tmp/
 
 ## Options
 
- * `--input: string`: Path of file to convert. Also could be a glob pattern.
+ * `--input: string`: Path to files to convert. It accepts one or more, relative or absolute, glob patterns or URLs.
  * `--output?: string`:If input file is only one then the output file will be written at this path, if given. If multiple input files are given, then the output files will be written at this folder path. In both cases, folders will be created if they doesn't exists. If not given output files will be written in stdout.
- * `--help?: boolean`:  Print usage information, then exit.
- * `--debug?: boolean`:  Prints debug messages.
- * `--image: Buffer`:
- * `--iterations?: number,`:
+ * `config?: string`: path to a json file containing this same configuration. Options from command line arguments takes precedence over options in the file.
+ * `--iterations?: number,`: The number shapes that will be generated. On each of these steps the library iteration, the library will generate `candidateShapesPerStep` number of totally random shapes and then mutates some `shapeMutationsPerStep` times. After that it chooses the shape that best feet in the original image regarding bounds and color.
  * `--format?: 'svg' | 'json' | 'png' | 'jpeg'`: Output format. Default: 'svg'
- * `--noOptimize?: boolean`: Don't optimize SVG.
+ * `--shapeMutationsPerStep: number;`: The number of times to mutate each candidate shape.
  * `--shapeTypes: Array<ShapeTypes>;`: The types of shapes to use when generating the image, as strings, any of: `RECTANGLE`, `ROTATED_RECTANGLE`, `TRIANGLE`, `ELLIPSE`, `ROTATED_ELLIPSE`, `CIRCLE`, `LINE`.
  * `--alpha: number;`: The opacity of the shapes (0-255).
  * `--candidateShapesPerStep: number;`: The number of candidate shapes to try per model step.
- * `--shapeMutationsPerStep: number;`: The number of times to mutate each candidate shape.
+ * `--noOptimize?: boolean`: Don't optimize SVG.
+ * `series?: Partial<CliOptions>[]`: If given, Instead of generating one image, it will generate several generates an animation building several images and then building an animated gif or video with them. For providing this information the user should [[configFile]] since via command line gets too complicated.
+ * `postScript?: string`: If provided after image are generated successfully it will execute it as a shell command. For example: `convert output/*.png output/flower.gif && rm output/*.png`
+ * `--help?: boolean`:  Print usage information, then exit.
+ * `--debug?: boolean`:  Prints debug messages.
+
 
 ### Config file
 
@@ -142,9 +145,9 @@ With some work animations in SVGs file can be also produced.
 - [ ] use svg-to-png-converter to render bitmap formats
 - [ ] users cannot use ImageRunner or Bitmap as types
 - [ ] integrate magica to generate gifs ? 
-- [ ] input from url
 - [ ] research on generating SVG animations
 - [ ] let postScript be a template so I can reference variable property values defined from the command line. Ex: postScript: "convert <%=output%>/*.<%=format%> <%=output=>/anim.gif"
+- [x] input from url
 - [x] document src/options.ts
 - [x] options in readme
 - [x] tests

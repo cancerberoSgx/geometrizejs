@@ -1,8 +1,10 @@
 import { ImageRunnerOptions } from 'geometrizejs'
+import { ShapeTypes } from 'geometrizejs/dist/src/shapeTypes';
 
-export interface GeometrizeOptions extends ImageRunnerOptions {
-  image: Buffer
-
+export interface BaseOptions extends ImageRunnerOptions {
+  /**
+   *  The number shapes that will be generated. On each of these steps the library iteration, the library will generate `candidateShapesPerStep` number of random shapes and `shapeMutationsPerStep` of those are mutated for choosing the shape that better matches the original image regarding colors and bounds. 
+   */
   iterations?: number,
   /**
    * Output format. Default: 'svg'
@@ -15,25 +17,17 @@ export interface GeometrizeOptions extends ImageRunnerOptions {
   noOptimize?: boolean
 
 }
-export interface CliOptions extends GeometrizeOptions {
+export interface CliOptions extends BaseOptions {
 
   /**
-   * Path of file to convert. Also could be a glob pattern.
+   * Path to files to convert. It accepts one or more, relative or absolute, glob patterns or URLs.
    */
   input: string
 
   /**
-   * If input file is only one, then the output file will be written at this path, if given. If multiple input
-   * files are given, then the output files will be written at this folder path. In both cases, folders will
-   * be created if they doesn't exists. If not given output files will be written in stdout.  
+   * If input file is only one, then the output file will be written at this path, if given. If multiple input files are given, then the output files will be written at this folder path. In both cases, folders will be created if they doesn't exists. If not given output files will be written in stdout.  
    */
   output?: string
-
-  // /**
-  //  * If [[input]] match a single file and this is defined the output file will be written in this location,
-  //  * creating folders if needed. 
-  //  */
-  // outputFile?: string
 
   /**
    *  Print usage information, then exit.
@@ -45,14 +39,23 @@ export interface CliOptions extends GeometrizeOptions {
    */
   debug?: boolean
 
-  /** path to a json file containing this same configuration. Options from command line arguments takes precedence over options in the file.  */
+  /** 
+   * Path to a json file containing this same configuration. Options from command line arguments takes precedence over options in the file.  
+   */
   config?: string
 
-  /** If given, Instead of generating one image, it will generate several generates an animation building several images and then building an animated gif or video with them. For providing this information the user should [[configFile]] since via command line gets too complicated.  */
+  /** 
+   * If given, Instead of generating one image, it will generate several generates an animation building several images and then building an animated gif or video with them. For providing this information the user should [[configFile]] since via command line gets too complicated.  
+   */
   series?: Partial<CliOptions>[]
 
   /**
-   * If provided after image are generated successfully it will execute it as a shell command. For example: `convert output/*.png output/flower.gif && rm output/*.png`
+   * In the Command line shape types are referenced by their names, case insensitive: `RECTANGLE`, `ROTATED_RECTANGLE`, `TRIANGLE`, `ELLIPSE`, `ROTATED_ELLIPSE`, `CIRCLE`, `LINE`.
+   */
+  shapeTypes: ShapeTypes[]
+
+  /**
+   * If provided after image are generated successfully it will execute it as a shell command. For example: `convert output/*.png output/flower.gif && rm output/*.png`.
    */
   postScript?: string
 }

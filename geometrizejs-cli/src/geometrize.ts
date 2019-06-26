@@ -3,17 +3,21 @@ import Jimp from 'jimp'
 import { svg2png } from 'svg-png-converter'
 import { OutputFormat } from 'svg-png-converter/dist/src/types'
 import { optimizeSvg } from './optimizeSvg'
-import { GeometrizeOptions } from './types'
+import { BaseOptions } from './types'
 
 export interface GeometrizeResult {
   content?: Buffer
   error?: Error
 }
 
+interface Options extends BaseOptions {
+  image: Buffer
+}
+
 /**
  * Implements the dialog directly with geometrizejs by iterating, creating bimap, etc. Uses jimp to read images and create bitmap. Output a SVG string.
  */
-export async function geometrize(o: GeometrizeOptions): Promise<GeometrizeResult> {
+export async function geometrize(o:  Options): Promise<GeometrizeResult> {
   try {
     const image = await Jimp.read(o.image)
     const bitmap = Bitmap.createFromByteArray(image.bitmap.width, image.bitmap.height, image.bitmap.data)
@@ -57,7 +61,7 @@ export async function geometrize(o: GeometrizeOptions): Promise<GeometrizeResult
   }
 }
 
-async function svg(options: GeometrizeOptions, runner: any, bitmap: any, o: GeometrizeOptions, iterations: number) {
+async function svg(options: BaseOptions, runner: any, bitmap: any, o: BaseOptions, iterations: number) {
   const svgData = []
   for (let i = 0;i < iterations;i++) {
     svgData.push(SvgExporter.exportShapes(runner.step(options)))

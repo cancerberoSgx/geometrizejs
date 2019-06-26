@@ -1,13 +1,12 @@
-
 import { execSync } from 'child_process'
-import { existsSync, mkdirSync, readFileSync, statSync, writeFileSync } from 'fs'
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs'
 import { ShapeTypes } from 'geometrizejs'
-import { sync as glob } from 'glob'
-import { serial } from 'misc-utils-of-mine-generic'
+import { serial, notUndefined, notFalsy } from 'misc-utils-of-mine-generic'
 import { basename, dirname, join } from 'path'
 import { geometrize } from './geometrize'
 import { buildSeries } from './series'
 import { CliOptions } from './types'
+import { resolveInput } from './resolveInput';
 
 export async function cli(options: CliOptions) {
   let fileConfig = {}
@@ -23,7 +22,6 @@ export async function cli(options: CliOptions) {
   options.debug && console.log(`CLI Options: ${JSON.stringify({ ...options, input: null })}`)
   if (options.series) {
     await buildSeries(options)
-    // return
   }
   else {
     await geometrizeImage(options)
@@ -46,16 +44,11 @@ export async function geometrizeImage(options: CliOptions) {
     const st: string[] = (options.shapeTypes + '').split(',').map(s => s)
     options.shapeTypes = st.map(s => (ShapeTypes as any)[s.toUpperCase()])
   }
-  const input = (typeof options.input === 'string' ? glob(options.input) : [])
-    .filter(f => existsSync(f) && statSync(f).isFile())
-    .map(f => ({
-      name: f,
-      content: readFileSync(f)
-    }))
+ const input = await resolveInput(options)
   if (!input.length) {
     fail(`No input files found for ${input}. Aborting. `)
   }
-  await serial(input.map(f => async () => {
+  await serial(input.filter(notFalsy).map(f => async () => {
     try {
       options.debug && console.log('Rendering ' + f.name + ' to ' + options.output);
       let { content, error } = await geometrize({ ...options, image: f.content });

@@ -1,5 +1,4 @@
 import { unique } from 'misc-utils-of-mine-generic'
-
 const SVGO = require('svgo')
 
 export async function optimizeSvg(data: string, debug?: boolean) {
@@ -16,6 +15,7 @@ export async function optimizeSvg(data: string, debug?: boolean) {
     return data
   }
 }
+
 const svgoOptions = {
   full: true,
   multipass: true,
