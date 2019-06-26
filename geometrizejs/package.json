@@ -17,6 +17,8 @@
     "format": "npx ts-refactor format \"src/**/*.ts*\" \"test/**/*.ts*\" ./formatCodeSettings.json --tsConfigPath ./tsconfig.json --dontAsk",
     "organizeImports": "npx ts-refactor organizeImports \"src/**/*.ts*\" \"test/**/*.ts*\" ./formatCodeSettings.json --tsConfigPath ./tsconfig.json --dontAsk ",
     "lint": "npm run organizeImports && npm run format",
+    "docs-readme-toc": "npx markdown-toc README.md -i",
+    "docs": "npm run docs-readme-toc",
     "all": "npm run clean && npm run lint && npm run build && npm run test && npm run test-js && npm run test-browser",
     "all-publish": "npm run all && git commit -a -m \"version patch\" && npm version patch && npm publish"
   },
@@ -24,6 +26,7 @@
   "devDependencies": {
     "ava": "^2.1.0",
     "jimp": "^0.6.4",
+    "markdown-toc": "^1.2.0",
     "ts-node": "^8.3.0",
     "ts-refactor": "0.0.6",
     "typescript": "^3.5.2"

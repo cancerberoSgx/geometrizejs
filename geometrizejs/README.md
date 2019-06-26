@@ -2,6 +2,25 @@
 
 See the [playground](https://cancerberosgx.github.io/demos/geometrizejs-playground/) to understand what's this is all about.
 
+## Contents
+
+<!-- toc -->
+
+- [Summary](#summary)
+- [Usage](#usage)
+  * [Render SVG](#render-svg)
+  * [Render bitmap](#render-bitmap)
+- [Render JSON](#render-json)
+- [API docs](#api-docs)
+- [Build geometrize.js](#build-geometrizejs)
+- [TODO / Roadmap](#todo--roadmap)
+- [Extras / ideas](#extras--ideas)
+- [Complex / not important:](#complex--not-important)
+
+<!-- tocstop -->
+
+## Summary
+
  * [geometrize](https://www.geometrize.co.uk/) JavaScript API. Original idea is from [primitive](https://github.com/fogleman/primitive).
  * Generated directly from [official geometrize-haxe](https://github.com/Tw1ddle/geometrize-haxe) code.
  * For node.js and browsers.
@@ -22,6 +41,8 @@ npm install --save geometrizejs
 ```
 
 This example uses [jimp](TODO) to load images which supports formats both in node.js and browsers. Nevertheless any library can be used, such as [pngjs](TODO).
+
+## Examples
 
 ### Render SVG
 
@@ -137,6 +158,14 @@ sh generate-geometrize-js.sh
 
 That should re-generate `geometrizejs/src/geometrize.js`.
 
+
+## ImageRunnerOptions
+
+ * `shapeTypes: Array<ShapeTypes>`: The types of shapes to use when generating the image.
+ * `alpha: number`: The opacity of the shapes (0-255).
+ * `candidateShapesPerStep: number`: The number of candidate shapes to try per model step.
+ * `shapeMutationsPerStep: number`: The number of times to mutate each candidate shape.
+
 ## TODO / Roadmap
 
 - [ ] sourcemaps https://haxe.org/manual/debugging-source-map.html
@@ -145,13 +174,28 @@ That should re-generate `geometrizejs/src/geometrize.js`.
 - [x] JSON output tests
 - [ ] performance tests. use different options and input image sizes and generate timings and output image diffs (as numbers - for example using imagemagick) - so we can better understand how options/image size/output quality relationships are. See https://github.com/Tw1ddle/geometrize-haxe-web/issues/3#issuecomment-504424092
 
-## Extras / ideas 
+ 
+### Extras / ideas 
 
 The following are features not supported by haxe implementation. If implemented it will be in a separate project so this project keeps being zero-implementation:
 
 - [ ] high level API to export current models to svg, png/jpg, json (so users dont have to build bitmap and iterate manually)
-- [ ]
+- [ ] geometrize - a new shape "text" - equivalent to rotated rectangle ? User can provide list of words - configure font style - letter vs word vs paragraph
 - [ ] notify listeners between N iterations passing current models  (format agnostic) (so they can take interval screenshots)
 - [ ] Be able to change options while the iteration is still running
 - [ ] be able to change iterations value ( while is running)
 - [ ] Be able to pause an iteration and serialize its state (options and model, current iteration, iterations value) so later, in another process, we can load it and resume it (even increase iterations value)
+- [ ] implement quadratic blezier curves based on https://github.com/Tw1ddle/geometrize-lib/blob/be14f7bf0d183faa03127c6500c6194877b3ee3d/geometrize/geometrize/rasterizer/rasterizer.cpp#L308 ? 
+- [ ] Research SVG post processing
+  - [ ] document that big SVGs can be reduced up to 50% size with svgo which supports node and browser (js)
+  - [ ] SVG paths cahnbe transformed with "simplify" (sharpen  by reducing nodes) and with smothing (adds nodes and transform ) 
+  - document that bitmap images can be generated from svgs (and good quality) offline with other tools. 
+- [ ] extensibilty: geometrize should allow users to:
+  - [ ] add new shapes types
+  - [ ] pre / post process shape mutations and rasterize
+
+## Complex / not important: 
+- [ ]refined styles:
+  - [ ] brushes / textures ? https://github.com/Tw1ddle/geometrize-haxe/issues/9
+  - [ ] gradients ?
+  - [ ] borders

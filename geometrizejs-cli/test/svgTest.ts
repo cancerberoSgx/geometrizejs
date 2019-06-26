@@ -8,7 +8,7 @@ test.before('should build', async t => {
 
 test('should render a png to svg triangle,rectangle', async t => {
   t.false(existsSync('tmp/1/panda.png.svg'))
-  const r = execSync('node bin/geometrize.js --input test/assets/panda.png --noOptimize  --format svg --output tmp/1 --shapeTypes triangle,rectangle --iterations 100', { stdio: 'pipe' })
+  const r = execSync('node bin/geometrize.js --input test/assets/panda.png --noOptimize --format svg --output tmp/1 --shapeTypes triangle,rectangle --iterations 100', { stdio: 'pipe' })
   const s = readFileSync('tmp/1/panda.png.svg').toString();
   ['<svg', '<polygon', '<rect'].forEach(e => {
     t.true(s.includes(e), e)
