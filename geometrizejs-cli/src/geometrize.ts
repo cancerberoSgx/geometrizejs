@@ -47,8 +47,8 @@ export async function geometrize(o: GeometrizeOptions): Promise<GeometrizeResult
           encoding: 'buffer',
           format: options.format as OutputFormat
         })
-      }  
-      
+      }
+
     }
   } catch (error) {
     return {

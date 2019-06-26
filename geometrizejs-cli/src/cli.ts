@@ -5,8 +5,8 @@ import { sync as glob } from 'glob'
 import { serial } from 'misc-utils-of-mine-generic'
 import { basename, dirname, join } from 'path'
 import { geometrize } from './geometrize'
+import { buildSeries } from './series'
 import { CliOptions } from './types'
-import { buildSeries } from './series';
 
 export async function cli(options: CliOptions) {
   let fileConfig = {}
@@ -20,11 +20,11 @@ export async function cli(options: CliOptions) {
   options = { ...fileConfig, ...options }
   preconditions(options)
   options.debug && console.log(`CLI Options: ${JSON.stringify({ ...options, input: null })}`)
-  if(options.series) {
+  if (options.series) {
     await buildSeries(options)
     return
   }
-  await geometrizeImage(options);
+  await geometrizeImage(options)
 }
 
 export async function geometrizeImage(options: CliOptions) {
@@ -38,9 +38,9 @@ export async function geometrizeImage(options: CliOptions) {
     .map(f => ({
       name: f,
       content: readFileSync(f)
-    }));
+    }))
   if (!input.length) {
-    fail(`No input files found for ${input}. Aborting. `);
+    fail(`No input files found for ${input}. Aborting. `)
   }
   await serial(input.map(f => async () => {
     try {
@@ -67,10 +67,10 @@ export async function geometrizeImage(options: CliOptions) {
       }
     }
     catch (error) {
-      console.error('ERROR while rendering file ' + f.name+' in output '+options.output);
+      console.error('ERROR while rendering file ' + f.name + ' in output ' + options.output);
       console.error(error, error.stack);
     }
-  }));
+  }))
 }
 
 function preconditions(options: CliOptions) {

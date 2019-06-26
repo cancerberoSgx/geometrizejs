@@ -10,7 +10,7 @@
   "scripts": {
     "test": "npm run build && ava",
     "test-browser": "exit 0; npx ava test-browser/*Test.ts",
-    "test-js": " npx ava ./dist/test/*Test.js",
+    "test-js": "npm run build && npx ava ./dist/test/*Test.js",
     "clean": "rm -rf dist tmp",
     "build": "npm run clean && tsc",
     "prepare": "npm run build",
