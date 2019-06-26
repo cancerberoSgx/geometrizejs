@@ -25,10 +25,10 @@ export async function buildSeries(o: CliOptions) {
     }))
   ]
     .map(o => ({ ...o, series: undefined, config: undefined }))
-  o.debug && console.log(`Series build starts. Count: ${series}.`)
+  o.debug && console.log(`Series build starts. Count: ${series.length}.`)
   await serial(series.map((serie, i) => async () => {
     try {
-      o.debug && console.log(`geometrizing serie image ${i}.`);
+      o.debug && console.log(`Geometrizing serie image ${i}.`);
       await geometrizeImage(serie)
     } catch (error) {
       throw error

@@ -3,7 +3,7 @@
   "shapeTypes": "circle",
   "format": "png",
   "series": [
-    {"iterations": 10},{"iterations": 220},{"iterations": 280},{"iterations": 420},{"iterations": 770},{"iterations": 1120},{"iterations": 2220},{"iterations": 4020}
+    {"iterations": 10},{"iterations": 220},{"iterations": 280},{"iterations": 420},{"iterations": 770},{"iterations": 1120},{"iterations": 2220},{"iterations": 4020},{"iterations": 8020}
   ],
-  "postScript": "convert tmp/series2/*.png tmp/series2.gif && rm -rf tmp/series2"
+  "postScript": "convert -coalesce -delete 0 -deconstruct -loop 0 -delay 18 $(ls tmp/series2/*.png | sort -V) $(ls tmp/series2/*.png | sort -Vr) tmp/series2.gif && rm -rf tmp/series2"
 }

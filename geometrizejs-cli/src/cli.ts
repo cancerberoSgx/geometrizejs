@@ -1,4 +1,5 @@
 
+import { execSync } from 'child_process'
 import { existsSync, mkdirSync, readFileSync, statSync, writeFileSync } from 'fs'
 import { ShapeTypes } from 'geometrizejs'
 import { sync as glob } from 'glob'
@@ -7,7 +8,6 @@ import { basename, dirname, join } from 'path'
 import { geometrize } from './geometrize'
 import { buildSeries } from './series'
 import { CliOptions } from './types'
-import { execSync } from 'child_process';
 
 export async function cli(options: CliOptions) {
   let fileConfig = {}
@@ -23,15 +23,18 @@ export async function cli(options: CliOptions) {
   options.debug && console.log(`CLI Options: ${JSON.stringify({ ...options, input: null })}`)
   if (options.series) {
     await buildSeries(options)
-    return
+    // return
   }
-  await geometrizeImage(options)
-  if(options.postScript){
+  else {
+    await geometrizeImage(options)
+  }
+  if (options.postScript) {
     try {
+      options.debug && console.log(`Executing post script: "${options.postScript}"`)
       execSync(options.postScript)
     } catch (error) {
-      console.error('Images generated successfully but there was an error executing postScript command '+options.postScript);
-      console.error(error);
+      console.error('Images generated successfully but there was an error executing postScript command ' + options.postScript)
+      console.error(error)
       process.exit(1)
     }
   }
@@ -54,7 +57,7 @@ export async function geometrizeImage(options: CliOptions) {
   }
   await serial(input.map(f => async () => {
     try {
-      options.debug && console.log('Rendering ' + f.name);
+      options.debug && console.log('Rendering ' + f.name + ' to ' + options.output);
       let { content, error } = await geometrize({ ...options, image: f.content });
       if (content) {
         if (options.output) {

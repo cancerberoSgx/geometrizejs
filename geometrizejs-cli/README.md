@@ -2,6 +2,14 @@
 
 Command line interface for [geometrizejs](https://github.com/cancerberoSgx/geometrizejs). 
 
+## Features
+
+ * JPG, PNG, TIFF, GIF, BMP input formats
+ * SVG, JSON, JPEG, PNG output formats
+ * config json file
+ * input file globs
+ * <a href="https://cancerberosgx.github.io/demos/geometrizejs-cli/index.html">Easy series generation</a>)
+
 ## Install
 
 ```sg
