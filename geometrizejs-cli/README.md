@@ -36,8 +36,16 @@ npm install -g geometrizejs-cli
 
 ## Usage
 
+Geometrizes local file and generates a JPG. Here the user passes lots of options, but notice that none of them are mandatory:
+
 ```sh
-geometrize --input test/assets/panda.png --noOptimize --format svg --output tmp/1 --shapeTypes triangle,rectangle --iterations 100
+geometrize --input ../some/photo.jpg --output out.jpg --shapeTypes triangle,rectangle --iterations 100 --format jpeg --shapeMutationsPerStep 88 --candidateShapesPerStep 233
+```
+
+Load image from URL, use a configuration file:
+
+```
+geometrize --input https://i.imgur.com/6egth7W.png --config tricks/killer1.json --debug
 ```
 
 ## Options
@@ -47,10 +55,10 @@ geometrize --input test/assets/panda.png --noOptimize --format svg --output tmp/
  * `config?: string`: path to a json file containing this same configuration. Options from command line arguments takes precedence over options in the file.
  * `--iterations?: number,`: The number shapes that will be generated. On each of these steps the library iteration, the library will generate `candidateShapesPerStep` number of totally random shapes and then mutates some `shapeMutationsPerStep` times. After that it chooses the shape that best feet in the original image regarding bounds and color.
  * `--format?: 'svg' | 'json' | 'png' | 'jpeg'`: Output format. Default: 'svg'
+ * `--candidateShapesPerStep: number;`: The number of candidate shapes to try per model step.
  * `--shapeMutationsPerStep: number;`: The number of times to mutate each candidate shape.
  * `--shapeTypes: Array<ShapeTypes>;`: The types of shapes to use when generating the image, as strings, any of: `RECTANGLE`, `ROTATED_RECTANGLE`, `TRIANGLE`, `ELLIPSE`, `ROTATED_ELLIPSE`, `CIRCLE`, `LINE`.
  * `--alpha: number;`: The opacity of the shapes (0-255).
- * `--candidateShapesPerStep: number;`: The number of candidate shapes to try per model step.
  * `--noOptimize?: boolean`: Don't optimize SVG.
  * `series?: Partial<CliOptions>[]`: If given, Instead of generating one image, it will generate several generates an animation building several images and then building an animated gif or video with them. For providing this information the user should [[configFile]] since via command line gets too complicated.
  * `postScript?: string`: If provided after image are generated successfully it will execute it as a shell command. For example: `convert output/*.png output/flower.gif && rm output/*.png`
