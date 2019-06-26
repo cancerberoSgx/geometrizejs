@@ -1,8 +1,10 @@
+
 {
   "output": "tmp/shapes",
   "format": "png",
+  "iterations": 600,
   "series": [
-    {"iterations": 10},{"iterations": 220},{"iterations": 280},{"iterations": 420},{"iterations": 770},{"iterations": 1120},{"iterations": 2220},{"iterations": 4020},{"iterations": 8020}
+    {"shapeTypes": "triangle"},{"shapeTypes": "ellipse"},{"shapeTypes": "rotated_rectangle"},{"shapeTypes": "circle"},{"shapeTypes": "rectangle"},{"shapeTypes": "rotated_ellipse"}
   ],
-  "postScript": "convert -coalesce -delete 0 -deconstruct -loop 0 -delay 18 $(ls tmp/shapes/*.png | sort -V) $(ls tmp/shapes/*.png | sort -Vr) tmp/shapes.gif && rm -rf tmp/shapes"
+  "postScript": "convert -coalesce -delete 0 -deconstruct -loop 0 -delay 28 $(ls tmp/shapes/*.png | sort -V) $(ls tmp/shapes/*.png | sort -Vr) tmp/shapes.gif"
 }

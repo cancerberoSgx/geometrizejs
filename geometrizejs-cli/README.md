@@ -1,6 +1,24 @@
 # geometrizejs-cli
 
-Command line interface for [geometrizejs](https://github.com/cancerberoSgx/geometrizejs). 
+Command line interface for [geometrizejs](https://github.com/cancerberoSgx/geometrizejs).
+
+<!-- toc -->
+
+- [Features](#features)
+- [Install](#install)
+- [Usage](#usage)
+- [Options](#options)
+  * [Config file](#config-file)
+  * [Series](#series)
+    + [Executing a program after it finishes](#executing-a-program-after-it-finishes)
+    + [series and postScript example](#series-and-postscript-example)
+    + [Generating gif animations from Series images](#generating-gif-animations-from-series-images)
+    + [Generating videos](#generating-videos)
+- [Related Projects](#related-projects)
+- [TODO](#todo)
+- [Ideas](#ideas)
+
+<!-- tocstop -->
 
 ## Features
 
@@ -118,10 +136,12 @@ With some work animations in SVGs file can be also produced.
  
 ## TODO
 
+- [ ] readme TOC
 - [ ] cli: use mujer for optimizing and remove this implementation
 - [ ] use svg-to-png-converter to render bitmap formats
 - [ ] users cannot use ImageRunner or Bitmap as types
 - [ ] integrate magica to generate gifs ? 
+- [ ] input from url
 - [ ] research on generating SVG animations
 - [ ] let postScript be a template so I can reference variable property values defined from the command line. Ex: postScript: "convert <%=output%>/*.<%=format%> <%=output=>/anim.gif"
 - [x] document src/options.ts
