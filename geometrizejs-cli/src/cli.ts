@@ -7,7 +7,16 @@ import { basename, dirname, join } from 'path'
 import { geometrize } from './geometrize'
 import { CliOptions } from './types'
 
-export async function traceImage(options: CliOptions) {
+export async function cli(options: CliOptions) {
+  let fileConfig = {}
+  if(options.configFile){
+    try {
+      fileConfig = JSON.parse(readFileSync(options.configFile).toString())
+    } catch (error) {
+      fail('Cannot parse given config file '+options.configFile+'. Aborting. ')
+    }
+  }
+  options = {...fileConfig, ...options}
   preconditions(options)
   if (options.shapeTypes) {
     // user pass shape types as strings comma separated

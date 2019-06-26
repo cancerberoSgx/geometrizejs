@@ -1,0 +1,9 @@
+{
+  "input": "test/assets/bluebells.jpg",
+  "output": "tmp/series1",
+  "shapeTypes": "circle",
+  "iterations": 20,
+  "series": [
+    {"iterations": 20},{"iterations": 120},{"iterations": 280},{"iterations": 420},{"iterations": 770},{"iterations": 1120},{"iterations": 2220},{"iterations": 4020}
+  ]
+}

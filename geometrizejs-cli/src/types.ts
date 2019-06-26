@@ -44,4 +44,10 @@ export interface CliOptions extends GeometrizeOptions {
    *  Prints debug messages. 
    */
   debug?: boolean
+
+  /** path to a json file containing this same configuration. Options from command line arguments takes precedence over options in the file.  */
+  configFile?: string
+
+  /** If given, Instead of generating one image, it will generate several generates an animation building several images and then building an animated gif or video with them. For providing this information the user should [[configFile]] since via command line gets too complicated.  */
+  animSeries?: Partial<CliOptions>[]
 }

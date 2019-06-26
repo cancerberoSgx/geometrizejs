@@ -23,14 +23,12 @@ geometrize --input test/assets/panda.png --noOptimize --format svg --output tmp/
  * `--debug?: boolean`:  Prints debug messages.
  * `--image: Buffer`:
  * `--iterations?: number,`:
- * `--format?: 'svg' | 'json' | 'png' | 'jpg' | 'tiff' | 'gif' | 'bmp'`: Output format. Default: 'svg'
+ * `--format?: 'svg' | 'json' | 'png' | 'jpeg'`: Output format. Default: 'svg'
  * `--noOptimize?: boolean`: Don't optimize SVG.
  * `--shapeTypes: Array<ShapeTypes>;`: The types of shapes to use when generating the image, as strings, any of: `RECTANGLE`, `ROTATED_RECTANGLE`, `TRIANGLE`, `ELLIPSE`, `ROTATED_ELLIPSE`, `CIRCLE`, `LINE`.
  * `--alpha: number;`: The opacity of the shapes (0-255).
  * `--candidateShapesPerStep: number;`: The number of candidate shapes to try per model step.
  * `--shapeMutationsPerStep: number;`: The number of times to mutate each candidate shape.
-
-Important. --shapeTypes are accepted as strings, any of: `RECTANGLE`, `ROTATED_RECTANGLE`, `TRIANGLE`, `ELLIPSE`, `ROTATED_ELLIPSE`, `CIRCLE`, `LINE`.
     
 ## Related Projects
 
@@ -48,3 +46,9 @@ Important. --shapeTypes are accepted as strings, any of: `RECTANGLE`, `ROTATED_R
 - [x] options in readme
 - [x] tests
 
+## Ideas
+
+ * include magica (image magick) ? (support lots of formats and particularly animated gif) 
+ * for little iterations
+ * morph 2 different pictures: generate the two with same fwe iterations (200) - let's say rectangles. Then relate rectangles in same aprox locations. And generate intermediate svgs bymoving from the first to the second changing size, color and location. then greate fig. we could use json output to calculate.
+ * start writing scripts to generate animations - then we can better consider is create another project with magick and CLI for those scripts
