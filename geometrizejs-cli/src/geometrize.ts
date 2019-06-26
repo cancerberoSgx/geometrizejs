@@ -17,7 +17,7 @@ interface Options extends BaseOptions {
 /**
  * Implements the dialog directly with geometrizejs by iterating, creating bimap, etc. Uses jimp to read images and create bitmap. Output a SVG string.
  */
-export async function geometrize(o:  Options): Promise<GeometrizeResult> {
+export async function geometrize(o: Options): Promise<GeometrizeResult> {
   try {
     const image = await Jimp.read(o.image)
     const bitmap = Bitmap.createFromByteArray(image.bitmap.width, image.bitmap.height, image.bitmap.data)

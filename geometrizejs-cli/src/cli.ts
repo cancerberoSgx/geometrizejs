@@ -1,12 +1,12 @@
 import { execSync } from 'child_process'
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs'
 import { ShapeTypes } from 'geometrizejs'
-import { serial, notUndefined, notFalsy } from 'misc-utils-of-mine-generic'
+import { notFalsy, serial } from 'misc-utils-of-mine-generic'
 import { basename, dirname, join } from 'path'
 import { geometrize } from './geometrize'
+import { resolveInput } from './resolveInput'
 import { buildSeries } from './series'
 import { CliOptions } from './types'
-import { resolveInput } from './resolveInput';
 
 export async function cli(options: CliOptions) {
   let fileConfig = {}
@@ -44,7 +44,7 @@ export async function geometrizeImage(options: CliOptions) {
     const st: string[] = (options.shapeTypes + '').split(',').map(s => s)
     options.shapeTypes = st.map(s => (ShapeTypes as any)[s.toUpperCase()])
   }
- const input = await resolveInput(options)
+  const input = await resolveInput(options)
   if (!input.length) {
     fail(`No input files found for ${input}. Aborting. `)
   }

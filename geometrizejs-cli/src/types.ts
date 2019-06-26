@@ -1,5 +1,5 @@
 import { ImageRunnerOptions } from 'geometrizejs'
-import { ShapeTypes } from 'geometrizejs/dist/src/shapeTypes';
+import { ShapeTypes } from 'geometrizejs/dist/src/shapeTypes'
 
 export interface BaseOptions extends ImageRunnerOptions {
   /**
