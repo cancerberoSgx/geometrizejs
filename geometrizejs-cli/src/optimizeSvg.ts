@@ -4,14 +4,12 @@ export async function optimizeSvg(data: string, debug?: boolean) {
   const svgo = new SVGO(svgoOptions)
   const before = data.length
   const result = await svgo.optimize(data, { path: 'foo.svg' })
-  // console.log(Object.keys(result));
 
   if (result.data) {
     debug && console.log('SVG data SHRINK IN ' + ((before) / result.data.length) + '%')
     return result.data
   }
   else {
-    // console.log(result);
     debug && console.error(`Error while optimizing svg `, result)
     return data
   }

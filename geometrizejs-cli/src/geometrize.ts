@@ -2,6 +2,8 @@ import { Bitmap, ImageRunner, ShapeJsonExporter, ShapeTypes, SvgExporter } from 
 import Jimp from 'jimp'
 import { optimizeSvg } from './optimizeSvg'
 import { GeometrizeOptions } from './types'
+import { svg2png } from 'svg-png-converter';
+import { OutputFormat } from 'svg-png-converter/dist/src/types';
 
 export async function geometrize(o: GeometrizeOptions): Promise<GeometrizeResult> {
   try {
@@ -23,16 +25,27 @@ export async function geometrize(o: GeometrizeOptions): Promise<GeometrizeResult
     }
     else if (options.format === 'json') {
       const shapes: string[] = []
-      for (let i = 0;i < iterations;i++) {
+      for (let i = 0; i < iterations; i++) {
         shapes.push(ShapeJsonExporter.exportShapes(runner.step(options)))
       }
       return {
         content: Buffer.from('[\n' + shapes.join(',\n  ') + '\n]')
       }
+    } else {
+      const { content  } = await svg(options, runner, bitmap, o, iterations)
+      // console.log('exec svg2png on svg ', content.toString());
+      return {
+        content : await svg2png({
+          input: content ? content.toString() : '',
+          encoding: 'buffer',
+          format: options.format as OutputFormat
+        })
+      } //as Buffer
+      // return {content}
     }
-    else {
-      throw new Error('Format not supported ' + options.format)
-    }
+    // else {
+    //   throw new Error('Format not supported ' + options.format)
+    // }
   } catch (error) {
     return {
       error
@@ -47,11 +60,11 @@ export interface GeometrizeResult {
 
 async function svg(options: GeometrizeOptions, runner: any, bitmap: any, o: GeometrizeOptions, iterations: number) {
   const svgData = []
-  for (let i = 0;i < iterations;i++) {
+  for (let i = 0; i < iterations; i++) {
     svgData.push(SvgExporter.exportShapes(runner.step(options)))
   }
   let svg = SvgExporter.getSvgPrelude() + SvgExporter.getSvgNodeOpen(bitmap.width, bitmap.height) + svgData.join('\n') + SvgExporter.getSvgNodeClose()
-  if (!o.noOptimize) {
+  if (!o.noOptimize && (!options.format || options.format === 'svg')) {
     svg = await optimizeSvg(svg)
   }
   return {

@@ -24,8 +24,9 @@
     "@types/glob": "^7.1.1",
     "@types/node": "^12.0.10",
     "ava": "^2.1.0",
-    "ts-refactor": "0.0.6",
+    "file-type": "^12.0.0",
     "ts-node": "^8.3.0",
+    "ts-refactor": "0.0.6",
     "typescript": "^3.5.2"
   },
   "homepage": "https://www.npmjs.com/package/geometrizejs-cli",
@@ -33,8 +34,10 @@
     "geometrizejs": "0.0.9",
     "glob": "^7.1.4",
     "jimp": "^0.6.4",
-    "svgo": "github:cancerberoSgx/svgo#browser",
-    "minimist": "^1.2.0"
+    "minimist": "^1.2.0",
+    "misc-utils-of-mine-generic": "^0.2.10",
+    "svg-png-converter": "0.0.9",
+    "svgo": "github:cancerberoSgx/svgo#browser"
   },
   "repository": {
     "type": "git",

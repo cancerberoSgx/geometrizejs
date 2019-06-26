@@ -7,7 +7,7 @@ export interface GeometrizeOptions extends ImageRunnerOptions {
   /**
    * Output format. Default: 'svg'
    */
-  format?: 'svg' | 'json' | 'png' | 'jpg' | 'tiff' | 'gif' | 'bmp'
+  format?: 'svg' | 'json' | 'png' | 'jpeg'
 
   /**
    * Don't optimize SVG.
@@ -23,7 +23,7 @@ export interface CliOptions extends GeometrizeOptions {
   input: string
 
   /**
-   * If input file is only one then the output file will be written at this path, if given. If multiple input
+   * If input file is only one, then the output file will be written at this path, if given. If multiple input
    * files are given, then the output files will be written at this folder path. In both cases, folders will
    * be created if they doesn't exists. If not given output files will be written in stdout.  
    */

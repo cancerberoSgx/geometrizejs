@@ -5,7 +5,9 @@ import { sync as glob } from 'glob'
 import { basename, join, dirname } from 'path'
 import { geometrize } from './geometrize'
 import { CliOptions } from './types'
-import { serial } from './util'
+import { serial } from 'misc-utils-of-mine-generic'
+import { svg2png } from 'svg-png-converter'
+import { OutputFormat } from 'svg-png-converter/dist/src/types';
 
 export async function traceImage(options: CliOptions) {
   preconditions(options)
@@ -15,22 +17,26 @@ export async function traceImage(options: CliOptions) {
     options.shapeTypes = st.map(s => (ShapeTypes as any)[s.toUpperCase()])
   }
   options.debug && console.log(`CLI Options: ${JSON.stringify({ ...options, input: null })}`)
-  const input = (typeof options.input === 'string' ? glob(options.input).filter(existsSync) : [])
-    .filter(f => statSync(f).isFile())
+  const input = (typeof options.input === 'string' ? glob(options.input) : [])
+    .filter(f => existsSync(f) && statSync(f).isFile())
     .map(f => ({
       name: f,
       content: readFileSync(f)
     }))
+
   if (!input.length) {
     fail(`No input files found for ${input}. Aborting. `)
   }
+
   await serial(input.map(f => async () => {
     try {
       options.debug && console.log('Rendering ' + f.name)
-      const { content, error } = await geometrize({ ...options, image: f.content })
+      let { content, error } = await geometrize({ ...options, image: f.content })
+      console.log('geom executed', error, content && content.toString().length);
+      
       if (content) {
         if (options.output) {
-          let outputFilePath = options.output
+          let outputFilePath = options.output+ '.' + (options.format || 'svg')
           if (input.length > 1) {
             !existsSync(options.output) && mkdirSync(options.output, { recursive: true })
             outputFilePath = join(options.output, basename(f.name + '.' + (options.format || 'svg')))
@@ -41,7 +47,7 @@ export async function traceImage(options: CliOptions) {
           writeFileSync(outputFilePath, content)
         }
         else {
-          process.stdout.write(content.toString('binary'))
+          process.stdout.write(content ? content.toString('binary') : 'ERROR')
         }
       }
       if (error) {
