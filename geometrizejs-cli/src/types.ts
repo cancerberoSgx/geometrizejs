@@ -23,13 +23,15 @@ export interface CliOptions extends GeometrizeOptions {
   input: string
 
   /**
-   * Folder for output files. If it doesn't exists it will be created. If none, output files will be written
-   * in current folder. 
+   * If input file is only one then the output file will be written at this path, if given. If multiple input
+   * files are given, then the output files will be written at this folder path. In both cases, folders will
+   * be created if they doesn't exists. If not given output files will be written in stdout.  
    */
   output?: string
 
   /**
-   * If [[input]] match a single file and this is defined the output file will be written in this location, creating folders if needed. 
+   * If [[input]] match a single file and this is defined the output file will be written in this location,
+   * creating folders if needed. 
    */
   outputFile?: string
 

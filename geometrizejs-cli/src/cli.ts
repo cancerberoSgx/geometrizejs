@@ -1,8 +1,8 @@
 
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs'
+import { existsSync, mkdirSync, readFileSync, writeFileSync, statSync } from 'fs'
 import { ShapeTypes } from 'geometrizejs'
 import { sync as glob } from 'glob'
-import { basename, join } from 'path'
+import { basename, join, dirname } from 'path'
 import { geometrize } from './geometrize'
 import { CliOptions } from './types'
 import { serial } from './util'
@@ -16,6 +16,7 @@ export async function traceImage(options: CliOptions) {
   }
   options.debug && console.log(`CLI Options: ${JSON.stringify({ ...options, input: null })}`)
   const input = (typeof options.input === 'string' ? glob(options.input).filter(existsSync) : [])
+    .filter(f => statSync(f).isFile())
     .map(f => ({
       name: f,
       content: readFileSync(f)
@@ -23,16 +24,20 @@ export async function traceImage(options: CliOptions) {
   if (!input.length) {
     fail(`No input files found for ${input}. Aborting. `)
   }
-  if (options.output && !existsSync(options.output)) {
-    mkdirSync(options.output, { recursive: true })
-  }
-  await serial(input.map(input => async () => {
+  await serial(input.map(f => async () => {
     try {
-      options.debug && console.log('Rendering ' + input.name)
-      const { content, error } = await geometrize({ ...options, image: input.content })
+      options.debug && console.log('Rendering ' + f.name)
+      const { content, error } = await geometrize({ ...options, image: f.content })
       if (content) {
         if (options.output) {
-          const outputFilePath = join(options.output, basename(input.name + '.' + (options.format || 'svg')))
+          let outputFilePath = options.output
+          if (input.length > 1) {
+            !existsSync(options.output) && mkdirSync(options.output, { recursive: true })
+            outputFilePath = join(options.output, basename(f.name + '.' + (options.format || 'svg')))
+          }
+          else if (!existsSync(dirname(options.output))) {
+            mkdirSync(dirname(options.output), { recursive: true })
+          }
           writeFileSync(outputFilePath, content)
         }
         else {
@@ -43,7 +48,7 @@ export async function traceImage(options: CliOptions) {
         throw error
       }
     } catch (error) {
-      console.error('ERROR while rendering file ' + input)
+      console.error('ERROR while rendering file ' + f)
       console.error(error, error.stack)
     }
   }))
@@ -68,24 +73,24 @@ function printHelp() {
   console.log(`
 Usage: 
 
-geometrize --input test/assets/panda.png --noOptimize --format svg --output output/folder --shapeTypes triangle,rectangle --iterations 100
+  geometrize --input test/assets/panda.png --noOptimize --format svg \
+    --output output/folder --shapeTypes triangle,rectangle --iterations 100
 
 Options:
 
- --input: string: Path of file to convert. Also could be a glob pattern.
- --output?: string: Folder for output files. If it doesn't exists it will be created. If none, output files will be written
-in current folder.
- --outputFile?: string: If [[input]] match a single file and this is defined the output file will be written in this location,creating folders if needed.
- --help?: boolean:  Print usage information, then exit.
- --debug?: boolean:  Prints debug messages.
- --image: Buffer:
- --iterations?: number,:
- --format?: 'svg' | 'json' | 'png' | 'jpg' | 'tiff' | 'gif' | 'bmp': Output format. Default: 'svg'
- --noOptimize?: boolean: Don't optimize SVG.
- --shapeTypes: Array<ShapeTypes>;: The types of shapes to use when generating the image.
- --alpha: number;: The opacity of the shapes (0-255).
- --candidateShapesPerStep: number;: The number of candidate shapes to try per model step.
- --shapeMutationsPerStep: number;: The number of times to mutate each candidate shape.
+  --input: string: Path of file to convert. Also could be a glob pattern.
+  --output?: string: If input file is only one then the output file will be written at this path, if given. If multiple input files are given, then the output files will be written at this folder path. In both cases, folders will be created if they doesn't exists. If not given output files will be written in stdout.
+  --outputFile?: string: If [[input]] match a single file and this is defined the output file will be written in this location,creating folders if needed.
+  --help?: boolean:  Print usage information, then exit.
+  --debug?: boolean:  Prints debug messages.
+  --image: Buffer:
+  --iterations?: number,:
+  --format?: 'svg' | 'json' | 'png' | 'jpg' | 'tiff' | 'gif' | 'bmp': Output format. Default: 'svg'
+  --noOptimize?: boolean: Don't optimize SVG.
+  --shapeTypes: Array<ShapeTypes>;: The types of shapes to use when generating the image.
+  --alpha: number;: The opacity of the shapes (0-255).
+  --candidateShapesPerStep: number;: The number of candidate shapes to try per model step.
+  --shapeMutationsPerStep: number;: The number of times to mutate each candidate shape.
 
 `)
 }

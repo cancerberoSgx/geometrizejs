@@ -17,8 +17,8 @@ geometrize --input test/assets/panda.png --noOptimize --format svg --output tmp/
 ## Options
 
  * `--input: string`: Path of file to convert. Also could be a glob pattern.
- * `--output?: string`: Folder for output files. If it doesn't exists it will be created. If none, output files will be written
-in current folder.
+ * `--output?: string`:If input file is only one then the output file will be written at this path, if given. If multiple input files are given, then the output files will be written at this folder path. In both cases, folders will be created if they doesn't exists. If not given output files will be written in stdout.
+ * `outputFile?: string`: If [[input]] match a single file and this is defined the output file will be written in this location, creating folders if needed.
  * `--outputFile?: string`: If [[input]] match a single file and this is defined the output file will be written in this location,creating folders if needed.
  * `--help?: boolean`:  Print usage information, then exit.
  * `--debug?: boolean`:  Prints debug messages.
