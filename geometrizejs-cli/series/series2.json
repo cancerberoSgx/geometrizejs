@@ -1,9 +1,9 @@
 {
-  "input": "test/assets/bluebells.jpg",
-  "output": "tmp/series1",
+  "output": "tmp/series2",
   "shapeTypes": "circle",
-  "iterations": 20,
+  "format": "png",
   "series": [
     {"iterations": 10},{"iterations": 220},{"iterations": 280},{"iterations": 420},{"iterations": 770},{"iterations": 1120},{"iterations": 2220},{"iterations": 4020}
-  ]
+  ],
+  "postScript": "convert tmp/series2/*.png tmp/series2.gif && rm -rf tmp/series2"
 }

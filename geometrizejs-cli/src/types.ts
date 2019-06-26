@@ -50,4 +50,9 @@ export interface CliOptions extends GeometrizeOptions {
 
   /** If given, Instead of generating one image, it will generate several generates an animation building several images and then building an animated gif or video with them. For providing this information the user should [[configFile]] since via command line gets too complicated.  */
   series?: Partial<CliOptions>[]
+
+  /**
+   * If provided after image are generated successfully it will execute it as a shell command. For example: `convert output/*.png output/flower.gif && rm output/*.png`
+   */
+  postScript?: string
 }

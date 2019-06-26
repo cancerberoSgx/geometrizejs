@@ -7,6 +7,7 @@ import { basename, dirname, join } from 'path'
 import { geometrize } from './geometrize'
 import { buildSeries } from './series'
 import { CliOptions } from './types'
+import { execSync } from 'child_process';
 
 export async function cli(options: CliOptions) {
   let fileConfig = {}
@@ -25,6 +26,15 @@ export async function cli(options: CliOptions) {
     return
   }
   await geometrizeImage(options)
+  if(options.postScript){
+    try {
+      execSync(options.postScript)
+    } catch (error) {
+      console.error('Images generated successfully but there was an error executing postScript command '+options.postScript);
+      console.error(error);
+      process.exit(1)
+    }
+  }
 }
 
 export async function geometrizeImage(options: CliOptions) {

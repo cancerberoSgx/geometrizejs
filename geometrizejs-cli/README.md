@@ -59,6 +59,10 @@ This is useful to later generate animated gif or videos or just to better unders
 
 Any option can be changed, even the input files!
 
+#### Executing a program after it finishes
+
+You can use the --postScript property to execute an external program to further processing generated images or clean up. Particularly useful when using with `--series` to build animations, videos or post process the images with an external tool.
+
 #### Generating gif animations from Series images
 
 To generate animated gifs you will need ImageMagick. The ImageMagick command is:
@@ -98,6 +102,7 @@ With some work animations in SVGs file can be also produced.
 - [ ] users cannot use ImageRunner or Bitmap as types
 - [ ] integrate magica to generate gifs ? 
 - [ ] research on generating SVG animations
+- [ ] let postScript be a template so I can reference variable property values defined from the command line. Ex: postScript: "convert <%=output%>/*.<%=format%> <%=output=>/anim.gif"
 - [x] document src/options.ts
 - [x] options in readme
 - [x] tests
