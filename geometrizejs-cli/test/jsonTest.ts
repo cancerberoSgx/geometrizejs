@@ -11,7 +11,7 @@ test('should render a png to json rectangle', async t => {
   const r = execSync('node bin/geometrize.js --input test/assets/panda.png --noOptimize --output tmp/b1 --shapeTypes  rectangle --iterations 10 --format json', { stdio: 'pipe' })
   const s = readFileSync('tmp/b1/panda.png.json').toString()
   const json = JSON.parse(s) as any[]
-  t.deepEqual(json.length, 2)
+  t.deepEqual(json.length, 10)
   json.forEach(s => {
     t.true(s.type === 0)
   })
