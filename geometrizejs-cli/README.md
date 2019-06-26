@@ -129,7 +129,8 @@ With some work animations in SVGs file can be also produced.
 
 ## Related Projects
 
- * [geometrizejs](https://www.npmjs.com/package/geometrizejs)
+ * [geometrizejs](https://www.npmjs.com/package/geometrizejs) (the library in which this tool is based)
+ * [geometrize-haxe](https://github.com/Tw1ddle/geometrize-haxe/) (the original library from which geometrizejs is built from)
  * [svg-png-converter](https://www.npmjs.com/package/svg-png-converter)
  * [magica](https://www.npmjs.com/package/magica)
  * [mujer](https://www.npmjs.com/package/mujer)
