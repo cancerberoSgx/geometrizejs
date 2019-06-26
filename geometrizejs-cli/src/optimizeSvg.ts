@@ -1,9 +1,11 @@
+import { unique } from 'misc-utils-of-mine-generic';
+
 const SVGO = require('svgo')
 
 export async function optimizeSvg(data: string, debug?: boolean) {
   const svgo = new SVGO(svgoOptions)
   const before = data.length
-  const result = await svgo.optimize(data, { path: 'foo.svg' })
+  const result = await svgo.optimize(data, { path: unique()+'.svg' })
 
   if (result.data) {
     debug && console.log('SVG data SHRINK IN ' + ((before) / result.data.length) + '%')

@@ -5,6 +5,14 @@ import { OutputFormat } from 'svg-png-converter/dist/src/types'
 import { optimizeSvg } from './optimizeSvg'
 import { GeometrizeOptions } from './types'
 
+export interface GeometrizeResult {
+  content?: Buffer
+  error?: Error
+}
+
+/**
+ * Implements the dialog directly with geometrizejs by iterating, creating bimap, etc. Uses jimp to read images and create bitmap. Output a SVG string.
+ */
 export async function geometrize(o: GeometrizeOptions): Promise<GeometrizeResult> {
   try {
     const image = await Jimp.read(o.image)
@@ -33,29 +41,20 @@ export async function geometrize(o: GeometrizeOptions): Promise<GeometrizeResult
       }
     } else {
       const { content } = await svg(options, runner, bitmap, o, iterations)
-      // console.log('exec svg2png on svg ', content.toString());
       return {
         content: await svg2png({
           input: content ? content.toString() : '',
           encoding: 'buffer',
           format: options.format as OutputFormat
         })
-      } //as Buffer
-      // return {content}
+      }  
+      
     }
-    // else {
-    //   throw new Error('Format not supported ' + options.format)
-    // }
   } catch (error) {
     return {
       error
     }
   }
-}
-
-export interface GeometrizeResult {
-  content?: Buffer
-  error?: Error
 }
 
 async function svg(options: GeometrizeOptions, runner: any, bitmap: any, o: GeometrizeOptions, iterations: number) {

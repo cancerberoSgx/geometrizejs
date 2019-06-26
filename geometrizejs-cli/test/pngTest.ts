@@ -3,9 +3,9 @@ import { execSync } from 'child_process'
 import fileType from 'file-type'
 import { existsSync, readFileSync } from 'fs'
 
-test.before('should build', async t => {
-  t.notThrows(() => execSync('npm run build', { stdio: 'pipe' }))
-})
+// test.before('should build', async t => {
+//   t.notThrows(() => execSync('npm run build', { stdio: 'pipe' }))
+// })
 
 test('should render a png to png rotated_rectangle', async t => {
   t.false(existsSync('tmp/out.png'))

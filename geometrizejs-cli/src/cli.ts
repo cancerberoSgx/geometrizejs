@@ -6,65 +6,71 @@ import { serial } from 'misc-utils-of-mine-generic'
 import { basename, dirname, join } from 'path'
 import { geometrize } from './geometrize'
 import { CliOptions } from './types'
+import { buildSeries } from './series';
 
 export async function cli(options: CliOptions) {
   let fileConfig = {}
-  if (options.configFile) {
+  if (options.config) {
     try {
-      fileConfig = JSON.parse(readFileSync(options.configFile).toString())
+      fileConfig = JSON.parse(readFileSync(options.config).toString())
     } catch (error) {
-      fail('Cannot parse given config file ' + options.configFile + '. Aborting. ')
+      fail('Cannot parse given config file ' + options.config + '. Aborting. ')
     }
   }
   options = { ...fileConfig, ...options }
   preconditions(options)
+  options.debug && console.log(`CLI Options: ${JSON.stringify({ ...options, input: null })}`)
+  if(options.series) {
+    await buildSeries(options)
+    return
+  }
+  await geometrizeImage(options);
+}
+
+export async function geometrizeImage(options: CliOptions) {
   if (options.shapeTypes) {
     // user pass shape types as strings comma separated
     const st: string[] = (options.shapeTypes + '').split(',').map(s => s)
     options.shapeTypes = st.map(s => (ShapeTypes as any)[s.toUpperCase()])
   }
-  options.debug && console.log(`CLI Options: ${JSON.stringify({ ...options, input: null })}`)
   const input = (typeof options.input === 'string' ? glob(options.input) : [])
     .filter(f => existsSync(f) && statSync(f).isFile())
     .map(f => ({
       name: f,
       content: readFileSync(f)
-    }))
-
+    }));
   if (!input.length) {
-    fail(`No input files found for ${input}. Aborting. `)
+    fail(`No input files found for ${input}. Aborting. `);
   }
-
   await serial(input.map(f => async () => {
     try {
-      options.debug && console.log('Rendering ' + f.name)
-      let { content, error } = await geometrize({ ...options, image: f.content })
-      console.log('geom executed', error, content && content.toString().length);
-
+      options.debug && console.log('Rendering ' + f.name);
+      let { content, error } = await geometrize({ ...options, image: f.content });
       if (content) {
         if (options.output) {
-          let outputFilePath = options.output + '.' + (options.format || 'svg')
+          let outputFilePath = options.output + '.' + (options.format || 'svg');
           if (input.length > 1) {
-            !existsSync(options.output) && mkdirSync(options.output, { recursive: true })
-            outputFilePath = join(options.output, basename(f.name + '.' + (options.format || 'svg')))
+            !existsSync(options.output) && mkdirSync(options.output, { recursive: true });
+            outputFilePath = join(options.output, basename(f.name + '.' + (options.format || 'svg')));
           }
           else if (!existsSync(dirname(options.output))) {
-            mkdirSync(dirname(options.output), { recursive: true })
+            mkdirSync(dirname(options.output), { recursive: true });
           }
-          writeFileSync(outputFilePath, content)
+          writeFileSync(outputFilePath, content);
         }
         else {
-          process.stdout.write(content ? content.toString('binary') : 'ERROR')
+          process.stdout.write(content ? content.toString('binary') : 'ERROR');
         }
       }
       if (error) {
-        throw error
+        throw error;
       }
-    } catch (error) {
-      console.error('ERROR while rendering file ' + f)
-      console.error(error, error.stack)
     }
-  }))
+    catch (error) {
+      console.error('ERROR while rendering file ' + f.name+' in output '+options.output);
+      console.error(error, error.stack);
+    }
+  }));
 }
 
 function preconditions(options: CliOptions) {
@@ -93,7 +99,6 @@ Options:
 
   --input: string: Path of file to convert. Also could be a glob pattern.
   --output?: string: If input file is only one then the output file will be written at this path, if given. If multiple input files are given, then the output files will be written at this folder path. In both cases, folders will be created if they doesn't exists. If not given output files will be written in stdout.
-  --outputFile?: string: If [[input]] match a single file and this is defined the output file will be written in this location,creating folders if needed.
   --help?: boolean:  Print usage information, then exit.
   --debug?: boolean:  Prints debug messages.
   --image: Buffer:

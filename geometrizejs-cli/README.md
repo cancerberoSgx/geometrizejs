@@ -18,7 +18,6 @@ geometrize --input test/assets/panda.png --noOptimize --format svg --output tmp/
 
  * `--input: string`: Path of file to convert. Also could be a glob pattern.
  * `--output?: string`:If input file is only one then the output file will be written at this path, if given. If multiple input files are given, then the output files will be written at this folder path. In both cases, folders will be created if they doesn't exists. If not given output files will be written in stdout.
- * `--outputFile?: string`: If [[input]] match a single file and this is defined, the output file will be written at this location, creating folders if needed.
  * `--help?: boolean`:  Print usage information, then exit.
  * `--debug?: boolean`:  Prints debug messages.
  * `--image: Buffer`:
@@ -29,10 +28,65 @@ geometrize --input test/assets/panda.png --noOptimize --format svg --output tmp/
  * `--alpha: number;`: The opacity of the shapes (0-255).
  * `--candidateShapesPerStep: number;`: The number of candidate shapes to try per model step.
  * `--shapeMutationsPerStep: number;`: The number of times to mutate each candidate shape.
-    
+
+### Config file
+
+Using `--config` you can pass a JSON file with configuration. Particularly useful to define complex properties like `--series`. 
+
+Heads up! command arguments will has precedence configuration file. 
+
+Example:
+
+```json
+{
+  "shapeTypes": "circle,rectangle",
+  "series": [ 
+    {"iterations": 120}, {"iterations": 380}, {"iterations": 620},
+    {"iterations": 1270}, {"iterations": 2220}, {"iterations": 4020}
+  ]
+}
+```
+
+### Series
+
+The option `--series` is an extra feature of this project for generating multiple images in one command. 
+
+See previous section for an example of how to define series using the configuration file.
+
+User can give with an array of options objects and the tool will iterate it (using base options as defaults) and generating images in the folder given by `--output` and appending numbers in the file name, foo/bar001.png, foo/bar002.png. 
+
+This is useful to later generate animated gif or videos or just to better understand how the properties impact in the final image. 
+
+Any option can be changed, even the input files!
+
+#### Generating gif animations from Series images
+
+To generate animated gifs you will need ImageMagick. The ImageMagick command is:
+
+```
+convert foo/imgs* output.gif -delay 10
+```
+(use delay for less speed).
+
+[magica](https://www.npmjs.com/package/magica) is a ImageMagick JavaScript port with a similar CLI that that can be easily installed with Node.js `npm install magica -g`. Also, it has an easy to use API for Node.js and the browser. 
+
+#### Generating videos
+
+ffmpeg is a command line video processing and player program that can generate videos from images like this:
+
+```
+ffmpeg -framerate 60 -i image-%03d.png video.webm
+```
+
+User -framerate to control speed
+
+####
+
+With some work animations in SVGs file can be also produced. 
+
 ## Related Projects
 
- * [geometrizejs](https://github.com/cancerberoSgx/geometrizejs)
+ * [geometrizejs](https://www.npmjs.com/package/geometrizejs)
  * [svg-png-converter](https://www.npmjs.com/package/svg-png-converter)
  * [magica](https://www.npmjs.com/package/magica)
  * [mujer](https://www.npmjs.com/package/mujer)
@@ -42,6 +96,8 @@ geometrize --input test/assets/panda.png --noOptimize --format svg --output tmp/
 - [ ] cli: use mujer for optimizing and remove this implementation
 - [ ] use svg-to-png-converter to render bitmap formats
 - [ ] users cannot use ImageRunner or Bitmap as types
+- [ ] integrate magica to generate gifs ? 
+- [ ] research on generating SVG animations
 - [x] document src/options.ts
 - [x] options in readme
 - [x] tests

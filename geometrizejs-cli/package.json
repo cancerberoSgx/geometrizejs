@@ -8,7 +8,7 @@
     "geometrize": "bin/geometrize.js"
   },
   "scripts": {
-    "test": "ava",
+    "test": "npm run build && ava",
     "test-browser": "exit 0; npx ava test-browser/*Test.ts",
     "test-js": " npx ava ./dist/test/*Test.js",
     "clean": "rm -rf dist tmp",

@@ -2,9 +2,9 @@ import test from 'ava'
 import { execSync } from 'child_process'
 import { existsSync, readFileSync } from 'fs'
 
-test.before('should build', async t => {
-  t.notThrows(() => execSync('npm run build', { stdio: 'pipe' }))
-})
+// test.before('should build', async t => {
+//   t.notThrows(() => execSync('npm run build', { stdio: 'pipe' }))
+// })
 
 test('should render a png to svg triangle,rectangle', async t => {
   t.false(existsSync('tmp/1.svg'))

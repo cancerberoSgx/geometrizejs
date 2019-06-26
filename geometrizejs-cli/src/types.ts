@@ -29,11 +29,11 @@ export interface CliOptions extends GeometrizeOptions {
    */
   output?: string
 
-  /**
-   * If [[input]] match a single file and this is defined the output file will be written in this location,
-   * creating folders if needed. 
-   */
-  outputFile?: string
+  // /**
+  //  * If [[input]] match a single file and this is defined the output file will be written in this location,
+  //  * creating folders if needed. 
+  //  */
+  // outputFile?: string
 
   /**
    *  Print usage information, then exit.
@@ -46,8 +46,8 @@ export interface CliOptions extends GeometrizeOptions {
   debug?: boolean
 
   /** path to a json file containing this same configuration. Options from command line arguments takes precedence over options in the file.  */
-  configFile?: string
+  config?: string
 
   /** If given, Instead of generating one image, it will generate several generates an animation building several images and then building an animated gif or video with them. For providing this information the user should [[configFile]] since via command line gets too complicated.  */
-  animSeries?: Partial<CliOptions>[]
+  series?: Partial<CliOptions>[]
 }
