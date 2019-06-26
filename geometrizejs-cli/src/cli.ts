@@ -1,13 +1,11 @@
 
-import { existsSync, mkdirSync, readFileSync, writeFileSync, statSync } from 'fs'
+import { existsSync, mkdirSync, readFileSync, statSync, writeFileSync } from 'fs'
 import { ShapeTypes } from 'geometrizejs'
 import { sync as glob } from 'glob'
-import { basename, join, dirname } from 'path'
+import { serial } from 'misc-utils-of-mine-generic'
+import { basename, dirname, join } from 'path'
 import { geometrize } from './geometrize'
 import { CliOptions } from './types'
-import { serial } from 'misc-utils-of-mine-generic'
-import { svg2png } from 'svg-png-converter'
-import { OutputFormat } from 'svg-png-converter/dist/src/types';
 
 export async function traceImage(options: CliOptions) {
   preconditions(options)
@@ -33,10 +31,10 @@ export async function traceImage(options: CliOptions) {
       options.debug && console.log('Rendering ' + f.name)
       let { content, error } = await geometrize({ ...options, image: f.content })
       console.log('geom executed', error, content && content.toString().length);
-      
+
       if (content) {
         if (options.output) {
-          let outputFilePath = options.output+ '.' + (options.format || 'svg')
+          let outputFilePath = options.output + '.' + (options.format || 'svg')
           if (input.length > 1) {
             !existsSync(options.output) && mkdirSync(options.output, { recursive: true })
             outputFilePath = join(options.output, basename(f.name + '.' + (options.format || 'svg')))

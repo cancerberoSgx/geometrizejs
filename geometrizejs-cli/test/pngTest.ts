@@ -1,7 +1,7 @@
 import test from 'ava'
 import { execSync } from 'child_process'
-import { existsSync, readFileSync } from 'fs'
 import fileType from 'file-type'
+import { existsSync, readFileSync } from 'fs'
 
 test.before('should build', async t => {
   t.notThrows(() => execSync('npm run build', { stdio: 'pipe' }))
