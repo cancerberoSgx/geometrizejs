@@ -71,6 +71,19 @@ Any option can be changed, even the input files!
 
 You can use the --postScript property to execute an external program to further processing generated images or clean up. Particularly useful when using with `--series` to build animations, videos or post process the images with an external tool.
 
+#### series and postScript example
+
+```json
+{
+  "output": "tmp/series2",
+  "format": "png",
+  "series": [
+    {"iterations": 10},{"iterations": 220},{"iterations": 280},{"iterations": 420},{"iterations": 770},{"iterations": 1120},{"iterations": 2220},{"iterations": 4020},{"iterations": 8020}
+  ],
+  "postScript": "convert -coalesce -delete 0 -deconstruct -loop 0 -delay 18 $(ls tmp/series2/*.png | sort -V) $(ls tmp/series2/*.png | sort -Vr) tmp/series2.gif && rm -rf tmp/series2"
+}
+```
+
 #### Generating gif animations from Series images
 
 To generate animated gifs you will need ImageMagick. The ImageMagick command is:
