@@ -1,0 +1,10 @@
+{
+  "output": "tmp_3/iterations",
+  "format": "png",
+  "shapeTypes": ["triangle", "rotated_rectangle", "rotated_ellipse", "circle", "line"],
+  "iterations": 400,
+  "series": [
+    {"candidateShapesPerStep": 10},{"candidateShapesPerStep": 220},{"candidateShapesPerStep": 420},{"candidateShapesPerStep": 770},{"candidateShapesPerStep": 1800},{"candidateShapesPerStep": 3555}
+  ],
+  "postScript": "convert -coalesce -delete 0 -deconstruct -loop 0 -delay 18 $(ls tmp_3/iterations/*.png | sort -V) $(ls tmp_3/iterations/*.png | sort -Vr) tmp_3/iterations.gif && rm -rf tmp_3/iterations"
+}

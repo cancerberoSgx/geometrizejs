@@ -1,7 +1,7 @@
-import { existsSync, readFileSync, statSync, writeFileSync } from 'fs'
+import { existsSync, readFileSync, statSync } from 'fs'
 import { sync as glob } from 'glob'
-import { get } from 'hyperquest-promise'
 import { getFileNameFromUrl, serial } from 'misc-utils-of-mine-generic'
+import fetch from 'node-fetch'
 import { CliOptions } from './types'
 
 export async function resolveInput(options: CliOptions) {
@@ -10,15 +10,17 @@ export async function resolveInput(options: CliOptions) {
 
   const input = await serial(inputNames.map(f => async () => {
     if (isUrl(f)) {
-      const response = await get(f);
-      if (!response || !response.data || response.error) {
+      const response = await fetch(f)
+      // const response = await get(f);
+      if (!response || !response.ok) {
         options.debug && console.log('Cannot fetch image from URL ', f, 'Omitting.');
         return null;
       }
-      writeFileSync('tmp_test.png', response.data)
+      const content = await response.buffer()
+      // writeFileSync('tmp_test.png', content)
       return {
         name: getFileNameFromUrl(f),
-        content: response.data
+        content
       };
     }
     else {

@@ -45,7 +45,7 @@ geometrize --input ../some/photo.jpg --output out.jpg --shapeTypes triangle,rect
 Load image from URL, use a configuration file:
 
 ```
-geometrize --input https://i.imgur.com/6egth7W.png --config tricks/killer1.json --debug
+geometrize --input https://foo.com/bar.jpg --config tricks/killer1.json --debug
 ```
 
 ## Options
