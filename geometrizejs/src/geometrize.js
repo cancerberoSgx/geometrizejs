@@ -491,7 +491,10 @@ geometrize_State.prototype = {
 };
 var geometrize_Util = function() { };
 geometrize_Util.__name__ = true;
-geometrize_Util.getAverageImageColor = function(image) {
+geometrize_Util.getAverageImageColor = function(image,alpha) {
+	if(alpha == null) {
+		alpha = 255;
+	}
 	if(!(image != null)) {
 		throw new js__$Boot_HaxeError("FAIL: image != null");
 	}
@@ -528,7 +531,7 @@ geometrize_Util.getAverageImageColor = function(image) {
 	if(!true) {
 		throw new js__$Boot_HaxeError("FAIL: min <= max");
 	}
-	return ((red < 0 ? 0 : red > 255 ? 255 : red) << 24) + ((green < 0 ? 0 : green > 255 ? 255 : green) << 16) + ((blue < 0 ? 0 : blue > 255 ? 255 : blue) << 8) + 255;
+	return ((red < 0 ? 0 : red > 255 ? 255 : red) << 24) + ((green < 0 ? 0 : green > 255 ? 255 : green) << 16) + ((blue < 0 ? 0 : blue > 255 ? 255 : blue) << 8) + (alpha < 0 ? 0 : alpha > 255 ? 255 : alpha);
 };
 geometrize_Util.clamp = function(value,min,max) {
 	if(!(min <= max)) {
@@ -870,9 +873,10 @@ geometrize_exporter_SvgExporter.getSvgNodeClose = function() {
 };
 geometrize_exporter_SvgExporter.stylesForShape = function(shape) {
 	var _g = shape.shape.getType();
-	if(_g == 6) {
+	switch(_g) {
+	case 6:case 7:
 		return geometrize_exporter_SvgExporter.strokeForColor(shape.color) + " stroke-width=\"1\" fill=\"none\" " + geometrize_exporter_SvgExporter.strokeOpacityForAlpha(shape.color & 255);
-	} else {
+	default:
 		return geometrize_exporter_SvgExporter.fillForColor(shape.color) + " " + geometrize_exporter_SvgExporter.fillOpacityForAlpha(shape.color & 255);
 	}
 };
@@ -1389,6 +1393,162 @@ geometrize_shape_Line.prototype = {
 	}
 	,__class__: geometrize_shape_Line
 };
+var geometrize_shape_QuadraticBezier = function(xBound,yBound) {
+	var upper = xBound - 1;
+	if(!(0 <= upper)) {
+		throw new js__$Boot_HaxeError("FAIL: lower <= upper");
+	}
+	this.x1 = Math.floor((upper + 1) * Math.random());
+	var upper1 = yBound - 1;
+	if(!(0 <= upper1)) {
+		throw new js__$Boot_HaxeError("FAIL: lower <= upper");
+	}
+	this.y1 = Math.floor((upper1 + 1) * Math.random());
+	var upper2 = xBound - 1;
+	if(!(0 <= upper2)) {
+		throw new js__$Boot_HaxeError("FAIL: lower <= upper");
+	}
+	this.cx = Math.floor((upper2 + 1) * Math.random());
+	var upper3 = yBound - 1;
+	if(!(0 <= upper3)) {
+		throw new js__$Boot_HaxeError("FAIL: lower <= upper");
+	}
+	this.cy = Math.floor((upper3 + 1) * Math.random());
+	var upper4 = xBound - 1;
+	if(!(0 <= upper4)) {
+		throw new js__$Boot_HaxeError("FAIL: lower <= upper");
+	}
+	this.x2 = Math.floor((upper4 + 1) * Math.random());
+	var upper5 = yBound - 1;
+	if(!(0 <= upper5)) {
+		throw new js__$Boot_HaxeError("FAIL: lower <= upper");
+	}
+	this.y2 = Math.floor((upper5 + 1) * Math.random());
+	this.xBound = xBound;
+	this.yBound = yBound;
+};
+geometrize_shape_QuadraticBezier.__name__ = true;
+geometrize_shape_QuadraticBezier.__interfaces__ = [geometrize_shape_Shape];
+geometrize_shape_QuadraticBezier.prototype = {
+	rasterize: function() {
+		var lines = [];
+		var points = [];
+		var pointCount = 20;
+		var _g1 = 0;
+		var _g = pointCount - 1;
+		while(_g1 < _g) {
+			var i = _g1++;
+			var t = i / pointCount;
+			var tp = 1 - t;
+			var x = tp * (tp * this.x1 + t * this.cx) + t * (tp * this.cx + t * this.x2) | 0;
+			var y = tp * (tp * this.y1 + t * this.cy) + t * (tp * this.cy + t * this.y2) | 0;
+			points.push({ x : x, y : y});
+		}
+		var _g11 = 0;
+		var _g2 = points.length - 1;
+		while(_g11 < _g2) {
+			var i1 = _g11++;
+			var p0 = points[i1];
+			var p1 = points[i1 + 1];
+			var pts = geometrize_rasterizer_Rasterizer.bresenham(p0.x,p0.y,p1.x,p1.y);
+			var _g21 = 0;
+			while(_g21 < pts.length) {
+				var point = pts[_g21];
+				++_g21;
+				lines.push(new geometrize_rasterizer_Scanline(point.y,point.x,point.x));
+			}
+		}
+		return geometrize_rasterizer_Scanline.trim(lines,this.xBound,this.yBound);
+	}
+	,mutate: function() {
+		if(!true) {
+			throw new js__$Boot_HaxeError("FAIL: lower <= upper");
+		}
+		var r = Math.floor(3 * Math.random());
+		switch(r) {
+		case 0:
+			if(!true) {
+				throw new js__$Boot_HaxeError("FAIL: lower <= upper");
+			}
+			var value = this.cx + (-8 + Math.floor(17 * Math.random()));
+			var max = this.xBound - 1;
+			if(!(0 <= max)) {
+				throw new js__$Boot_HaxeError("FAIL: min <= max");
+			}
+			this.cx = value < 0 ? 0 : value > max ? max : value;
+			if(!true) {
+				throw new js__$Boot_HaxeError("FAIL: lower <= upper");
+			}
+			var value1 = this.cy + (-8 + Math.floor(17 * Math.random()));
+			var max1 = this.yBound - 1;
+			if(!(0 <= max1)) {
+				throw new js__$Boot_HaxeError("FAIL: min <= max");
+			}
+			this.cy = value1 < 0 ? 0 : value1 > max1 ? max1 : value1;
+			break;
+		case 1:
+			if(!true) {
+				throw new js__$Boot_HaxeError("FAIL: lower <= upper");
+			}
+			var value2 = this.x1 + (-8 + Math.floor(17 * Math.random()));
+			var max2 = this.xBound - 1;
+			if(!(1 <= max2)) {
+				throw new js__$Boot_HaxeError("FAIL: min <= max");
+			}
+			this.x1 = value2 < 1 ? 1 : value2 > max2 ? max2 : value2;
+			if(!true) {
+				throw new js__$Boot_HaxeError("FAIL: lower <= upper");
+			}
+			var value3 = this.y1 + (-8 + Math.floor(17 * Math.random()));
+			var max3 = this.yBound - 1;
+			if(!(1 <= max3)) {
+				throw new js__$Boot_HaxeError("FAIL: min <= max");
+			}
+			this.y1 = value3 < 1 ? 1 : value3 > max3 ? max3 : value3;
+			break;
+		case 2:
+			if(!true) {
+				throw new js__$Boot_HaxeError("FAIL: lower <= upper");
+			}
+			var value4 = this.x2 + (-8 + Math.floor(17 * Math.random()));
+			var max4 = this.xBound - 1;
+			if(!(1 <= max4)) {
+				throw new js__$Boot_HaxeError("FAIL: min <= max");
+			}
+			this.x2 = value4 < 1 ? 1 : value4 > max4 ? max4 : value4;
+			if(!true) {
+				throw new js__$Boot_HaxeError("FAIL: lower <= upper");
+			}
+			var value5 = this.y2 + (-8 + Math.floor(17 * Math.random()));
+			var max5 = this.yBound - 1;
+			if(!(1 <= max5)) {
+				throw new js__$Boot_HaxeError("FAIL: min <= max");
+			}
+			this.y2 = value5 < 1 ? 1 : value5 > max5 ? max5 : value5;
+			break;
+		}
+	}
+	,clone: function() {
+		var bezier = new geometrize_shape_QuadraticBezier(this.xBound,this.yBound);
+		bezier.cx = this.cx;
+		bezier.cy = this.cy;
+		bezier.x1 = this.x1;
+		bezier.y1 = this.y1;
+		bezier.x2 = this.x2;
+		bezier.y2 = this.y2;
+		return bezier;
+	}
+	,getType: function() {
+		return 7;
+	}
+	,getRawShapeData: function() {
+		return [this.x1,this.y1,this.cx,this.cy,this.x2,this.y2];
+	}
+	,getSvgShapeData: function() {
+		return "<path d=\"M" + this.x1 + " " + this.y1 + " Q " + this.cx + " " + this.cy + " " + this.x2 + " " + this.y2 + "\" " + geometrize_exporter_SvgExporter.SVG_STYLE_HOOK + " />";
+	}
+	,__class__: geometrize_shape_QuadraticBezier
+};
 var geometrize_shape_Rectangle = function(xBound,yBound) {
 	this.x1 = Std.random(xBound);
 	this.y1 = Std.random(yBound);
@@ -1850,10 +2010,12 @@ geometrize_shape_ShapeFactory.create = function(type,xBound,yBound) {
 		return new geometrize_shape_Circle(xBound,yBound);
 	case 6:
 		return new geometrize_shape_Line(xBound,yBound);
+	case 7:
+		return new geometrize_shape_QuadraticBezier(xBound,yBound);
 	}
 };
 geometrize_shape_ShapeFactory.randomShape = function(xBound,yBound) {
-	var a = [0,1,2,3,4,5,6];
+	var a = [0,1,2,3,4,5,6,7];
 	if(!(a != null && a.length > 0)) {
 		throw new js__$Boot_HaxeError("FAIL: a != null && a.length > 0");
 	}
@@ -2354,6 +2516,7 @@ geometrize_shape_ShapeTypes.ELLIPSE = 3;
 geometrize_shape_ShapeTypes.ROTATED_ELLIPSE = 4;
 geometrize_shape_ShapeTypes.CIRCLE = 5;
 geometrize_shape_ShapeTypes.LINE = 6;
+geometrize_shape_ShapeTypes.QUADRATIC_BEZIER = 7;
 js_Boot.__toStr = ({ }).toString;
 js_html_compat_Uint8Array.BYTES_PER_ELEMENT = 1;
 })(typeof exports != "undefined" ? exports : typeof window != "undefined" ? window : typeof self != "undefined" ? self : this, typeof window != "undefined" ? window : typeof global != "undefined" ? global : typeof self != "undefined" ? self : this);

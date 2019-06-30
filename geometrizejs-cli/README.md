@@ -155,6 +155,7 @@ With some work animations in SVGs file can be also produced.
 - [ ] integrate magica to generate gifs ? 
 - [ ] research on generating SVG animations
 - [ ] let postScript be a template so I can reference variable property values defined from the command line. Ex: postScript: "convert <%=output%>/*.<%=format%> <%=output=>/anim.gif"
+- [ ] since is not browser and since 
 - [x] input from url
 - [x] document src/options.ts
 - [x] options in readme
