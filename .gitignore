@@ -12,3 +12,4 @@ tmp.?*
 .antlr
 /tmp*
 simplify-svg-path
+playground/geometrizejs-playground

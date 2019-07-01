@@ -12,4 +12,4 @@ export const ShapeTypes = geometrize.shape.ShapeTypes as typeof ShapeTypesClass
 export const SvgExporter = geometrize.exporter.SvgExporter as typeof SvgExporterClass
 export const ShapeJsonExporter = geometrize.exporter.ShapeJsonExporter as typeof ShapeJsonExporterClass
 export { ImageRunnerOptions } from './imageRunnerOptions'
-export { Model, ShapeResult } from './model'
+export { ShapeResult } from './model'

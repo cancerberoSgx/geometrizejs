@@ -1,6 +1,6 @@
 import { Bitmap } from "./bitmap"
 import { ImageRunnerOptions } from './imageRunnerOptions'
-import { Model, ShapeResult } from './model'
+import { ShapeResult } from './model'
 
 export interface ImageRunnerConstructor {
   /**
@@ -14,11 +14,6 @@ export interface ImageRunnerConstructor {
  * Helper class for creating a set of shapes that approximate a source image.
  */
 interface ImageRunner {
-
-  /**
-   * The model for the optimization/fitting algorithm.
-   */
-  model?: Model
 
   /**
    * Updates the model once.

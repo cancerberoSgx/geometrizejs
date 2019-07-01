@@ -15,7 +15,7 @@ interface Options extends BaseOptions {
 }
 
 /**
- * Implements the dialog directly with geometrizejs by iterating, creating bimap, etc. Uses jimp to read images and create bitmap. Output a SVG string.
+ * Implements the dialog directly with geometrizejs by iterating, creating bitmap, etc. Uses jimp to read images and create bitmap. Output a SVG string.
  */
 export async function geometrize(o: Options): Promise<GeometrizeResult> {
   try {
@@ -32,10 +32,7 @@ export async function geometrize(o: Options): Promise<GeometrizeResult> {
       ...o
     }
     const iterations = options.iterations || 200
-    if (!options.format || options.format === 'svg') {
-      return await svg(options, runner, bitmap, o, iterations)
-    }
-    else if (options.format === 'json') {
+    if (options.format === 'json') {
       const shapes: string[] = []
       for (let i = 0;i < iterations;i++) {
         shapes.push(ShapeJsonExporter.exportShapes(runner.step(options)))
@@ -45,14 +42,18 @@ export async function geometrize(o: Options): Promise<GeometrizeResult> {
       }
     } else {
       const { content } = await svg(options, runner, bitmap, o, iterations)
-      return {
-        content: await svg2png({
-          input: content ? content.toString() : '',
-          encoding: 'buffer',
-          format: options.format as OutputFormat
-        })
+      if (!options.format || options.format === 'svg') {
+        return { content }
       }
-
+      else {
+        return {
+          content: await svg2png({
+            input: content ? content.toString() : '',
+            encoding: 'buffer',
+            format: options.format as OutputFormat
+          })
+        }
+      }
     }
   } catch (error) {
     return {
