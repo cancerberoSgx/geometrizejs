@@ -1,12 +1,9 @@
 {
-  "name": "geometrizejs-cli",
-  "version": "0.0.13",
-  "description": "Command line interface for geometrizejs: JavaScript types & API for https://github.com/Tw1ddle/geometrize-haxe",
+  "name": "geometrizejs-extra",
+  "version": "0.0.12",
+  "description": "Extra (high level APIs) for geometrizejs",
   "main": "dist/src/index.js",
   "types": "dist/src/index.d.ts",
-  "bin": {
-    "geometrize": "bin/geometrize.js"
-  },
   "scripts": {
     "test": "npm run build && ava",
     "test-browser": "exit 0; npx ava test-browser/*Test.ts",
@@ -23,25 +20,20 @@
     "all-publish": "npm run all && git commit -a -m \"version patch\" && npm version patch && npm publish"
   },
   "devDependencies": {
-    "@types/glob": "^7.1.1",
-    "@types/node": "^12.6.2",
+    "@types/node": "^12.0.10",
     "@types/node-fetch": "^2.3.7",
-    "ava": "^2.2.0",
-    "file-type": "^12.0.1",
+    "ava": "^2.1.0",
+    "file-type": "^12.0.0",
     "markdown-toc": "^1.2.0",
     "ts-node": "^8.3.0",
     "ts-refactor": "0.0.6",
-    "typescript": "^3.5.3"
+    "typescript": "^3.5.2"
   },
-  "homepage": "https://www.npmjs.com/package/geometrizejs-cli",
+  "homepage": "https://www.npmjs.com/package/geometrizejs-extra",
   "dependencies": {
-    "geometrizejs": "0.0.14",
-    "glob": "^7.1.4",
+    "geometrizejs": "0.0.13",
     "jimp": "^0.6.4",
-    "minimist": "^1.2.0",
-    "misc-utils-of-mine-generic": "^0.2.15",
-    "svg-png-converter": "0.0.9",
-    "svgo": "github:cancerberoSgx/svgo"
+    "misc-utils-of-mine-generic": "^0.2.10"
   },
   "repository": {
     "type": "git",
