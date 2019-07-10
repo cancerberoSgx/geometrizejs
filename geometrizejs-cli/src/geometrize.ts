@@ -45,11 +45,6 @@ export async function geometrize(o: Options): Promise<GeometrizeResult> {
       if (!o.noOptimize && (!options.format || options.format === 'svg')) {
         svg = await optimizeSvg(svg)
       }
-      // return {
-      //   content: Buffer.from(svg)
-      // }
-      // const { content } = await svg(options, runner, bitmap, o, iterations)
-      // const content = Buffer.from(svg)
       if (!options.format || options.format === 'svg') {
         return { content: Buffer.from(svg) }
       }
@@ -69,18 +64,4 @@ export async function geometrize(o: Options): Promise<GeometrizeResult> {
     }
   }
 }
-
-// async function svg(options: BaseOptions, runner: any, bitmap: any, o: BaseOptions, iterations: number) {
-//   const svgData = []
-//   for (let i = 0;i < iterations;i++) {
-//     svgData.push(runner.step(options))
-//   }
-//   let svg = SvgExporter.getSvgPrelude() + SvgExporter.getSvgNodeOpen(bitmap.width, bitmap.height) + SvgExporter.exportShapes(svgData) + SvgExporter.getSvgNodeClose()
-//   if (!o.noOptimize && (!options.format || options.format === 'svg')) {
-//     svg = await optimizeSvg(svg)
-//   }
-//   return {
-//     content: Buffer.from(svg)
-//   }
-// }
 

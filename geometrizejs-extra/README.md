@@ -4,6 +4,12 @@ Extra (High level APIs) for [geometrizejs](https://github.com/cancerberoSgx/geom
 
 <!-- toc -->
 
+- [Features](#features)
+- [Install](#install)
+- [Usage](#usage)
+- [Options](#options)
+- [Related Projects](#related-projects)
+- [TODO](#todo)
 
 <!-- tocstop -->
 
@@ -38,6 +44,8 @@ npm install geometrizejs-extra
 ## TODO
 
 - [ ] readme TOC
+- [ ] svg optimizer
+- [ ] magica to more formats ?
 - [ ] use svg-to-png-converter to render bitmap formats
 - [ ] input from url
 - [ ] document src/options.ts

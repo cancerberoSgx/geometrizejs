@@ -1,6 +1,6 @@
 {
   "name": "geometrizejs-extra",
-  "version": "0.0.12",
+  "version": "0.0.1",
   "description": "Extra (high level APIs) for geometrizejs",
   "main": "dist/src/index.js",
   "types": "dist/src/index.d.ts",
@@ -33,7 +33,9 @@
   "dependencies": {
     "geometrizejs": "0.0.13",
     "jimp": "^0.6.4",
-    "misc-utils-of-mine-generic": "^0.2.10"
+    "misc-utils-of-mine-generic": "^0.2.10",
+    "mujer": "0.0.5",
+    "svg-png-converter": "0.0.9"
   },
   "repository": {
     "type": "git",

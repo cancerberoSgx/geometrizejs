@@ -13,7 +13,7 @@ export interface ImageRunnerConstructor {
 /**
  * Helper class for creating a set of shapes that approximate a source image.
  */
-interface ImageRunner {
+export interface ImageRunner {
 
   /**
    * Updates the model once.
@@ -22,8 +22,8 @@ interface ImageRunner {
   step(options: ImageRunnerOptions): Array<ShapeResult>;
 
   /**
- * Gets the current bitmap with the shapes drawn on it.
- * @return	The current bitmap.
- */
+   * Gets the current bitmap with the shapes drawn on it.
+   * @return	The current bitmap.
+   */
   getImageData(): Bitmap
 }

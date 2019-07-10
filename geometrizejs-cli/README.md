@@ -150,7 +150,7 @@ With some work animations in SVGs file can be also produced.
 
 - [ ] move series, load input file/parse format, optimizeSvg to a separate library geometrizejs-extra so it's also an API
 - [ ] use mujer for optimizing and remove this implementation
-- [ ] users cannot use ImageRunner or Bitmap as types
+- [x] users cannot use ImageRunner or Bitmap as types
 - [ ] integrate magica to generate gifs ? 
 - [ ] research on generating SVG animations
 - [ ] let postScript be a template so I can reference variable property values defined from the command line. Ex: postScript: "convert <%=output%>/*.<%=format%> <%=output=>/anim.gif"
