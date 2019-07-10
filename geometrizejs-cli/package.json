@@ -41,7 +41,7 @@
     "minimist": "^1.2.0",
     "misc-utils-of-mine-generic": "^0.2.10",
     "svg-png-converter": "0.0.9",
-    "svgo": "github:cancerberoSgx/svgo#browser"
+    "svgo": "github:cancerberoSgx/svgo#"
   },
   "repository": {
     "type": "git",
