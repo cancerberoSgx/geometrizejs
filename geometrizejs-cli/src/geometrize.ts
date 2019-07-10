@@ -1,4 +1,4 @@
-import { Bitmap, ImageRunner, ShapeJsonExporter, ShapeTypes, SvgExporter, ShapeResult } from 'geometrizejs'
+import { Bitmap, ImageRunner, ShapeJsonExporter, ShapeResult, ShapeTypes, SvgExporter } from 'geometrizejs'
 import Jimp from 'jimp'
 import { svg2png } from 'svg-png-converter'
 import { OutputFormat } from 'svg-png-converter/dist/src/types'
@@ -51,7 +51,7 @@ export async function geometrize(o: Options): Promise<GeometrizeResult> {
       // const { content } = await svg(options, runner, bitmap, o, iterations)
       // const content = Buffer.from(svg)
       if (!options.format || options.format === 'svg') {
-        return { content:  Buffer.from(svg) }
+        return { content: Buffer.from(svg) }
       }
       else {
         return {
