@@ -1,10 +1,10 @@
 import { mkdirSync, writeFileSync } from 'fs'
-import { Bitmap, ImageRunner, ImageRunnerOptions, ShapeResult, ShapeTypes, SvgExporter, ShapeJsonExporter } from 'geometrizejs'
+import { Bitmap, ImageRunner, ImageRunnerOptions, ShapeJsonExporter, ShapeResult, ShapeTypes, SvgExporter } from 'geometrizejs'
 import Jimp from 'jimp'
 import { dirname, getFileExtension, isNode } from 'misc-utils-of-mine-generic'
-import { resolveInput } from './resolveInput'
 import { optimizeSvg } from 'mujer'
 import { svg2png } from 'svg-png-converter'
+import { resolveInput } from './resolveInput'
 
 export class Geometrize {
   protected defaultOptions: GeometrizeOptions = {
@@ -21,8 +21,8 @@ export class Geometrize {
   candidateShapesPerStep: number;
   input: string;
   alpha: number;
-  onFinish: (result: Result) =>void|Promise<void>;
-  onStep: (step: Step) =>  void|true|Promise<void|true>
+  onFinish: (result: Result) => void | Promise<void>;
+  onStep: (step: Step) => void | true | Promise<void | true>
   output: string | undefined;
   protected options: Partial<GeometrizeOptions> & { input: string; };
   constructor(options: Partial<GeometrizeOptions> & { input: string }) {
@@ -34,7 +34,7 @@ export class Geometrize {
     this.candidateShapesPerStep = finalOptions.candidateShapesPerStep
     this.alpha = finalOptions.alpha
     this.output = finalOptions.output
-    this.onStep = finalOptions.onStep || (r=>Promise.resolve())
+    this.onStep = finalOptions.onStep || (r => Promise.resolve())
     this.onFinish = finalOptions.onFinish || function() { }
     this.options = options
   }
@@ -51,8 +51,8 @@ export class Geometrize {
         break
       }
     }
-    const r=await this.export(shapes, image);
-    const results: Result = { shapes, runner, ...r}
+    const r = await this.export(shapes, image)
+    const results: Result = { shapes, runner, ...r }
     await this.onFinish(results)
     return results
   }
@@ -60,29 +60,29 @@ export class Geometrize {
 
   protected async   export(shapes: ShapeResult[], image: Jimp) {
     if (this.output) {
-      const e = getFileExtension(this.output).toLowerCase();
-     isNode()&& mkdirSync(dirname(this.output), { recursive: true });
-      let content,  outputWritten=this.output
+      const e = getFileExtension(this.output).toLowerCase()
+      isNode() && mkdirSync(dirname(this.output), { recursive: true })
+      let content, outputWritten = this.output
       if (!e || e === 'svg') {
         content = SvgExporter.export(shapes, image.bitmap.width, image.bitmap.height)
-        if(!this.options.noSvgOptimize){
-          content = await optimizeSvg({...this.options, input: content})
+        if (!this.options.noSvgOptimize) {
+          content = await optimizeSvg({ ...this.options, input: content })
         }
-        content = Buffer.from(content)        
-      }      
-      else if(e==='json'){
+        content = Buffer.from(content)
+      }
+      else if (e === 'json') {
         content = ShapeJsonExporter.export(shapes)
-        content = Buffer.from(content)  
+        content = Buffer.from(content)
       }
       else {
         content = await svg2png({
           input: SvgExporter.export(shapes, image.bitmap.width, image.bitmap.height),
           encoding: 'buffer',
-          format: e==='jpg'?'jpeg':e as any
+          format: e === 'jpg' ? 'jpeg' : e as any
         })
       }
-      isNode()&& writeFileSync(outputWritten, content);
-      return {...isNode()?{outputWritten}:{}, content}
+      isNode() && writeFileSync(outputWritten, content)
+      return { ...isNode() ? { outputWritten } : {}, content }
     }
   }
 }
@@ -92,17 +92,17 @@ export interface GeometrizeOptions extends ImageRunnerOptions {
   output?: string;
   debug?: boolean
   iterations: number;
-  onFinish?(result: Result): void|Promise<void> ;
+  onFinish?(result: Result): void | Promise<void>;
   /**
    * called after each step. If returned true, then the iteration will break.
    */
-  onStep?(step: Step): void|true|Promise<void|true>;
+  onStep?(step: Step): void | true | Promise<void | true>;
   noSvgOptimize?: boolean
 }
 
 interface Result {
   shapes: ShapeResult[]
-  runner:ImageRunner
+  runner: ImageRunner
   outputWritten?: string
   content?: Buffer
 }
@@ -110,5 +110,5 @@ interface Result {
 interface Step {
   results: ShapeResult[]
   shapes: ShapeResult[]
-  runner:ImageRunner
+  runner: ImageRunner
 }

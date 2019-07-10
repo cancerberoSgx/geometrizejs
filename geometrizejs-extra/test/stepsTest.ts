@@ -1,8 +1,8 @@
 import test from 'ava'
-import { existsSync, readFileSync } from 'fs'
-import { Geometrize } from '../src/steps'
-import { ShapeTypes } from 'geometrizejs';
 import getFileType from 'file-type'
+import { existsSync, readFileSync } from 'fs'
+import { ShapeTypes } from 'geometrizejs'
+import { Geometrize } from '../src/steps'
 
 test('should iterate given iterations, noOptimize, triangles, input jpg, output svg', async t => {
   t.false(existsSync('tmp/formUrl.png'))
@@ -44,9 +44,9 @@ test('should iterate given iterations, optimize, CIRCLE, input png, output jpg',
   })
   const r = await job.start()
   t.true(existsSync('tmp/output2.jpg'))
-  t.deepEqual( getFileType(readFileSync('tmp/output2.jpg')), {ext: 'jpg',mime: 'image/jpeg'})
+  t.deepEqual(getFileType(readFileSync('tmp/output2.jpg')), { ext: 'jpg', mime: 'image/jpeg' })
   t.deepEqual(r.outputWritten, 'tmp/output2.jpg')
-  t.deepEqual( getFileType(r.content!), {ext: 'jpg',mime: 'image/jpeg'})
+  t.deepEqual(getFileType(r.content!), { ext: 'jpg', mime: 'image/jpeg' })
   t.deepEqual(c, 10)
   t.deepEqual(d, 1)
 })
