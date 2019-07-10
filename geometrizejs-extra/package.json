@@ -1,7 +1,7 @@
 {
   "name": "geometrizejs-extra",
-  "version": "0.0.1",
-  "description": "Extra (high level APIs) for geometrizejs, suuports Node.js and Browser",
+  "version": "0.0.2",
+  "description": "Extra (high level APIs) for geometrizejs, supports Node.js and Browser",
   "main": "dist/src/index.js",
   "types": "dist/src/index.d.ts",
   "scripts": {
