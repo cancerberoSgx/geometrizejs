@@ -35,22 +35,22 @@
   },
   "homepage": "https://www.npmjs.com/package/geometrizejs-cli",
   "dependencies": {
-    "geometrizejs": "0.0.12",
+    "geometrizejs": "0.0.13",
     "glob": "^7.1.4",
     "jimp": "^0.6.4",
     "minimist": "^1.2.0",
     "misc-utils-of-mine-generic": "^0.2.10",
     "svg-png-converter": "0.0.9",
-    "svgo": "github:cancerberoSgx/svgo#"
+    "svgo": "github:cancerberoSgx/svgo"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/cancerberoSgx/univac.git"
+    "url": "git+https://github.com/cancerberoSgx/geometrizejs.git"
   },
   "keywords": [],
   "author": "Sebastián Gurin",
   "license": "Unlicense",
   "bugs": {
-    "url": "https://github.com/cancerberosgx/univac/issues"
+    "url": "https://github.com/cancerberosgx/geometrizejs/issues"
   }
 }
