@@ -833,7 +833,7 @@ geometrize_exporter_ShapeJsonExporter.exportShapes = function(shapes) {
 		var i = _g1++;
 		results += geometrize_exporter_ShapeJsonExporter.exportShape(shapes[i]);
 		if(i != shapes.length - 1) {
-			results += "\n";
+			results += ",\n";
 		}
 	}
 	return results;

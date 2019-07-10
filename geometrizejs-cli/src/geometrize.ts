@@ -1,4 +1,4 @@
-import { Bitmap, ImageRunner, ShapeJsonExporter, ShapeTypes, SvgExporter } from 'geometrizejs'
+import { Bitmap, ImageRunner, ShapeJsonExporter, ShapeTypes, SvgExporter, ShapeResult } from 'geometrizejs'
 import Jimp from 'jimp'
 import { svg2png } from 'svg-png-converter'
 import { OutputFormat } from 'svg-png-converter/dist/src/types'
@@ -32,23 +32,31 @@ export async function geometrize(o: Options): Promise<GeometrizeResult> {
       ...o
     }
     const iterations = options.iterations || 200
+    const shapes: ShapeResult[] = []
+    for (let i = 0;i < iterations;i++) {
+      shapes.push(...runner.step(options))
+    }
     if (options.format === 'json') {
-      const shapes: string[] = []
-      for (let i = 0;i < iterations;i++) {
-        shapes.push(ShapeJsonExporter.exportShapes(runner.step(options)))
-      }
       return {
-        content: Buffer.from('[\n' + shapes.join(',\n  ') + '\n]')
+        content: Buffer.from(ShapeJsonExporter.export(shapes))
       }
     } else {
-      const { content } = await svg(options, runner, bitmap, o, iterations)
+      let svg = SvgExporter.getSvgPrelude() + SvgExporter.getSvgNodeOpen(bitmap.width, bitmap.height) + SvgExporter.exportShapes(shapes) + SvgExporter.getSvgNodeClose()
+      if (!o.noOptimize && (!options.format || options.format === 'svg')) {
+        svg = await optimizeSvg(svg)
+      }
+      // return {
+      //   content: Buffer.from(svg)
+      // }
+      // const { content } = await svg(options, runner, bitmap, o, iterations)
+      // const content = Buffer.from(svg)
       if (!options.format || options.format === 'svg') {
-        return { content }
+        return { content:  Buffer.from(svg) }
       }
       else {
         return {
           content: await svg2png({
-            input: content ? content.toString() : '',
+            input: svg ? svg : '',
             encoding: 'buffer',
             format: options.format as OutputFormat
           })
@@ -62,17 +70,17 @@ export async function geometrize(o: Options): Promise<GeometrizeResult> {
   }
 }
 
-async function svg(options: BaseOptions, runner: any, bitmap: any, o: BaseOptions, iterations: number) {
-  const svgData = []
-  for (let i = 0;i < iterations;i++) {
-    svgData.push(SvgExporter.exportShapes(runner.step(options)))
-  }
-  let svg = SvgExporter.getSvgPrelude() + SvgExporter.getSvgNodeOpen(bitmap.width, bitmap.height) + svgData.join('\n') + SvgExporter.getSvgNodeClose()
-  if (!o.noOptimize && (!options.format || options.format === 'svg')) {
-    svg = await optimizeSvg(svg)
-  }
-  return {
-    content: Buffer.from(svg)
-  }
-}
+// async function svg(options: BaseOptions, runner: any, bitmap: any, o: BaseOptions, iterations: number) {
+//   const svgData = []
+//   for (let i = 0;i < iterations;i++) {
+//     svgData.push(runner.step(options))
+//   }
+//   let svg = SvgExporter.getSvgPrelude() + SvgExporter.getSvgNodeOpen(bitmap.width, bitmap.height) + SvgExporter.exportShapes(svgData) + SvgExporter.getSvgNodeClose()
+//   if (!o.noOptimize && (!options.format || options.format === 'svg')) {
+//     svg = await optimizeSvg(svg)
+//   }
+//   return {
+//     content: Buffer.from(svg)
+//   }
+// }
 
