@@ -29,7 +29,7 @@ export class Geometrize {
   alpha: number
   onFinish: (result: GeometrizeFinishResult) => void | Promise<void>
   onStep: (step: GeometrizeStepEvent) => void | true | Promise<void | true>
-  output: string|undefined
+  output: string | undefined
   protected options: Partial<GeometrizeOptions> & { input: string }
   constructor(options: Partial<GeometrizeOptions> & { input: string }) {
     const finalOptions = { ...this.defaultOptions, ...options }

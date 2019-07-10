@@ -1,10 +1,10 @@
 import 'babel-polyfill'
 import { serial } from 'misc-utils-of-mine-generic';
-import simpleIdentify from './tests/simpleIdentify';
+import jpgToSvg10 from './tests/jpgToSvg10';
 import { assert } from './testUtil';
 
 const all = [
-  simpleIdentify, 
+  jpgToSvg10, 
 ]
 serial(all.map(test=>async ()=>{
    try {
