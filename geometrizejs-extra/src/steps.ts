@@ -15,19 +15,25 @@ export class Geometrize {
     shapeMutationsPerStep: 100,
     iterations: 500
   }
-  iterations: number;
-  shapeMutationsPerStep: number;
-  shapeTypes: any;
-  candidateShapesPerStep: number;
-  input: string;
-  alpha: number;
-  onFinish: (result: Result) => void | Promise<void>;
-  onStep: (step: Step) => void | true | Promise<void | true>
-  output: string | undefined;
-  protected options: Partial<GeometrizeOptions> & { input: string; };
+  /**
+ * Number of steps (number of shaper to generate). Can be changed dynamically while iterating
+ */
+  iterations: number
+  shapeMutationsPerStep: number
+  shapeTypes: any
+  candidateShapesPerStep: number
+  /**
+ * Input file path or url. Cannot be changed dynamically.
+ */
+  input: string
+  alpha: number
+  onFinish: (result: GeometrizeFinishResult) => void | Promise<void>
+  onStep: (step: GeometrizeStepEvent) => void | true | Promise<void | true>
+  output: string|undefined
+  protected options: Partial<GeometrizeOptions> & { input: string }
   constructor(options: Partial<GeometrizeOptions> & { input: string }) {
     const finalOptions = { ...this.defaultOptions, ...options }
-    this.iterations = finalOptions.iterations
+    this.iterations = finalOptions.iterations!
     this.input = finalOptions.input
     this.shapeMutationsPerStep = finalOptions.shapeMutationsPerStep
     this.shapeTypes = finalOptions.shapeTypes
@@ -51,32 +57,31 @@ export class Geometrize {
         break
       }
     }
-    const r = await this.export(shapes, image)
-    const results: Result = { shapes, runner, ...r }
+    const r = await this.export({ shapes, runner })
+    const results: GeometrizeFinishResult = { shapes, runner, ...r }
     await this.onFinish(results)
     return results
   }
 
-
-  protected async   export(shapes: ShapeResult[], image: Jimp) {
+  protected async   export(ev: GeometrizeAbstractEvent) {
     if (this.output) {
       const e = getFileExtension(this.output).toLowerCase()
       isNode() && mkdirSync(dirname(this.output), { recursive: true })
       let content, outputWritten = this.output
       if (!e || e === 'svg') {
-        content = SvgExporter.export(shapes, image.bitmap.width, image.bitmap.height)
+        content = SvgExporter.export(ev.shapes, ev.runner.getImageData().width, ev.runner.getImageData().height)
         if (!this.options.noSvgOptimize) {
           content = await optimizeSvg({ ...this.options, input: content })
         }
         content = Buffer.from(content)
       }
       else if (e === 'json') {
-        content = ShapeJsonExporter.export(shapes)
+        content = ShapeJsonExporter.export(ev.shapes)
         content = Buffer.from(content)
       }
       else {
         content = await svg2png({
-          input: SvgExporter.export(shapes, image.bitmap.width, image.bitmap.height),
+          input: SvgExporter.export(ev.shapes, ev.runner.getImageData().width, ev.runner.getImageData().height),
           encoding: 'buffer',
           format: e === 'jpg' ? 'jpeg' : e as any
         })
@@ -88,27 +93,37 @@ export class Geometrize {
 }
 
 export interface GeometrizeOptions extends ImageRunnerOptions {
-  input: string;
-  output?: string;
+  /**
+   * Input file path or url. Cannot be changed dynamically.
+   */
+  input: string
+  /**
+   * Output file to write. Extension will be use to infer output format.
+   */
+  output?: string
   debug?: boolean
-  iterations: number;
-  onFinish?(result: Result): void | Promise<void>;
+  /**
+   * Number of steps (number of shaper to generate)
+   */
+  iterations?: number
+  onFinish?(result: GeometrizeFinishResult): void | Promise<void>
   /**
    * called after each step. If returned true, then the iteration will break.
    */
-  onStep?(step: Step): void | true | Promise<void | true>;
+  onStep?(step: GeometrizeStepEvent): void | true | Promise<void | true>
   noSvgOptimize?: boolean
 }
 
-interface Result {
-  shapes: ShapeResult[]
-  runner: ImageRunner
+interface GeometrizeFinishResult extends GeometrizeAbstractEvent {
   outputWritten?: string
   content?: Buffer
 }
 
-interface Step {
+interface GeometrizeStepEvent extends GeometrizeAbstractEvent {
   results: ShapeResult[]
+}
+
+interface GeometrizeAbstractEvent {
   shapes: ShapeResult[]
   runner: ImageRunner
 }

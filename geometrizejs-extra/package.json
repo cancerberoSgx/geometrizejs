@@ -1,7 +1,7 @@
 {
   "name": "geometrizejs-extra",
   "version": "0.0.1",
-  "description": "Extra (high level APIs) for geometrizejs",
+  "description": "Extra (high level APIs) for geometrizejs, suuports Node.js and Browser",
   "main": "dist/src/index.js",
   "types": "dist/src/index.d.ts",
   "scripts": {
@@ -20,20 +20,20 @@
     "all-publish": "npm run all && git commit -a -m \"version patch\" && npm version patch && npm publish"
   },
   "devDependencies": {
-    "@types/node": "^12.0.10",
+    "@types/node": "^12.6.2",
     "@types/node-fetch": "^2.3.7",
-    "ava": "^2.1.0",
-    "file-type": "^12.0.0",
+    "ava": "^2.2.0",
+    "file-type": "^12.0.1",
     "markdown-toc": "^1.2.0",
     "ts-node": "^8.3.0",
     "ts-refactor": "0.0.6",
-    "typescript": "^3.5.2"
+    "typescript": "^3.5.3"
   },
   "homepage": "https://www.npmjs.com/package/geometrizejs-extra",
   "dependencies": {
-    "geometrizejs": "0.0.13",
+    "geometrizejs": "0.0.15",
     "jimp": "^0.6.4",
-    "misc-utils-of-mine-generic": "^0.2.10",
+    "misc-utils-of-mine-generic": "^0.2.15",
     "mujer": "0.0.5",
     "svg-png-converter": "0.0.9"
   },

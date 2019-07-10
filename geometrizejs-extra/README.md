@@ -28,27 +28,42 @@ npm install geometrizejs-extra
 ```
 
 ## Usage
-
+```js
+import {Geometrize} from 'geometrizejs-extra'
+const job = new Geometrize({
+  input: 'test/assets/bluebells.jpg',
+  output: 'tmp/formUrl.svg',
+  shapeTypes: [ShapeTypes.TRIANGLE],
+  iterations: 1000,
+  onFinish: result => {
+    
+  },
+  onStep: step => {
+    
+  }
+})
+const r = await job.start()
+```
 ## Options
 
 
 
 ## Related Projects
 
- * [geometrizejs-cli](https://www.npmjs.com/package/geometrizejs-cli) (the library in which this tool is based)
  * [geometrizejs](https://www.npmjs.com/package/geometrizejs) (the library in which this tool is based)
  * [geometrize-haxe](https://github.com/Tw1ddle/geometrize-haxe/) (the original library from which geometrizejs is built from)
+ * [geometrizejs-cli](https://www.npmjs.com/package/geometrizejs-cli) (provides CLI using this library)
  * [magica](https://www.npmjs.com/package/magica)
- * [mujer](https://www.npmjs.com/package/mujer)
+ * [mujer](https://www.npmjs.com/package/mujer) provides SVG optimization tools
  
 ## TODO
 
-- [ ] readme TOC
-- [ ] svg optimizer
+- [ ] browser tests
 - [ ] magica to more formats ?
-- [ ] use svg-to-png-converter to render bitmap formats
 - [ ] input from url
 - [ ] document src/options.ts
 - [ ] options in readme
-- [ ] node.js tests
-- [ ] browser tests
+- [x] readme TOC
+- [x] node.js tests
+- [x] svg optimizer
+- [x] use svg-to-png-converter to render bitmap formats
