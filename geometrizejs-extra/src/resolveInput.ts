@@ -1,16 +1,17 @@
 import { readFileSync } from 'fs'
-import { getFileNameFromUrl } from 'misc-utils-of-mine-generic'
-import fetch from 'node-fetch'
+import { getFileNameFromUrl, isNode } from 'misc-utils-of-mine-generic'
+import fetch from 'cross-fetch'
+
 import { GeometrizeOptions } from './steps'
 
 export async function resolveInput(options: GeometrizeOptions) {
-  if (isUrl(options.input)) {
+  if (!isNode()|| isUrl(options.input)) {
     const response = await fetch(options.input)
     if (!response || !response.ok) {
       options.debug && console.log('Cannot fetch image from URL ', options.input, 'Omitting.')
       return null
     }
-    const content = await response.buffer()
+    const content =  Buffer.from(await response.arrayBuffer())
     return {
       name: getFileNameFromUrl(options.input),
       content

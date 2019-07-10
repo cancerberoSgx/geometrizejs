@@ -40,3 +40,5 @@ render-dot
 svg-png
 /tmp*
 build-grammars-svgs.sh
+test-browser-outdir
+test-browser

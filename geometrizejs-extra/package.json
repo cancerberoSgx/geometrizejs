@@ -6,7 +6,7 @@
   "types": "dist/src/index.d.ts",
   "scripts": {
     "test": "npm run build && ava",
-    "test-browser": "exit 0; npx ava test-browser/*Test.ts",
+    "test-browser": "npx ava test-browser/*Test.ts",
     "test-js": "npm run build && npx ava ./dist/test/*Test.js",
     "clean": "rm -rf dist tmp",
     "build": "npm run clean && tsc",
@@ -21,16 +21,19 @@
   },
   "devDependencies": {
     "@types/node": "^12.6.2",
-    "@types/node-fetch": "^2.3.7",
+    "@types/puppeteer": "^1.12.4",
     "ava": "^2.2.0",
+    "babel-polyfill": "^6.26.0",
     "file-type": "^12.0.1",
     "markdown-toc": "^1.2.0",
+    "puppeteer": "^1.18.1",
     "ts-node": "^8.3.0",
     "ts-refactor": "0.0.6",
     "typescript": "^3.5.3"
   },
   "homepage": "https://www.npmjs.com/package/geometrizejs-extra",
   "dependencies": {
+    "cross-fetch": "^3.0.4",
     "geometrizejs": "0.0.15",
     "jimp": "^0.6.4",
     "misc-utils-of-mine-generic": "^0.2.15",

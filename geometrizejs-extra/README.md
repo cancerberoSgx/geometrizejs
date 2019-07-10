@@ -58,11 +58,11 @@ const r = await job.start()
  
 ## TODO
 
-- [ ] browser tests
 - [ ] magica to more formats ?
 - [ ] input from url
 - [ ] document src/options.ts
 - [ ] options in readme
+- [x] browser tests
 - [x] readme TOC
 - [x] node.js tests
 - [x] svg optimizer
