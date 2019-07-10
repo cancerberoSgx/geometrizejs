@@ -173,7 +173,11 @@ That should re-generate `geometrizejs/src/geometrize.js`.
 - [x] bitmap output tests
 - [x] JSON output tests
 - [ ] performance tests. use different options and input image sizes and generate timings and output image diffs (as numbers - for example using imagemagick) - so we can better understand how options/image size/output quality relationships are. See https://github.com/Tw1ddle/geometrize-haxe-web/issues/3#issuecomment-504424092
-
+- performance on haxe lib: 
+  * explicit option to not copy buffers
+  * https://stackoverflow.com/a/16679447/1179379 - seems transforming u8int to u32int array is faster to extract colors ? maybe even in haxe
+  * use Uint8ClampedArray ? 
+  
  
 ### Extras / ideas 
 
@@ -188,7 +192,7 @@ The following are features not supported by haxe implementation. If implemented 
 - [ ] implement quadratic blezier curves based on https://github.com/Tw1ddle/geometrize-lib/blob/be14f7bf0d183faa03127c6500c6194877b3ee3d/geometrize/geometrize/rasterizer/rasterizer.cpp#L308 ? 
 - [ ] Research SVG post processing
   - [ ] document that big SVGs can be reduced up to 50% size with svgo which supports node and browser (js)
-  - [ ] SVG paths cahnbe transformed with "simplify" (sharpen  by reducing nodes) and with smothing (adds nodes and transform ) 
+  - [ ] SVG paths can be transformed with "simplify" (sharpen  by reducing nodes) and with smothing (adds nodes and transform ) 
   - document that bitmap images can be generated from svgs (and good quality) offline with other tools. 
 - [ ] extensibilty: geometrize should allow users to:
   - [ ] add new shapes types

@@ -26,7 +26,7 @@ export interface Image {
 export async function getInitialState(): Promise<State> {
   return {
     working: false,
-    stepInterval: 100,
+    stepInterval: 1,
     input: {
       size: panda_png.length,
       content: BufferClass.from(urlToBase64(panda_png), 'base64'),
@@ -37,11 +37,11 @@ export async function getInitialState(): Promise<State> {
       content: BufferClass.from(''),
       name: 'unnamed.png.svg',
     },
-    iterations: 50,
+    iterations: 500,
     alpha: 128,
     candidateShapesPerStep: 50,
     shapeMutationsPerStep: 100,
-    shapeTypes: [ShapeTypes.CIRCLE],
-    stepTimeout: 100
+    shapeTypes: [ShapeTypes.ROTATED_ELLIPSE],
+    stepTimeout: 2000
   }
 }

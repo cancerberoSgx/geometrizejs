@@ -6,27 +6,27 @@ import { Button, Segment } from 'semantic-ui-react'
 import { blobToBuffer, BufferClass } from '../../app/buffer'
 import { getStore } from '../../app/store'
 import { AbstractComponent } from '../component'
+import { ShapeResult } from 'geometrizer-js'
 
 enum ShapeTypesEnum {
   Circle = ShapeTypes.CIRCLE,
-  Rectangle = ShapeTypes.RECTANGLE,
   Triangle = ShapeTypes.TRIANGLE,
-  Ellipse = ShapeTypes.ELLIPSE,
-  Line = ShapeTypes.LINE,
-  ['Rotated Ellipse'] = ShapeTypes.ROTATED_ELLIPSE,
+  Rectangle = ShapeTypes.RECTANGLE,
   ['Rotated Rectangle'] = ShapeTypes.ROTATED_RECTANGLE,
+  Ellipse = ShapeTypes.ELLIPSE,
+  ['Rotated Ellipse'] = ShapeTypes.ROTATED_ELLIPSE,
+  Line = ShapeTypes.LINE,
+  ['Quadratic Bezier'] = ShapeTypes.QUADRATIC_BEZIER,
 }
+
 export class Options extends AbstractComponent {
   svg: string = ''
-
   render() {
     return (
       <Segment basic className="loadImage">
-        {/* <Header as="h3">Load Image</Header> */}
         <label>Choose file
         <input type="file" onChange={async e => {
             if (e.currentTarget.files && e.currentTarget.files.length) {
-              //  debugger
               const size = e.currentTarget.files[0].size
               const name = e.currentTarget.files[0].name
               const content = await blobToBuffer(e.currentTarget.files[0])
@@ -88,19 +88,25 @@ export class Options extends AbstractComponent {
 }
 
 async function geometrize(onStep?: (svg: string) => void) {
-  const state = getStore().getState()
-  const image = await Jimp.read(state.input.content)
+  let image = await Jimp.read(getStore().getState().input.content)
+  image = await image.opaque()
+  image = await image.normalize()
   const bitmap = Bitmap.createFromByteArray(image.bitmap.width, image.bitmap.height, image.bitmap.data)
   const runner = new ImageRunner(bitmap)
-  const svgData = []
-  for (let i = 0;i < state.iterations && getStore().getState().working;i++) {
-    svgData.push(SvgExporter.exportShapes(runner.step(state)))
-    if (state.stepTimeout && onStep) {
-      const svg = SvgExporter.getSvgPrelude() + SvgExporter.getSvgNodeOpen(bitmap.width, bitmap.height) + svgData.join('\n') + SvgExporter.getSvgNodeClose()
+  const svgData: ShapeResult[] = []
+  const interval = setInterval(() => {
+    if (onStep) {
+      const svg = SvgExporter.getSvgPrelude() + SvgExporter.getSvgNodeOpen(bitmap.width, bitmap.height) + `<rect x="0" y="0" width="${bitmap.width}" height="${bitmap.height}" fill="rgb(61,60,55)" fill-opacity="0.5019607843137255"></rect>` + SvgExporter.exportShapes(svgData) + SvgExporter.getSvgNodeClose()
       onStep(svg)
     }
-    await sleep(state.stepTimeout || 1)
+  }, getStore().getState().stepTimeout)
+  for (let i = 0;i < getStore().getState().iterations && getStore().getState().working;i++) {
+    svgData.push(...runner.step(getStore().getState()))
+    await sleep(getStore().getState().stepInterval || 1)
   }
-  const svg = SvgExporter.getSvgPrelude() + SvgExporter.getSvgNodeOpen(bitmap.width, bitmap.height) + svgData.join('\n') + SvgExporter.getSvgNodeClose()
+  clearInterval(interval)
+  const svg = SvgExporter.getSvgPrelude() + SvgExporter.getSvgNodeOpen(bitmap.width, bitmap.height) +
+    `<rect x="0" y="0" width="${bitmap.width}" height="${bitmap.height}" fill="rgb(61,60,55)" fill-opacity="0.5019607843137255"></rect>` +
+    SvgExporter.exportShapes(svgData) + SvgExporter.getSvgNodeClose()
   return svg
 }

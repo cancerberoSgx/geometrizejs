@@ -251,6 +251,18 @@ geometrize_Core.differenceFull = function(first,second) {
 	if(!(second != null)) {
 		throw new js__$Boot_HaxeError("FAIL: second != null");
 	}
+	if(!(first.width != 0)) {
+		throw new js__$Boot_HaxeError("FAIL: first.width != 0");
+	}
+	if(!(first.height != 0)) {
+		throw new js__$Boot_HaxeError("FAIL: first.height != 0");
+	}
+	if(!(second.width != 0)) {
+		throw new js__$Boot_HaxeError("FAIL: second.width != 0");
+	}
+	if(!(second.height != 0)) {
+		throw new js__$Boot_HaxeError("FAIL: second.height != 0");
+	}
 	var actual = first.width;
 	var expected = second.width;
 	if(actual != expected) {
@@ -281,7 +293,11 @@ geometrize_Core.differenceFull = function(first,second) {
 			total += dr * dr + dg * dg + db * db + da * da;
 		}
 	}
-	return Math.sqrt(total / (width * height * 4.0)) / 255;
+	var result = Math.sqrt(total / (width * height * 4.0)) / 255;
+	if(!isFinite(result)) {
+		throw new js__$Boot_HaxeError("FAIL: Math.isFinite(result)");
+	}
+	return result;
 };
 geometrize_Core.differencePartial = function(target,before,after,score,lines) {
 	if(!(target != null)) {
@@ -295,6 +311,9 @@ geometrize_Core.differencePartial = function(target,before,after,score,lines) {
 	}
 	if(!(lines != null)) {
 		throw new js__$Boot_HaxeError("FAIL: lines != null");
+	}
+	if(!(lines.length != 0)) {
+		throw new js__$Boot_HaxeError("FAIL: lines.length != 0");
 	}
 	var width = target.width;
 	var height = target.height;
@@ -324,7 +343,11 @@ geometrize_Core.differencePartial = function(target,before,after,score,lines) {
 			total += dtar * dtar + dtag * dtag + dtab * dtab + dtaa * dtaa;
 		}
 	}
-	return Math.sqrt(total / rgbaCount) / 255;
+	var result = Math.sqrt(total / rgbaCount) / 255;
+	if(!isFinite(result)) {
+		throw new js__$Boot_HaxeError("FAIL: Math.isFinite(result)");
+	}
+	return result;
 };
 geometrize_Core.bestRandomState = function(shapes,alpha,n,target,current,buffer,lastScore) {
 	var bestEnergy = 0;
@@ -386,6 +409,12 @@ geometrize_Core.energy = function(shape,alpha,target,current,buffer,score) {
 		throw new js__$Boot_HaxeError("FAIL: buffer != null");
 	}
 	var lines = shape.rasterize();
+	if(!(lines != null)) {
+		throw new js__$Boot_HaxeError("FAIL: lines != null");
+	}
+	if(!(lines.length != 0)) {
+		throw new js__$Boot_HaxeError("FAIL: lines.length != 0");
+	}
 	var color = geometrize_Core.computeColor(target,current,lines,alpha);
 	geometrize_rasterizer_Rasterizer.copyLines(buffer,current,lines);
 	geometrize_rasterizer_Rasterizer.drawLines(buffer,color,lines);
@@ -1455,6 +1484,12 @@ geometrize_shape_QuadraticBezier.prototype = {
 			while(_g21 < pts.length) {
 				var point = pts[_g21];
 				++_g21;
+				if(lines.length > 0) {
+					var lastLine = lines[lines.length - 1];
+					if(lastLine.y == point.y && lastLine.x1 == point.x && lastLine.x2 == point.x) {
+						continue;
+					}
+				}
 				lines.push(new geometrize_rasterizer_Scanline(point.y,point.x,point.x));
 			}
 		}
@@ -1572,16 +1607,28 @@ geometrize_shape_Rectangle.__interfaces__ = [geometrize_shape_Shape];
 geometrize_shape_Rectangle.prototype = {
 	rasterize: function() {
 		var lines = [];
-		var _g1 = this.y1;
-		var _g = this.y2;
-		while(_g1 < _g) {
-			var y = _g1++;
-			if(this.x1 != this.x2) {
-				var first = this.x1;
-				var second = this.x2;
-				var first1 = this.x1;
-				var second1 = this.x2;
-				lines.push(new geometrize_rasterizer_Scanline(y,first < second ? first : second,first1 > second1 ? first1 : second1));
+		var first = this.y1;
+		var second = this.y2;
+		var yMin = first < second ? first : second;
+		var first1 = this.y1;
+		var second1 = this.y2;
+		var yMax = first1 > second1 ? first1 : second1;
+		if(yMin == yMax) {
+			var first2 = this.x1;
+			var second2 = this.x2;
+			var first3 = this.x1;
+			var second3 = this.x2;
+			lines.push(new geometrize_rasterizer_Scanline(yMin,first2 < second2 ? first2 : second2,first3 > second3 ? first3 : second3));
+		} else {
+			var _g1 = yMin;
+			var _g = yMax;
+			while(_g1 < _g) {
+				var y = _g1++;
+				var first4 = this.x1;
+				var second4 = this.x2;
+				var first5 = this.x1;
+				var second5 = this.x2;
+				lines.push(new geometrize_rasterizer_Scanline(y,first4 < second4 ? first4 : second4,first5 > second5 ? first5 : second5));
 			}
 		}
 		return lines;

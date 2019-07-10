@@ -129,10 +129,10 @@ convert foo/imgs* output.gif -delay 10
 ffmpeg is a command line video processing and player program that can generate videos from images like this:
 
 ```
-ffmpeg -framerate 60 -i image-%03d.png video.webm
+ffmpeg -framerate 1 -pix_fmt yuv420p -y -i "frame-%03d.png" -crf 15 video.mp4
 ```
 
-User -framerate to control speed
+User -framerate to control speed and -crf to control quality
 
 ####
 

@@ -7,15 +7,12 @@ import { About } from './about'
 export class Header extends AbstractComponent {
   render() {
     return (<Menu>
-
       <Menu.Menu position="right">
-
-      <Dropdown item text='Examples' >
+        <Dropdown item text='Examples' >
           <Dropdown.Menu>
-        <Dropdown.Item text='TODO' onClick={e=>{}} />
-        </Dropdown.Menu>
+            <Dropdown.Item text='TODO' onClick={e => { }} />
+          </Dropdown.Menu>
         </Dropdown>
-
         <Dropdown item text='More'>
           <Dropdown.Menu>
             <Dropdown.Item icon='edit' text='Create Url' onClick={createUrl} />
@@ -27,9 +24,7 @@ export class Header extends AbstractComponent {
             </Modal>
           </Dropdown.Menu>
         </Dropdown>
-
       </Menu.Menu>
-
     </Menu>)
   }
 }
