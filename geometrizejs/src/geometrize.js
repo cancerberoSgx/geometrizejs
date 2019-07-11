@@ -1139,7 +1139,31 @@ var geometrize_runner_ImageRunner = $hx_exports["geometrize"]["runner"]["ImageRu
 geometrize_runner_ImageRunner.__name__ = true;
 geometrize_runner_ImageRunner.prototype = {
 	step: function(options) {
-		return this.model.step(options.shapeTypes,options.alpha,options.candidateShapesPerStep,options.shapeMutationsPerStep);
+		var finalOptions_shapeTypes;
+		var finalOptions_shapeMutationsPerStep;
+		var finalOptions_candidateShapesPerStep;
+		var finalOptions_alpha;
+		if(options.shapeTypes != null && options.shapeTypes.length != 0) {
+			finalOptions_shapeTypes = options.shapeTypes;
+		} else {
+			finalOptions_shapeTypes = geometrize_runner_Default.options.shapeTypes;
+		}
+		if(options.alpha != null) {
+			finalOptions_alpha = options.alpha;
+		} else {
+			finalOptions_alpha = geometrize_runner_Default.options.alpha;
+		}
+		if(options.candidateShapesPerStep != null) {
+			finalOptions_candidateShapesPerStep = options.candidateShapesPerStep;
+		} else {
+			finalOptions_candidateShapesPerStep = geometrize_runner_Default.options.candidateShapesPerStep;
+		}
+		if(options.shapeMutationsPerStep != null) {
+			finalOptions_shapeMutationsPerStep = options.shapeMutationsPerStep;
+		} else {
+			finalOptions_shapeMutationsPerStep = geometrize_runner_Default.options.shapeMutationsPerStep;
+		}
+		return this.model.step(finalOptions_shapeTypes,finalOptions_alpha,finalOptions_candidateShapesPerStep,finalOptions_shapeMutationsPerStep);
 	}
 	,getImageData: function() {
 		if(!(this.model != null)) {
@@ -1149,6 +1173,8 @@ geometrize_runner_ImageRunner.prototype = {
 	}
 	,__class__: geometrize_runner_ImageRunner
 };
+var geometrize_runner_Default = function() { };
+geometrize_runner_Default.__name__ = true;
 var geometrize_shape_Shape = function() { };
 geometrize_shape_Shape.__name__ = true;
 geometrize_shape_Shape.prototype = {
@@ -2556,6 +2582,7 @@ if(ArrayBuffer.prototype.slice == null) {
 }
 var Uint8Array = $global.Uint8Array || js_html_compat_Uint8Array._new;
 geometrize_exporter_SvgExporter.SVG_STYLE_HOOK = "::svg_style_hook::";
+geometrize_runner_Default.options = { shapeTypes : [2], candidateShapesPerStep : 50, shapeMutationsPerStep : 100, alpha : 128};
 geometrize_shape_ShapeTypes.RECTANGLE = 0;
 geometrize_shape_ShapeTypes.ROTATED_RECTANGLE = 1;
 geometrize_shape_ShapeTypes.TRIANGLE = 2;
