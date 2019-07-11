@@ -1,4 +1,4 @@
-import { Bitmap, ImageRunner, ImageRunnerOptions, ShapeJsonExporter, ShapeResult, ShapeTypes, SvgExporter } from 'geometrizejs'
+import { ImageRunner, ImageRunnerOptions, ShapeResult } from 'geometrizejs'
 
 export interface GeometrizeOptions extends ImageRunnerOptions {
   /**
@@ -48,12 +48,12 @@ export interface GeometrizeAbstractEvent {
 export interface GeometrizeExportOptions extends GeometrizeAbstractEvent {
   format?: Format
   /** in case no output is given this defines in which form the content will be delivered when exporting output files. */
-  encoding?: 'buffer'|'base64'
+  encoding?: 'buffer' | 'base64'
   /**
    * Node.js only, if given output will be written to that file
    */
   output?: string
-  content?: Buffer|string
+  content?: Buffer | string
 
   noSvgOptimize?: boolean
 
@@ -64,5 +64,5 @@ export interface GeometrizeExportOptions extends GeometrizeAbstractEvent {
   // output?: string
 }
 
-export type Format = 'svg'|'json'|'png'|'jpeg'
+export type Format = 'svg' | 'json' | 'png' | 'jpeg'
 

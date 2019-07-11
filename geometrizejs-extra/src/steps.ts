@@ -1,10 +1,9 @@
-import { Bitmap, ImageRunner, ImageRunnerOptions, ShapeResult, ShapeTypes } from 'geometrizejs'
+import { Bitmap, ImageRunner, ShapeTypes } from 'geometrizejs'
 import Jimp from 'jimp'
-import { Emitter, notUndefined } from 'misc-utils-of-mine-generic'
+import { GeometrizeStepsEvent } from './event'
+import { exportResult } from './export'
 import { resolveInput } from './resolveInput'
-import { GeometrizeFinishResult, GeometrizeOptions } from './types';
-import { exportResult } from './export';
-import { GeometrizeStepsEvent } from './event';
+import { GeometrizeFinishResult, GeometrizeOptions } from './types'
 
 export class Geometrize extends GeometrizeStepsEvent {
   protected defaultOptions: GeometrizeOptions = {
@@ -44,20 +43,20 @@ export class Geometrize extends GeometrizeStepsEvent {
     options.onFinish && this.addFinishListener(options.onFinish)
     this.options = options
   }
-// protected shapes: ShapeResult[] = []
-/**
- * Will start step iteration reseting any previous run.
- */
+  // protected shapes: ShapeResult[] = []
+  /**
+   * Will start step iteration reseting any previous run.
+   */
   async start() {
     const input = await resolveInput(this)
     const image = await Jimp.read(input!.content)
     const bitmap = Bitmap.createFromByteArray(image.bitmap.width, image.bitmap.height, image.bitmap.data)
     const runner = new ImageRunner(bitmap)
     const shapes = []
-    for (let i = 0; i < this.iterations; i++) {
+    for (let i = 0;i < this.iterations;i++) {
       const results = runner.step(this)
       shapes.push(...results)
-      const e = { results, shapes, runner}
+      const e = { results, shapes, runner }
       if (await this.notifyStepListeners(e)) {
         break
       }
@@ -69,8 +68,8 @@ export class Geometrize extends GeometrizeStepsEvent {
     return results
   }
 
-  async pause(){}
-  async resume(){}
+  async pause() { }
+  async resume() { }
 
 }
 

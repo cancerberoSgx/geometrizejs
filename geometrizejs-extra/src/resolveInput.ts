@@ -1,7 +1,7 @@
 import fetch from 'cross-fetch'
 import { readFileSync } from 'fs'
 import { getFileNameFromUrl, isNode } from 'misc-utils-of-mine-generic'
-import { GeometrizeOptions } from './types';
+import { GeometrizeOptions } from './types'
 
 export async function resolveInput(options: GeometrizeOptions) {
   if (!isNode() || isUrl(options.input)) {

@@ -2,8 +2,8 @@ import test from 'ava'
 import getFileType from 'file-type'
 import { existsSync, readFileSync } from 'fs'
 import { ShapeTypes } from 'geometrizejs'
+import { exportResult } from '../src/export'
 import { Geometrize } from '../src/steps'
-import { exportResult } from '../src/export';
 
 test('should iterate given iterations, noOptimize, triangles, input jpg, output svg', async t => {
   t.false(existsSync('tmp/formUrl.png'))
@@ -22,7 +22,7 @@ test('should iterate given iterations, noOptimize, triangles, input jpg, output 
   const stepsResult = await job.start()
   const exportResults = await exportResult({
     ...stepsResult,
-        output: 'tmp/formUrl.svg',
+    output: 'tmp/formUrl.svg',
     noSvgOptimize: true,
   })
   t.true(existsSync('tmp/formUrl.svg'))
@@ -47,7 +47,7 @@ test('should iterate given iterations, optimize, CIRCLE, input png, output jpg',
   })
   const stepsResult = await job.start()
   const r = await exportResult({
-    ...stepsResult,    
+    ...stepsResult,
     output: 'tmp/output2.jpg',
   })
   t.true(existsSync('tmp/output2.jpg'))
