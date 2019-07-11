@@ -5,22 +5,22 @@ import { ShapeTypes } from "./shapeTypes"
  */
 export interface ImageRunnerOptions {
   /**
-   * The types of shapes to use when generating the image.
+   * The types of shapes to use when generating the image. By default `[ShapeType.TRIANGLE]`.
    */
-  shapeTypes: Array<ShapeTypes>
+  shapeTypes?: Array<ShapeTypes>
 
 	/**
-	 * The opacity of the shapes (0-255).
+	 * The opacity of the shapes (0-255). By default `128`.
 	 */
-  alpha: number
+  alpha?: number
 
 	/**
-	 * The number of candidate shapes to try per model step.
+	 * The number of candidate shapes to try per model step. By default `50`.
 	 */
-  candidateShapesPerStep: number
+  candidateShapesPerStep?: number
 
 	/**
-	 * The number of times to mutate each candidate shape.
+	 * The number of times to mutate each candidate shape. By default `100`.
 	 */
-  shapeMutationsPerStep: number
+  shapeMutationsPerStep?: number
 }

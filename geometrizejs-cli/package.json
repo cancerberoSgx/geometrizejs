@@ -35,7 +35,7 @@
   },
   "homepage": "https://www.npmjs.com/package/geometrizejs-cli",
   "dependencies": {
-    "geometrizejs": "0.0.15",
+    "geometrizejs": "0.0.16",
     "glob": "^7.1.4",
     "jimp": "^0.6.4",
     "minimist": "^1.2.0",
