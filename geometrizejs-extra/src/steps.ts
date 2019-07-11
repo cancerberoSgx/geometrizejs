@@ -1,12 +1,12 @@
-import { mkdirSync, writeFileSync } from 'fs'
-import { Bitmap, ImageRunner, ImageRunnerOptions, ShapeJsonExporter, ShapeResult, ShapeTypes, SvgExporter } from 'geometrizejs'
+import { Bitmap, ImageRunner, ImageRunnerOptions, ShapeResult, ShapeTypes } from 'geometrizejs'
 import Jimp from 'jimp'
-import { dirname, getFileExtension, isNode } from 'misc-utils-of-mine-generic'
-import { optimizeSvg } from 'mujer'
-import { svg2png } from 'svg-png-converter'
+import { Emitter, notUndefined } from 'misc-utils-of-mine-generic'
 import { resolveInput } from './resolveInput'
+import { GeometrizeFinishResult, GeometrizeOptions } from './types';
+import { exportResult } from './export';
+import { GeometrizeStepsEvent } from './event';
 
-export class Geometrize {
+export class Geometrize extends GeometrizeStepsEvent {
   protected defaultOptions: GeometrizeOptions = {
     alpha: 128,
     input: '',
@@ -27,11 +27,11 @@ export class Geometrize {
  */
   input: string
   alpha: number
-  onFinish: (result: GeometrizeFinishResult) => void | Promise<void>
-  onStep: (step: GeometrizeStepEvent) => void | true | Promise<void | true>
-  output: string | undefined
+  // output: string | undefined
   protected options: Partial<GeometrizeOptions> & { input: string }
+
   constructor(options: Partial<GeometrizeOptions> & { input: string }) {
+    super()
     const finalOptions = { ...this.defaultOptions, ...options }
     this.iterations = finalOptions.iterations!
     this.input = finalOptions.input
@@ -39,91 +39,39 @@ export class Geometrize {
     this.shapeTypes = finalOptions.shapeTypes
     this.candidateShapesPerStep = finalOptions.candidateShapesPerStep
     this.alpha = finalOptions.alpha
-    this.output = finalOptions.output
-    this.onStep = finalOptions.onStep || (r => Promise.resolve())
-    this.onFinish = finalOptions.onFinish || function() { }
+    // this.output = finalOptions.output
+    options.onStep && this.addStepListener(options.onStep)
+    options.onFinish && this.addFinishListener(options.onFinish)
     this.options = options
   }
+// protected shapes: ShapeResult[] = []
+/**
+ * Will start step iteration reseting any previous run.
+ */
   async start() {
     const input = await resolveInput(this)
     const image = await Jimp.read(input!.content)
     const bitmap = Bitmap.createFromByteArray(image.bitmap.width, image.bitmap.height, image.bitmap.data)
     const runner = new ImageRunner(bitmap)
-    const shapes: ShapeResult[] = []
-    for (let i = 0;i < this.iterations;i++) {
+    const shapes = []
+    for (let i = 0; i < this.iterations; i++) {
       const results = runner.step(this)
       shapes.push(...results)
-      if (await this.onStep({ results, shapes, runner })) {
+      const e = { results, shapes, runner}
+      if (await this.notifyStepListeners(e)) {
         break
       }
     }
-    const r = await this.export({ shapes, runner })
-    const results: GeometrizeFinishResult = { shapes, runner, ...r }
-    await this.onFinish(results)
+    const r2 = { shapes, runner }
+    const r = await exportResult(r2)
+    const results: GeometrizeFinishResult = { ...r2, ...r }
+    await this.notifyFinishListeners(results)
     return results
   }
 
-  protected async   export(ev: GeometrizeAbstractEvent) {
-    if (this.output) {
-      const e = getFileExtension(this.output).toLowerCase()
-      isNode() && mkdirSync(dirname(this.output), { recursive: true })
-      let content, outputWritten = this.output
-      if (!e || e === 'svg') {
-        content = SvgExporter.export(ev.shapes, ev.runner.getImageData().width, ev.runner.getImageData().height)
-        if (!this.options.noSvgOptimize) {
-          content = await optimizeSvg({ ...this.options, input: content })
-        }
-        content = Buffer.from(content)
-      }
-      else if (e === 'json') {
-        content = ShapeJsonExporter.export(ev.shapes)
-        content = Buffer.from(content)
-      }
-      else {
-        content = await svg2png({
-          input: SvgExporter.export(ev.shapes, ev.runner.getImageData().width, ev.runner.getImageData().height),
-          encoding: 'buffer',
-          format: e === 'jpg' ? 'jpeg' : e as any
-        })
-      }
-      isNode() && writeFileSync(outputWritten, content)
-      return { ...isNode() ? { outputWritten } : {}, content }
-    }
-  }
+  async pause(){}
+  async resume(){}
+
 }
 
-export interface GeometrizeOptions extends ImageRunnerOptions {
-  /**
-   * Input file path or url. Cannot be changed dynamically.
-   */
-  input: string
-  /**
-   * Output file to write. Extension will be use to infer output format.
-   */
-  output?: string
-  debug?: boolean
-  /**
-   * Number of steps (number of shaper to generate)
-   */
-  iterations?: number
-  onFinish?(result: GeometrizeFinishResult): void | Promise<void>
-  /**
-   * called after each step. If returned true, then the iteration will break.
-   */
-  onStep?(step: GeometrizeStepEvent): void | true | Promise<void | true>
-  noSvgOptimize?: boolean
-}
 
-interface GeometrizeFinishResult extends GeometrizeAbstractEvent {
-  outputWritten?: string
-  content?: Buffer
-}
-
-interface GeometrizeStepEvent extends GeometrizeAbstractEvent {
-  results: ShapeResult[]
-}
-
-interface GeometrizeAbstractEvent {
-  shapes: ShapeResult[]
-  runner: ImageRunner
-}
