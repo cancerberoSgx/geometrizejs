@@ -13,9 +13,28 @@ export declare class Bitmap {
 	 * The height of the bitmap.
 	 */
   height: number
-  
-  public setOffset(offset?:Rect):void
 
+  /**
+   * Sets the bitmap offset, this is, a region inside relative to which pixel read and write operations are made.
+   * Calling this method without parameters will remove the offset and reset to default behavior.
+  **/
+  public setOffset(offset?: Rect): void
+
+  /**
+   *  @returns current offset or null if none.
+   */
+  public getOffSet(): Rect | undefined
+
+  /**
+   * Saves current offset overriding previous saves.
+   * @param reset if given it will also remove current offset.
+   */
+  public saveOffSet(reset?: boolean): void
+
+  /**
+   * Restores previously saved offset, if any.
+   */
+  public restoreOffset(): void
 
 	/**
 	 * Creates a new bitmap, filled with the given color.
@@ -25,6 +44,7 @@ export declare class Bitmap {
 	 * @return	The new bitmap.
 	 */
   static create(w: number, h: number, color: Rgba): Bitmap
+
 	/**
 	 * Creates a new bitmap from the supplied byte data.
 	 * @param	w		The width of the bitmap.
@@ -33,6 +53,7 @@ export declare class Bitmap {
 	 * @return	The new bitmap.
 	 */
   static createFromBytes(w: number, h: number, bytes: Bytes): Bitmap
+
   /**
 	 * Creates a new bitmap from the supplied native raw byte array. Useful for target language consumers
    * that don't have access to Bytes haxe standar library class. 
@@ -90,9 +111,19 @@ export interface Bytes {
  * Color representation in red, green, blue, alpha format. 
  */
 export type Rgba = number
-export interface Rect {
-  x:number
-  y:number
-  width:number
-  height:number
+
+/**
+ * Represents a point or vector in 2D space.
+ */
+export interface Point {
+  x: number
+  y: number
+}
+
+/**
+ *  Represents a rectangle in 2D space.
+ */
+export interface Rect extends Point {
+  width: number
+  height: number
 }

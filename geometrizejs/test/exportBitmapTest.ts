@@ -6,12 +6,11 @@ import { Bitmap, ImageRunner, ShapeTypes } from '../src'
 test('should export bitmap', async t => {
   const image = await Jimp.read('test/assets/logo.png')
   const bitmap = Bitmap.createFromByteArray(image.bitmap.width,  image.bitmap.height, image.bitmap.data)
-  bitmap.setOffset({x: 120, y: 10, width:20, height: 120})
-
+  bitmap.setOffset({x: 120, y: 50, width:210, height: 70})
 
   const runner = new ImageRunner(bitmap)
   const options = {
-    shapeTypes: [ShapeTypes.TRIANGLE],
+    shapeTypes: [ShapeTypes.ROTATED_ELLIPSE, ShapeTypes.RECTANGLE, ShapeTypes.ROTATED_RECTANGLE, ShapeTypes.TRIANGLE, ShapeTypes.LINE, ShapeTypes.QUADRATIC_BEZIER],
     candidateShapesPerStep: 50,
     shapeMutationsPerStep: 100,
     alpha: 128

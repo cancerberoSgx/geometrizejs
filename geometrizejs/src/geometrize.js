@@ -204,8 +204,14 @@ geometrize_Core.computeColor = function(target,current,lines,alpha) {
 		var _g1 = line.x2 + 1;
 		while(_g2 < _g1) {
 			var x = _g2++;
-			var t = target.data[target.width * y + x];
-			var c = current.data[current.width * y + x];
+			var absoluteStart = target.offsetY * target.originalWidth + target.offsetX;
+			var absoluteIndex = target.originalWidth * y + x - target.offsetX;
+			var index = absoluteStart + absoluteIndex;
+			var t = target.data[index];
+			var absoluteStart1 = current.offsetY * current.originalWidth + current.offsetX;
+			var absoluteIndex1 = current.originalWidth * y + x - current.offsetX;
+			var index1 = absoluteStart1 + absoluteIndex1;
+			var c = current.data[index1];
 			totalRed += ((t >> 24 & 255) - (c >> 24 & 255)) * a + (c >> 24 & 255) * 257;
 			totalGreen += ((t >> 16 & 255) - (c >> 16 & 255)) * a + (c >> 16 & 255) * 257;
 			totalBlue += ((t >> 8 & 255) - (c >> 8 & 255)) * a + (c >> 8 & 255) * 257;
@@ -284,8 +290,14 @@ geometrize_Core.differenceFull = function(first,second) {
 		var _g2 = width;
 		while(_g3 < _g2) {
 			var x = _g3++;
-			var f = first.data[first.width * y + x];
-			var s = second.data[second.width * y + x];
+			var absoluteStart = first.offsetY * first.originalWidth + first.offsetX;
+			var absoluteIndex = first.originalWidth * y + x - first.offsetX;
+			var index = absoluteStart + absoluteIndex;
+			var f = first.data[index];
+			var absoluteStart1 = second.offsetY * second.originalWidth + second.offsetX;
+			var absoluteIndex1 = second.originalWidth * y + x - second.offsetX;
+			var index1 = absoluteStart1 + absoluteIndex1;
+			var s = second.data[index1];
 			var dr = (f >> 24 & 255) - (s >> 24 & 255);
 			var dg = (f >> 16 & 255) - (s >> 16 & 255);
 			var db = (f >> 8 & 255) - (s >> 8 & 255);
@@ -328,9 +340,18 @@ geometrize_Core.differencePartial = function(target,before,after,score,lines) {
 		var _g1 = line.x2 + 1;
 		while(_g2 < _g1) {
 			var x = _g2++;
-			var t = target.data[target.width * y + x];
-			var b = before.data[before.width * y + x];
-			var a = after.data[after.width * y + x];
+			var absoluteStart = target.offsetY * target.originalWidth + target.offsetX;
+			var absoluteIndex = target.originalWidth * y + x - target.offsetX;
+			var index = absoluteStart + absoluteIndex;
+			var t = target.data[index];
+			var absoluteStart1 = before.offsetY * before.originalWidth + before.offsetX;
+			var absoluteIndex1 = before.originalWidth * y + x - before.offsetX;
+			var index1 = absoluteStart1 + absoluteIndex1;
+			var b = before.data[index1];
+			var absoluteStart2 = after.offsetY * after.originalWidth + after.offsetX;
+			var absoluteIndex2 = after.originalWidth * y + x - after.offsetX;
+			var index2 = absoluteStart2 + absoluteIndex2;
+			var a = after.data[index2];
 			var dtbr = (t >> 24 & 255) - (b >> 24 & 255);
 			var dtbg = (t >> 16 & 255) - (b >> 16 & 255);
 			var dtbb = (t >> 8 & 255) - (b >> 8 & 255);
@@ -427,13 +448,10 @@ var geometrize_Model = function(target,backgroundColor) {
 	this.width = target.width;
 	this.height = target.height;
 	this.target = target;
+	target.saveOffSet(true);
 	var w = target.width;
 	var h = target.height;
-	var bitmap = new geometrize_bitmap_Bitmap();
-	bitmap.width = w;
-	bitmap.height = h;
-	var this1 = new Array(w * h);
-	bitmap.data = this1;
+	var bitmap = geometrize_bitmap_Bitmap.createBitmapOfLength(w,h,w * h);
 	var i = 0;
 	while(i < bitmap.data.length) {
 		bitmap.data[i] = backgroundColor;
@@ -442,17 +460,76 @@ var geometrize_Model = function(target,backgroundColor) {
 	this.current = bitmap;
 	var w1 = target.width;
 	var h1 = target.height;
-	var bitmap1 = new geometrize_bitmap_Bitmap();
-	bitmap1.width = w1;
-	bitmap1.height = h1;
-	var this2 = new Array(w1 * h1);
-	bitmap1.data = this2;
+	var bitmap1 = geometrize_bitmap_Bitmap.createBitmapOfLength(w1,h1,w1 * h1);
 	var i1 = 0;
 	while(i1 < bitmap1.data.length) {
 		bitmap1.data[i1] = backgroundColor;
 		++i1;
 	}
 	this.buffer = bitmap1;
+	target.restoreOffset();
+	var _this = this.current;
+	var offset = target.width != target.originalWidth || target.height != target.originalHeight || target.offsetX != 0 || target.offsetY != 0 ? { x : target.offsetX, y : target.offsetY, width : target.width, height : target.height} : null;
+	if(offset == null) {
+		_this.width = _this.originalWidth;
+		_this.height = _this.originalHeight;
+		_this.offsetX = 0;
+		_this.offsetY = 0;
+	} else {
+		if(!(offset.width > 0)) {
+			throw new js__$Boot_HaxeError("FAIL: offset.width > 0");
+		}
+		if(!(offset.x + offset.width <= _this.originalWidth)) {
+			throw new js__$Boot_HaxeError("FAIL: offset.x + offset.width <= originalWidth");
+		}
+		if(!(offset.height > 0)) {
+			throw new js__$Boot_HaxeError("FAIL: offset.height > 0");
+		}
+		if(!(offset.y + offset.height <= _this.originalHeight)) {
+			throw new js__$Boot_HaxeError("FAIL: offset.y + offset.height <= originalHeight");
+		}
+		if(!(offset.x >= 0)) {
+			throw new js__$Boot_HaxeError("FAIL: offset.x >= 0");
+		}
+		if(!(offset.y >= 0)) {
+			throw new js__$Boot_HaxeError("FAIL: offset.y >= 0");
+		}
+		_this.width = offset.width;
+		_this.height = offset.height;
+		_this.offsetX = offset.x;
+		_this.offsetY = offset.y;
+	}
+	var _this1 = this.buffer;
+	var offset1 = target.width != target.originalWidth || target.height != target.originalHeight || target.offsetX != 0 || target.offsetY != 0 ? { x : target.offsetX, y : target.offsetY, width : target.width, height : target.height} : null;
+	if(offset1 == null) {
+		_this1.width = _this1.originalWidth;
+		_this1.height = _this1.originalHeight;
+		_this1.offsetX = 0;
+		_this1.offsetY = 0;
+	} else {
+		if(!(offset1.width > 0)) {
+			throw new js__$Boot_HaxeError("FAIL: offset.width > 0");
+		}
+		if(!(offset1.x + offset1.width <= _this1.originalWidth)) {
+			throw new js__$Boot_HaxeError("FAIL: offset.x + offset.width <= originalWidth");
+		}
+		if(!(offset1.height > 0)) {
+			throw new js__$Boot_HaxeError("FAIL: offset.height > 0");
+		}
+		if(!(offset1.y + offset1.height <= _this1.originalHeight)) {
+			throw new js__$Boot_HaxeError("FAIL: offset.y + offset.height <= originalHeight");
+		}
+		if(!(offset1.x >= 0)) {
+			throw new js__$Boot_HaxeError("FAIL: offset.x >= 0");
+		}
+		if(!(offset1.y >= 0)) {
+			throw new js__$Boot_HaxeError("FAIL: offset.y >= 0");
+		}
+		_this1.width = offset1.width;
+		_this1.height = offset1.height;
+		_this1.offsetX = offset1.x;
+		_this1.offsetY = offset1.y;
+	}
 	this.score = geometrize_Core.differenceFull(target,this.current);
 };
 geometrize_Model.__name__ = true;
@@ -467,12 +544,37 @@ geometrize_Model.prototype = {
 			throw new js__$Boot_HaxeError("FAIL: shape != null");
 		}
 		var _this = this.current;
-		var bitmap = new geometrize_bitmap_Bitmap();
-		bitmap.width = _this.width;
-		bitmap.height = _this.height;
-		var length = _this.data.length;
-		var this1 = new Array(length);
-		bitmap.data = this1;
+		var bitmap = geometrize_bitmap_Bitmap.createBitmapOfLength(_this.originalWidth,_this.originalHeight,_this.data.length);
+		var offset = _this.width != _this.originalWidth || _this.height != _this.originalHeight || _this.offsetX != 0 || _this.offsetY != 0 ? { x : _this.offsetX, y : _this.offsetY, width : _this.width, height : _this.height} : null;
+		if(offset == null) {
+			bitmap.width = bitmap.originalWidth;
+			bitmap.height = bitmap.originalHeight;
+			bitmap.offsetX = 0;
+			bitmap.offsetY = 0;
+		} else {
+			if(!(offset.width > 0)) {
+				throw new js__$Boot_HaxeError("FAIL: offset.width > 0");
+			}
+			if(!(offset.x + offset.width <= bitmap.originalWidth)) {
+				throw new js__$Boot_HaxeError("FAIL: offset.x + offset.width <= originalWidth");
+			}
+			if(!(offset.height > 0)) {
+				throw new js__$Boot_HaxeError("FAIL: offset.height > 0");
+			}
+			if(!(offset.y + offset.height <= bitmap.originalHeight)) {
+				throw new js__$Boot_HaxeError("FAIL: offset.y + offset.height <= originalHeight");
+			}
+			if(!(offset.x >= 0)) {
+				throw new js__$Boot_HaxeError("FAIL: offset.x >= 0");
+			}
+			if(!(offset.y >= 0)) {
+				throw new js__$Boot_HaxeError("FAIL: offset.y >= 0");
+			}
+			bitmap.width = offset.width;
+			bitmap.height = offset.height;
+			bitmap.offsetX = offset.x;
+			bitmap.offsetY = offset.y;
+		}
 		var _g1 = 0;
 		var _g = _this.data.length;
 		while(_g1 < _g) {
@@ -484,6 +586,11 @@ geometrize_Model.prototype = {
 		var color = geometrize_Core.computeColor(this.target,this.current,lines,alpha);
 		geometrize_rasterizer_Rasterizer.drawLines(this.current,color,lines);
 		this.score = geometrize_Core.differencePartial(this.target,before,this.current,this.score,lines);
+		var _this1 = this.current;
+		var currentOffset = _this1.width != _this1.originalWidth || _this1.height != _this1.originalHeight || _this1.offsetX != 0 || _this1.offsetY != 0 ? { x : _this1.offsetX, y : _this1.offsetY, width : _this1.width, height : _this1.height} : null;
+		if(currentOffset != null) {
+			shape.translate(currentOffset);
+		}
 		var result = { score : this.score, color : color, shape : shape};
 		return result;
 	}
@@ -538,7 +645,10 @@ geometrize_Util.getAverageImageColor = function(image,alpha) {
 		var _g2 = image.height;
 		while(_g3 < _g2) {
 			var y = _g3++;
-			var pixel = image.data[image.width * y + x];
+			var absoluteStart = image.offsetY * image.originalWidth + image.offsetX;
+			var absoluteIndex = image.originalWidth * y + x - image.offsetX;
+			var index = absoluteStart + absoluteIndex;
+			var pixel = image.data[index];
 			totalRed += pixel >> 24 & 255;
 			totalGreen += pixel >> 16 & 255;
 			totalBlue += pixel >> 8 & 255;
@@ -635,15 +745,108 @@ geometrize_Util.abs = function(value) {
 	}
 	return value;
 };
+var geometrize_bitmap_OffsetArea = function() { };
+geometrize_bitmap_OffsetArea.__name__ = true;
+geometrize_bitmap_OffsetArea.prototype = {
+	setOffset: function(offset) {
+		if(offset == null) {
+			this.width = this.originalWidth;
+			this.height = this.originalHeight;
+			this.offsetX = 0;
+			this.offsetY = 0;
+		} else {
+			if(!(offset.width > 0)) {
+				throw new js__$Boot_HaxeError("FAIL: offset.width > 0");
+			}
+			if(!(offset.x + offset.width <= this.originalWidth)) {
+				throw new js__$Boot_HaxeError("FAIL: offset.x + offset.width <= originalWidth");
+			}
+			if(!(offset.height > 0)) {
+				throw new js__$Boot_HaxeError("FAIL: offset.height > 0");
+			}
+			if(!(offset.y + offset.height <= this.originalHeight)) {
+				throw new js__$Boot_HaxeError("FAIL: offset.y + offset.height <= originalHeight");
+			}
+			if(!(offset.x >= 0)) {
+				throw new js__$Boot_HaxeError("FAIL: offset.x >= 0");
+			}
+			if(!(offset.y >= 0)) {
+				throw new js__$Boot_HaxeError("FAIL: offset.y >= 0");
+			}
+			this.width = offset.width;
+			this.height = offset.height;
+			this.offsetX = offset.x;
+			this.offsetY = offset.y;
+		}
+	}
+	,getOffSet: function() {
+		if(this.width != this.originalWidth || this.height != this.originalHeight || this.offsetX != 0 || this.offsetY != 0) {
+			return { x : this.offsetX, y : this.offsetY, width : this.width, height : this.height};
+		}
+		return null;
+	}
+	,saveOffSet: function(reset) {
+		this.savedOffset = this.width != this.originalWidth || this.height != this.originalHeight || this.offsetX != 0 || this.offsetY != 0 ? { x : this.offsetX, y : this.offsetY, width : this.width, height : this.height} : null;
+		if(reset) {
+			this.width = this.originalWidth;
+			this.height = this.originalHeight;
+			this.offsetX = 0;
+			this.offsetY = 0;
+		}
+	}
+	,restoreOffset: function() {
+		if(this.savedOffset != null) {
+			var offset = this.savedOffset;
+			if(offset == null) {
+				this.width = this.originalWidth;
+				this.height = this.originalHeight;
+				this.offsetX = 0;
+				this.offsetY = 0;
+			} else {
+				if(!(offset.width > 0)) {
+					throw new js__$Boot_HaxeError("FAIL: offset.width > 0");
+				}
+				if(!(offset.x + offset.width <= this.originalWidth)) {
+					throw new js__$Boot_HaxeError("FAIL: offset.x + offset.width <= originalWidth");
+				}
+				if(!(offset.height > 0)) {
+					throw new js__$Boot_HaxeError("FAIL: offset.height > 0");
+				}
+				if(!(offset.y + offset.height <= this.originalHeight)) {
+					throw new js__$Boot_HaxeError("FAIL: offset.y + offset.height <= originalHeight");
+				}
+				if(!(offset.x >= 0)) {
+					throw new js__$Boot_HaxeError("FAIL: offset.x >= 0");
+				}
+				if(!(offset.y >= 0)) {
+					throw new js__$Boot_HaxeError("FAIL: offset.y >= 0");
+				}
+				this.width = offset.width;
+				this.height = offset.height;
+				this.offsetX = offset.x;
+				this.offsetY = offset.y;
+			}
+		}
+	}
+	,__class__: geometrize_bitmap_OffsetArea
+};
 var geometrize_bitmap_Bitmap = $hx_exports["geometrize"]["bitmap"]["Bitmap"] = function() {
 };
 geometrize_bitmap_Bitmap.__name__ = true;
-geometrize_bitmap_Bitmap.create = function(w,h,color) {
+geometrize_bitmap_Bitmap.createBitmapOfLength = function(w,h,length) {
 	var bitmap = new geometrize_bitmap_Bitmap();
 	bitmap.width = w;
 	bitmap.height = h;
-	var this1 = new Array(w * h);
+	bitmap.originalWidth = w;
+	bitmap.originalHeight = h;
+	bitmap.offsetX = 0;
+	bitmap.offsetY = 0;
+	var this1 = new Array(length);
 	bitmap.data = this1;
+	return bitmap;
+};
+geometrize_bitmap_Bitmap.create = function(w,h,color) {
+	var bitmap = geometrize_bitmap_Bitmap.createBitmapOfLength(w,h,w * h);
 	var i = 0;
 	while(i < bitmap.data.length) {
 		bitmap.data[i] = color;
@@ -652,7 +855,6 @@ geometrize_bitmap_Bitmap.create = function(w,h,color) {
 	return bitmap;
 };
 geometrize_bitmap_Bitmap.createFromBytes = function(w,h,bytes) {
-	var bitmap = new geometrize_bitmap_Bitmap();
 	if(!(bytes != null)) {
 		throw new js__$Boot_HaxeError("FAIL: bytes != null");
 	}
@@ -661,11 +863,7 @@ geometrize_bitmap_Bitmap.createFromBytes = function(w,h,bytes) {
 	if(actual != expected) {
 		throw new js__$Boot_HaxeError("FAIL: values are not equal (expected: " + expected + ", actual: " + actual + ")");
 	}
-	bitmap.width = w;
-	bitmap.height = h;
-	var length = bytes.length / 4 | 0;
-	var this1 = new Array(length);
-	bitmap.data = this1;
+	var bitmap = geometrize_bitmap_Bitmap.createBitmapOfLength(w,h,bytes.length / 4 | 0);
 	var i = 0;
 	var x = 0;
 	while(i < bytes.length) {
@@ -698,7 +896,6 @@ geometrize_bitmap_Bitmap.createFromByteArray = function(w,h,bytes) {
 		data.b[i] = bytes[i] & 255;
 		++i;
 	}
-	var bitmap = new geometrize_bitmap_Bitmap();
 	if(!(data != null)) {
 		throw new js__$Boot_HaxeError("FAIL: bytes != null");
 	}
@@ -707,11 +904,7 @@ geometrize_bitmap_Bitmap.createFromByteArray = function(w,h,bytes) {
 	if(actual != expected) {
 		throw new js__$Boot_HaxeError("FAIL: values are not equal (expected: " + expected + ", actual: " + actual + ")");
 	}
-	bitmap.width = w;
-	bitmap.height = h;
-	var length = data.length / 4 | 0;
-	var this1 = new Array(length);
-	bitmap.data = this1;
+	var bitmap = geometrize_bitmap_Bitmap.createBitmapOfLength(w,h,data.length / 4 | 0);
 	var i1 = 0;
 	var x = 0;
 	while(i1 < data.length) {
@@ -737,20 +930,58 @@ geometrize_bitmap_Bitmap.createFromByteArray = function(w,h,bytes) {
 	}
 	return bitmap;
 };
-geometrize_bitmap_Bitmap.prototype = {
+geometrize_bitmap_Bitmap.__super__ = geometrize_bitmap_OffsetArea;
+geometrize_bitmap_Bitmap.prototype = $extend(geometrize_bitmap_OffsetArea.prototype,{
 	getPixel: function(x,y) {
-		return this.data[this.width * y + x];
+		var absoluteStart = this.offsetY * this.originalWidth + this.offsetX;
+		var absoluteIndex = this.originalWidth * y + x - this.offsetX;
+		var index = absoluteStart + absoluteIndex;
+		return this.data[index];
 	}
 	,setPixel: function(x,y,color) {
-		this.data[this.width * y + x] = color;
+		var absoluteStart = this.offsetY * this.originalWidth + this.offsetX;
+		var absoluteIndex = this.originalWidth * y + x - this.offsetX;
+		var index = absoluteStart + absoluteIndex;
+		this.data[index] = color;
+	}
+	,getCoordsIndex: function(x,y) {
+		var absoluteStart = this.offsetY * this.originalWidth + this.offsetX;
+		var absoluteIndex = this.originalWidth * y + x - this.offsetX;
+		var index = absoluteStart + absoluteIndex;
+		return index;
 	}
 	,clone: function() {
-		var bitmap = new geometrize_bitmap_Bitmap();
-		bitmap.width = this.width;
-		bitmap.height = this.height;
-		var length = this.data.length;
-		var this1 = new Array(length);
-		bitmap.data = this1;
+		var bitmap = geometrize_bitmap_Bitmap.createBitmapOfLength(this.originalWidth,this.originalHeight,this.data.length);
+		var offset = this.width != this.originalWidth || this.height != this.originalHeight || this.offsetX != 0 || this.offsetY != 0 ? { x : this.offsetX, y : this.offsetY, width : this.width, height : this.height} : null;
+		if(offset == null) {
+			bitmap.width = bitmap.originalWidth;
+			bitmap.height = bitmap.originalHeight;
+			bitmap.offsetX = 0;
+			bitmap.offsetY = 0;
+		} else {
+			if(!(offset.width > 0)) {
+				throw new js__$Boot_HaxeError("FAIL: offset.width > 0");
+			}
+			if(!(offset.x + offset.width <= bitmap.originalWidth)) {
+				throw new js__$Boot_HaxeError("FAIL: offset.x + offset.width <= originalWidth");
+			}
+			if(!(offset.height > 0)) {
+				throw new js__$Boot_HaxeError("FAIL: offset.height > 0");
+			}
+			if(!(offset.y + offset.height <= bitmap.originalHeight)) {
+				throw new js__$Boot_HaxeError("FAIL: offset.y + offset.height <= originalHeight");
+			}
+			if(!(offset.x >= 0)) {
+				throw new js__$Boot_HaxeError("FAIL: offset.x >= 0");
+			}
+			if(!(offset.y >= 0)) {
+				throw new js__$Boot_HaxeError("FAIL: offset.y >= 0");
+			}
+			bitmap.width = offset.width;
+			bitmap.height = offset.height;
+			bitmap.offsetX = offset.x;
+			bitmap.offsetY = offset.y;
+		}
 		var _g1 = 0;
 		var _g = this.data.length;
 		while(_g1 < _g) {
@@ -783,7 +1014,7 @@ geometrize_bitmap_Bitmap.prototype = {
 		return bytes;
 	}
 	,__class__: geometrize_bitmap_Bitmap
-};
+});
 var geometrize_bitmap__$Rgba_Rgba_$Impl_$ = {};
 geometrize_bitmap__$Rgba_Rgba_$Impl_$.__name__ = true;
 geometrize_bitmap__$Rgba_Rgba_$Impl_$._new = function(rgba) {
@@ -960,7 +1191,10 @@ geometrize_rasterizer_Rasterizer.drawLines = function(image,c,lines) {
 		var _g1 = line.x2 + 1;
 		while(_g2 < _g1) {
 			var x = _g2++;
-			var d = image.data[image.width * y + x];
+			var absoluteStart = image.offsetY * image.originalWidth + image.offsetX;
+			var absoluteIndex = image.originalWidth * y + x - image.offsetX;
+			var index = absoluteStart + absoluteIndex;
+			var d = image.data[index];
 			var dr = d >> 24 & 255;
 			var dg = d >> 16 & 255;
 			var db = d >> 8 & 255;
@@ -981,7 +1215,10 @@ geometrize_rasterizer_Rasterizer.drawLines = function(image,c,lines) {
 			if(!true) {
 				throw new js__$Boot_HaxeError("FAIL: min <= max");
 			}
-			image.data[image.width * y + x] = ((r < 0 ? 0 : r > 255 ? 255 : r) << 24) + ((g < 0 ? 0 : g > 255 ? 255 : g) << 16) + ((b < 0 ? 0 : b > 255 ? 255 : b) << 8) + (a1 < 0 ? 0 : a1 > 255 ? 255 : a1);
+			var absoluteStart1 = image.offsetY * image.originalWidth + image.offsetX;
+			var absoluteIndex1 = image.originalWidth * y + x - image.offsetX;
+			var index1 = absoluteStart1 + absoluteIndex1;
+			image.data[index1] = ((r < 0 ? 0 : r > 255 ? 255 : r) << 24) + ((g < 0 ? 0 : g > 255 ? 255 : g) << 16) + ((b < 0 ? 0 : b > 255 ? 255 : b) << 8) + (a1 < 0 ? 0 : a1 > 255 ? 255 : a1);
 		}
 	}
 };
@@ -1004,7 +1241,13 @@ geometrize_rasterizer_Rasterizer.copyLines = function(destination,source,lines) 
 		var _g1 = line.x2 + 1;
 		while(_g2 < _g1) {
 			var x = _g2++;
-			destination.data[destination.width * y + x] = source.data[source.width * y + x];
+			var absoluteStart = source.offsetY * source.originalWidth + source.offsetX;
+			var absoluteIndex = source.originalWidth * y + x - source.offsetX;
+			var index = absoluteStart + absoluteIndex;
+			var absoluteStart1 = destination.offsetY * destination.originalWidth + destination.offsetX;
+			var absoluteIndex1 = destination.originalWidth * y + x - destination.offsetX;
+			var index1 = absoluteStart1 + absoluteIndex1;
+			destination.data[index1] = source.data[index];
 		}
 	}
 };
@@ -1191,7 +1434,9 @@ var geometrize_shape_Ellipse = function(xBound,yBound) {
 geometrize_shape_Ellipse.__name__ = true;
 geometrize_shape_Ellipse.__interfaces__ = [geometrize_shape_Shape];
 geometrize_shape_Ellipse.prototype = {
-	rasterize: function() {
+	translate: function(vector) {
+	}
+	,rasterize: function() {
 		var lines = [];
 		var aspect = this.rx / this.ry;
 		var w = this.xBound;
@@ -1373,7 +1618,9 @@ var geometrize_shape_Line = function(xBound,yBound) {
 geometrize_shape_Line.__name__ = true;
 geometrize_shape_Line.__interfaces__ = [geometrize_shape_Shape];
 geometrize_shape_Line.prototype = {
-	rasterize: function() {
+	translate: function(vector) {
+	}
+	,rasterize: function() {
 		var lines = [];
 		var points = geometrize_rasterizer_Rasterizer.bresenham(this.x1,this.y1,this.x2,this.y2);
 		var _g = 0;
@@ -1485,7 +1732,15 @@ var geometrize_shape_QuadraticBezier = function(xBound,yBound) {
 geometrize_shape_QuadraticBezier.__name__ = true;
 geometrize_shape_QuadraticBezier.__interfaces__ = [geometrize_shape_Shape];
 geometrize_shape_QuadraticBezier.prototype = {
-	rasterize: function() {
+	translate: function(vector) {
+		this.x1 += vector.x;
+		this.x2 += vector.x;
+		this.cx += vector.x;
+		this.cy += vector.y;
+		this.y1 += vector.y;
+		this.y2 += vector.y;
+	}
+	,rasterize: function() {
 		var lines = [];
 		var points = [];
 		var pointCount = 20;
@@ -1631,7 +1886,13 @@ var geometrize_shape_Rectangle = function(xBound,yBound) {
 geometrize_shape_Rectangle.__name__ = true;
 geometrize_shape_Rectangle.__interfaces__ = [geometrize_shape_Shape];
 geometrize_shape_Rectangle.prototype = {
-	rasterize: function() {
+	translate: function(vector) {
+		this.x1 += vector.x;
+		this.x2 += vector.x;
+		this.y1 += vector.y;
+		this.y2 += vector.y;
+	}
+	,rasterize: function() {
 		var lines = [];
 		var first = this.y1;
 		var second = this.y2;
@@ -1755,7 +2016,9 @@ var geometrize_shape_RotatedEllipse = function(xBound,yBound) {
 geometrize_shape_RotatedEllipse.__name__ = true;
 geometrize_shape_RotatedEllipse.__interfaces__ = [geometrize_shape_Shape];
 geometrize_shape_RotatedEllipse.prototype = {
-	rasterize: function() {
+	translate: function(vector) {
+	}
+	,rasterize: function() {
 		var pointCount = 20;
 		var points = [];
 		var rads = this.angle * (Math.PI / 180.0);
@@ -1877,7 +2140,9 @@ var geometrize_shape_RotatedRectangle = function(xBound,yBound) {
 geometrize_shape_RotatedRectangle.__name__ = true;
 geometrize_shape_RotatedRectangle.__interfaces__ = [geometrize_shape_Shape];
 geometrize_shape_RotatedRectangle.prototype = {
-	rasterize: function() {
+	translate: function(vector) {
+	}
+	,rasterize: function() {
 		var first = this.x1;
 		var second = this.x2;
 		var xm1 = first < second ? first : second;
@@ -2135,7 +2400,15 @@ var geometrize_shape_Triangle = function(xBound,yBound) {
 geometrize_shape_Triangle.__name__ = true;
 geometrize_shape_Triangle.__interfaces__ = [geometrize_shape_Shape];
 geometrize_shape_Triangle.prototype = {
-	rasterize: function() {
+	translate: function(vector) {
+		this.x1 += vector.x;
+		this.x2 += vector.x;
+		this.x3 += vector.x;
+		this.y1 += vector.y;
+		this.y2 += vector.y;
+		this.y3 += vector.y;
+	}
+	,rasterize: function() {
 		return geometrize_rasterizer_Scanline.trim(geometrize_rasterizer_Rasterizer.scanlinesForPolygon([{ x : this.x1, y : this.y1},{ x : this.x2, y : this.y2},{ x : this.x3, y : this.y3}]),this.xBound,this.yBound);
 	}
 	,mutate: function() {
@@ -2594,3 +2867,5 @@ geometrize_shape_ShapeTypes.QUADRATIC_BEZIER = 7;
 js_Boot.__toStr = ({ }).toString;
 js_html_compat_Uint8Array.BYTES_PER_ELEMENT = 1;
 })(typeof exports != "undefined" ? exports : typeof window != "undefined" ? window : typeof self != "undefined" ? self : this, typeof window != "undefined" ? window : typeof global != "undefined" ? global : typeof self != "undefined" ? self : this);
+
+//# sourceMappingURL=geometrize.js.map
