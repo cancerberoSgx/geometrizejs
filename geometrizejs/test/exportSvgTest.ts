@@ -19,13 +19,8 @@ test('should export SVG', async t => {
   for (let i = 0;i < iterations;i++) {
     shapes.push(...runner.step(options));
   }
-  // bitmap.setOffset();
-  //@ts-ignore
-  // shapes.forEach(s=>{s.shape.translate({x: 100, y: 40})})
-  const svg = SvgExporter.export(shapes, image.bitmap.width, image.bitmap.height);//getSvgPrelude() + SvgExporter.getSvgNodeOpen(bitmap.width, bitmap.height) + svgData.join('\n') + SvgExporter.getSvgNodeClose()
-
+  const svg = SvgExporter.export(shapes, image.bitmap.width, image.bitmap.height);
   const expected = ['<?xml', '<svg xmlns="http://www.w3.org/2000/svg"', '<rect', '</svg>']
-
   mkdirSync('tmp/svg/', { recursive: true })
   writeFileSync('tmp/svg/test1.svg', svg)
   expected.forEach(e => t.true(svg.includes(e)))

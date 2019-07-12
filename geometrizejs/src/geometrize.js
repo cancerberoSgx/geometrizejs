@@ -205,11 +205,11 @@ geometrize_Core.computeColor = function(target,current,lines,alpha) {
 		while(_g2 < _g1) {
 			var x = _g2++;
 			var absoluteStart = target.offsetY * target.originalWidth + target.offsetX;
-			var absoluteIndex = target.originalWidth * y + x - target.offsetX;
+			var absoluteIndex = target.originalWidth * y + x;
 			var index = absoluteStart + absoluteIndex;
 			var t = target.data[index];
 			var absoluteStart1 = current.offsetY * current.originalWidth + current.offsetX;
-			var absoluteIndex1 = current.originalWidth * y + x - current.offsetX;
+			var absoluteIndex1 = current.originalWidth * y + x;
 			var index1 = absoluteStart1 + absoluteIndex1;
 			var c = current.data[index1];
 			totalRed += ((t >> 24 & 255) - (c >> 24 & 255)) * a + (c >> 24 & 255) * 257;
@@ -291,11 +291,11 @@ geometrize_Core.differenceFull = function(first,second) {
 		while(_g3 < _g2) {
 			var x = _g3++;
 			var absoluteStart = first.offsetY * first.originalWidth + first.offsetX;
-			var absoluteIndex = first.originalWidth * y + x - first.offsetX;
+			var absoluteIndex = first.originalWidth * y + x;
 			var index = absoluteStart + absoluteIndex;
 			var f = first.data[index];
 			var absoluteStart1 = second.offsetY * second.originalWidth + second.offsetX;
-			var absoluteIndex1 = second.originalWidth * y + x - second.offsetX;
+			var absoluteIndex1 = second.originalWidth * y + x;
 			var index1 = absoluteStart1 + absoluteIndex1;
 			var s = second.data[index1];
 			var dr = (f >> 24 & 255) - (s >> 24 & 255);
@@ -341,15 +341,15 @@ geometrize_Core.differencePartial = function(target,before,after,score,lines) {
 		while(_g2 < _g1) {
 			var x = _g2++;
 			var absoluteStart = target.offsetY * target.originalWidth + target.offsetX;
-			var absoluteIndex = target.originalWidth * y + x - target.offsetX;
+			var absoluteIndex = target.originalWidth * y + x;
 			var index = absoluteStart + absoluteIndex;
 			var t = target.data[index];
 			var absoluteStart1 = before.offsetY * before.originalWidth + before.offsetX;
-			var absoluteIndex1 = before.originalWidth * y + x - before.offsetX;
+			var absoluteIndex1 = before.originalWidth * y + x;
 			var index1 = absoluteStart1 + absoluteIndex1;
 			var b = before.data[index1];
 			var absoluteStart2 = after.offsetY * after.originalWidth + after.offsetX;
-			var absoluteIndex2 = after.originalWidth * y + x - after.offsetX;
+			var absoluteIndex2 = after.originalWidth * y + x;
 			var index2 = absoluteStart2 + absoluteIndex2;
 			var a = after.data[index2];
 			var dtbr = (t >> 24 & 255) - (b >> 24 & 255);
@@ -534,7 +534,102 @@ var geometrize_Model = function(target,backgroundColor) {
 };
 geometrize_Model.__name__ = true;
 geometrize_Model.prototype = {
-	step: function(shapeTypes,alpha,n,age) {
+	setOffset: function(offset) {
+		var _this = this.current;
+		if(offset == null) {
+			_this.width = _this.originalWidth;
+			_this.height = _this.originalHeight;
+			_this.offsetX = 0;
+			_this.offsetY = 0;
+		} else {
+			if(!(offset.width > 0)) {
+				throw new js__$Boot_HaxeError("FAIL: offset.width > 0");
+			}
+			if(!(offset.x + offset.width <= _this.originalWidth)) {
+				throw new js__$Boot_HaxeError("FAIL: offset.x + offset.width <= originalWidth");
+			}
+			if(!(offset.height > 0)) {
+				throw new js__$Boot_HaxeError("FAIL: offset.height > 0");
+			}
+			if(!(offset.y + offset.height <= _this.originalHeight)) {
+				throw new js__$Boot_HaxeError("FAIL: offset.y + offset.height <= originalHeight");
+			}
+			if(!(offset.x >= 0)) {
+				throw new js__$Boot_HaxeError("FAIL: offset.x >= 0");
+			}
+			if(!(offset.y >= 0)) {
+				throw new js__$Boot_HaxeError("FAIL: offset.y >= 0");
+			}
+			_this.width = offset.width;
+			_this.height = offset.height;
+			_this.offsetX = offset.x;
+			_this.offsetY = offset.y;
+		}
+		var _this1 = this.current;
+		if(offset == null) {
+			_this1.width = _this1.originalWidth;
+			_this1.height = _this1.originalHeight;
+			_this1.offsetX = 0;
+			_this1.offsetY = 0;
+		} else {
+			if(!(offset.width > 0)) {
+				throw new js__$Boot_HaxeError("FAIL: offset.width > 0");
+			}
+			if(!(offset.x + offset.width <= _this1.originalWidth)) {
+				throw new js__$Boot_HaxeError("FAIL: offset.x + offset.width <= originalWidth");
+			}
+			if(!(offset.height > 0)) {
+				throw new js__$Boot_HaxeError("FAIL: offset.height > 0");
+			}
+			if(!(offset.y + offset.height <= _this1.originalHeight)) {
+				throw new js__$Boot_HaxeError("FAIL: offset.y + offset.height <= originalHeight");
+			}
+			if(!(offset.x >= 0)) {
+				throw new js__$Boot_HaxeError("FAIL: offset.x >= 0");
+			}
+			if(!(offset.y >= 0)) {
+				throw new js__$Boot_HaxeError("FAIL: offset.y >= 0");
+			}
+			_this1.width = offset.width;
+			_this1.height = offset.height;
+			_this1.offsetX = offset.x;
+			_this1.offsetY = offset.y;
+		}
+		var _this2 = this.target;
+		if(offset == null) {
+			_this2.width = _this2.originalWidth;
+			_this2.height = _this2.originalHeight;
+			_this2.offsetX = 0;
+			_this2.offsetY = 0;
+		} else {
+			if(!(offset.width > 0)) {
+				throw new js__$Boot_HaxeError("FAIL: offset.width > 0");
+			}
+			if(!(offset.x + offset.width <= _this2.originalWidth)) {
+				throw new js__$Boot_HaxeError("FAIL: offset.x + offset.width <= originalWidth");
+			}
+			if(!(offset.height > 0)) {
+				throw new js__$Boot_HaxeError("FAIL: offset.height > 0");
+			}
+			if(!(offset.y + offset.height <= _this2.originalHeight)) {
+				throw new js__$Boot_HaxeError("FAIL: offset.y + offset.height <= originalHeight");
+			}
+			if(!(offset.x >= 0)) {
+				throw new js__$Boot_HaxeError("FAIL: offset.x >= 0");
+			}
+			if(!(offset.y >= 0)) {
+				throw new js__$Boot_HaxeError("FAIL: offset.y >= 0");
+			}
+			_this2.width = offset.width;
+			_this2.height = offset.height;
+			_this2.offsetX = offset.x;
+			_this2.offsetY = offset.y;
+		}
+		this.width = this.target.width;
+		this.height = this.target.height;
+		this.score = geometrize_Core.differenceFull(this.target,this.current);
+	}
+	,step: function(shapeTypes,alpha,n,age) {
 		var state = geometrize_Core.bestHillClimbState(shapeTypes,alpha,n,age,this.target,this.current,this.buffer,this.score);
 		var results = [this.addShape(state.shape,state.alpha)];
 		return results;
@@ -646,7 +741,7 @@ geometrize_Util.getAverageImageColor = function(image,alpha) {
 		while(_g3 < _g2) {
 			var y = _g3++;
 			var absoluteStart = image.offsetY * image.originalWidth + image.offsetX;
-			var absoluteIndex = image.originalWidth * y + x - image.offsetX;
+			var absoluteIndex = image.originalWidth * y + x;
 			var index = absoluteStart + absoluteIndex;
 			var pixel = image.data[index];
 			totalRed += pixel >> 24 & 255;
@@ -828,6 +923,12 @@ geometrize_bitmap_OffsetArea.prototype = {
 			}
 		}
 	}
+	,getCoordsIndex: function(x,y) {
+		var absoluteStart = this.offsetY * this.originalWidth + this.offsetX;
+		var absoluteIndex = this.originalWidth * y + x;
+		var index = absoluteStart + absoluteIndex;
+		return index;
+	}
 	,__class__: geometrize_bitmap_OffsetArea
 };
 var geometrize_bitmap_Bitmap = $hx_exports["geometrize"]["bitmap"]["Bitmap"] = function() {
@@ -934,21 +1035,15 @@ geometrize_bitmap_Bitmap.__super__ = geometrize_bitmap_OffsetArea;
 geometrize_bitmap_Bitmap.prototype = $extend(geometrize_bitmap_OffsetArea.prototype,{
 	getPixel: function(x,y) {
 		var absoluteStart = this.offsetY * this.originalWidth + this.offsetX;
-		var absoluteIndex = this.originalWidth * y + x - this.offsetX;
+		var absoluteIndex = this.originalWidth * y + x;
 		var index = absoluteStart + absoluteIndex;
 		return this.data[index];
 	}
 	,setPixel: function(x,y,color) {
 		var absoluteStart = this.offsetY * this.originalWidth + this.offsetX;
-		var absoluteIndex = this.originalWidth * y + x - this.offsetX;
+		var absoluteIndex = this.originalWidth * y + x;
 		var index = absoluteStart + absoluteIndex;
 		this.data[index] = color;
-	}
-	,getCoordsIndex: function(x,y) {
-		var absoluteStart = this.offsetY * this.originalWidth + this.offsetX;
-		var absoluteIndex = this.originalWidth * y + x - this.offsetX;
-		var index = absoluteStart + absoluteIndex;
-		return index;
 	}
 	,clone: function() {
 		var bitmap = geometrize_bitmap_Bitmap.createBitmapOfLength(this.originalWidth,this.originalHeight,this.data.length);
@@ -1192,7 +1287,7 @@ geometrize_rasterizer_Rasterizer.drawLines = function(image,c,lines) {
 		while(_g2 < _g1) {
 			var x = _g2++;
 			var absoluteStart = image.offsetY * image.originalWidth + image.offsetX;
-			var absoluteIndex = image.originalWidth * y + x - image.offsetX;
+			var absoluteIndex = image.originalWidth * y + x;
 			var index = absoluteStart + absoluteIndex;
 			var d = image.data[index];
 			var dr = d >> 24 & 255;
@@ -1216,7 +1311,7 @@ geometrize_rasterizer_Rasterizer.drawLines = function(image,c,lines) {
 				throw new js__$Boot_HaxeError("FAIL: min <= max");
 			}
 			var absoluteStart1 = image.offsetY * image.originalWidth + image.offsetX;
-			var absoluteIndex1 = image.originalWidth * y + x - image.offsetX;
+			var absoluteIndex1 = image.originalWidth * y + x;
 			var index1 = absoluteStart1 + absoluteIndex1;
 			image.data[index1] = ((r < 0 ? 0 : r > 255 ? 255 : r) << 24) + ((g < 0 ? 0 : g > 255 ? 255 : g) << 16) + ((b < 0 ? 0 : b > 255 ? 255 : b) << 8) + (a1 < 0 ? 0 : a1 > 255 ? 255 : a1);
 		}
@@ -1242,10 +1337,10 @@ geometrize_rasterizer_Rasterizer.copyLines = function(destination,source,lines) 
 		while(_g2 < _g1) {
 			var x = _g2++;
 			var absoluteStart = source.offsetY * source.originalWidth + source.offsetX;
-			var absoluteIndex = source.originalWidth * y + x - source.offsetX;
+			var absoluteIndex = source.originalWidth * y + x;
 			var index = absoluteStart + absoluteIndex;
 			var absoluteStart1 = destination.offsetY * destination.originalWidth + destination.offsetX;
-			var absoluteIndex1 = destination.originalWidth * y + x - destination.offsetX;
+			var absoluteIndex1 = destination.originalWidth * y + x;
 			var index1 = absoluteStart1 + absoluteIndex1;
 			destination.data[index1] = source.data[index];
 		}
@@ -1381,7 +1476,103 @@ var geometrize_runner_ImageRunner = $hx_exports["geometrize"]["runner"]["ImageRu
 };
 geometrize_runner_ImageRunner.__name__ = true;
 geometrize_runner_ImageRunner.prototype = {
-	step: function(options) {
+	setOffset: function(offset) {
+		var _this = this.model;
+		var _this1 = _this.current;
+		if(offset == null) {
+			_this1.width = _this1.originalWidth;
+			_this1.height = _this1.originalHeight;
+			_this1.offsetX = 0;
+			_this1.offsetY = 0;
+		} else {
+			if(!(offset.width > 0)) {
+				throw new js__$Boot_HaxeError("FAIL: offset.width > 0");
+			}
+			if(!(offset.x + offset.width <= _this1.originalWidth)) {
+				throw new js__$Boot_HaxeError("FAIL: offset.x + offset.width <= originalWidth");
+			}
+			if(!(offset.height > 0)) {
+				throw new js__$Boot_HaxeError("FAIL: offset.height > 0");
+			}
+			if(!(offset.y + offset.height <= _this1.originalHeight)) {
+				throw new js__$Boot_HaxeError("FAIL: offset.y + offset.height <= originalHeight");
+			}
+			if(!(offset.x >= 0)) {
+				throw new js__$Boot_HaxeError("FAIL: offset.x >= 0");
+			}
+			if(!(offset.y >= 0)) {
+				throw new js__$Boot_HaxeError("FAIL: offset.y >= 0");
+			}
+			_this1.width = offset.width;
+			_this1.height = offset.height;
+			_this1.offsetX = offset.x;
+			_this1.offsetY = offset.y;
+		}
+		var _this2 = _this.current;
+		if(offset == null) {
+			_this2.width = _this2.originalWidth;
+			_this2.height = _this2.originalHeight;
+			_this2.offsetX = 0;
+			_this2.offsetY = 0;
+		} else {
+			if(!(offset.width > 0)) {
+				throw new js__$Boot_HaxeError("FAIL: offset.width > 0");
+			}
+			if(!(offset.x + offset.width <= _this2.originalWidth)) {
+				throw new js__$Boot_HaxeError("FAIL: offset.x + offset.width <= originalWidth");
+			}
+			if(!(offset.height > 0)) {
+				throw new js__$Boot_HaxeError("FAIL: offset.height > 0");
+			}
+			if(!(offset.y + offset.height <= _this2.originalHeight)) {
+				throw new js__$Boot_HaxeError("FAIL: offset.y + offset.height <= originalHeight");
+			}
+			if(!(offset.x >= 0)) {
+				throw new js__$Boot_HaxeError("FAIL: offset.x >= 0");
+			}
+			if(!(offset.y >= 0)) {
+				throw new js__$Boot_HaxeError("FAIL: offset.y >= 0");
+			}
+			_this2.width = offset.width;
+			_this2.height = offset.height;
+			_this2.offsetX = offset.x;
+			_this2.offsetY = offset.y;
+		}
+		var _this3 = _this.target;
+		if(offset == null) {
+			_this3.width = _this3.originalWidth;
+			_this3.height = _this3.originalHeight;
+			_this3.offsetX = 0;
+			_this3.offsetY = 0;
+		} else {
+			if(!(offset.width > 0)) {
+				throw new js__$Boot_HaxeError("FAIL: offset.width > 0");
+			}
+			if(!(offset.x + offset.width <= _this3.originalWidth)) {
+				throw new js__$Boot_HaxeError("FAIL: offset.x + offset.width <= originalWidth");
+			}
+			if(!(offset.height > 0)) {
+				throw new js__$Boot_HaxeError("FAIL: offset.height > 0");
+			}
+			if(!(offset.y + offset.height <= _this3.originalHeight)) {
+				throw new js__$Boot_HaxeError("FAIL: offset.y + offset.height <= originalHeight");
+			}
+			if(!(offset.x >= 0)) {
+				throw new js__$Boot_HaxeError("FAIL: offset.x >= 0");
+			}
+			if(!(offset.y >= 0)) {
+				throw new js__$Boot_HaxeError("FAIL: offset.y >= 0");
+			}
+			_this3.width = offset.width;
+			_this3.height = offset.height;
+			_this3.offsetX = offset.x;
+			_this3.offsetY = offset.y;
+		}
+		_this.width = _this.target.width;
+		_this.height = _this.target.height;
+		_this.score = geometrize_Core.differenceFull(_this.target,_this.current);
+	}
+	,step: function(options) {
 		var finalOptions_shapeTypes;
 		var finalOptions_shapeMutationsPerStep;
 		var finalOptions_candidateShapesPerStep;
@@ -1434,9 +1625,7 @@ var geometrize_shape_Ellipse = function(xBound,yBound) {
 geometrize_shape_Ellipse.__name__ = true;
 geometrize_shape_Ellipse.__interfaces__ = [geometrize_shape_Shape];
 geometrize_shape_Ellipse.prototype = {
-	translate: function(vector) {
-	}
-	,rasterize: function() {
+	rasterize: function() {
 		var lines = [];
 		var aspect = this.rx / this.ry;
 		var w = this.xBound;
@@ -1532,6 +1721,12 @@ geometrize_shape_Ellipse.prototype = {
 	,getSvgShapeData: function() {
 		return "<ellipse cx=\"" + this.x + "\" cy=\"" + this.y + "\" rx=\"" + this.rx + "\" ry=\"" + this.ry + "\" " + geometrize_exporter_SvgExporter.SVG_STYLE_HOOK + " />";
 	}
+	,translate: function(vector) {
+		this.x += vector.x;
+		this.rx += vector.x;
+		this.y += vector.y;
+		this.ry += vector.y;
+	}
 	,__class__: geometrize_shape_Ellipse
 };
 var geometrize_shape_Circle = function(xBound,yBound) {
@@ -1618,9 +1813,7 @@ var geometrize_shape_Line = function(xBound,yBound) {
 geometrize_shape_Line.__name__ = true;
 geometrize_shape_Line.__interfaces__ = [geometrize_shape_Shape];
 geometrize_shape_Line.prototype = {
-	translate: function(vector) {
-	}
-	,rasterize: function() {
+	rasterize: function() {
 		var lines = [];
 		var points = geometrize_rasterizer_Rasterizer.bresenham(this.x1,this.y1,this.x2,this.y2);
 		var _g = 0;
@@ -1693,6 +1886,12 @@ geometrize_shape_Line.prototype = {
 	,getSvgShapeData: function() {
 		return "<line x1=\"" + this.x1 + "\" y1=\"" + this.y1 + "\" x2=\"" + this.x2 + "\" y2=\"" + this.y2 + "\" " + geometrize_exporter_SvgExporter.SVG_STYLE_HOOK + " />";
 	}
+	,translate: function(vector) {
+		this.x1 += vector.x;
+		this.x2 += vector.x;
+		this.y1 += vector.y;
+		this.y2 += vector.y;
+	}
 	,__class__: geometrize_shape_Line
 };
 var geometrize_shape_QuadraticBezier = function(xBound,yBound) {
@@ -1732,15 +1931,7 @@ var geometrize_shape_QuadraticBezier = function(xBound,yBound) {
 geometrize_shape_QuadraticBezier.__name__ = true;
 geometrize_shape_QuadraticBezier.__interfaces__ = [geometrize_shape_Shape];
 geometrize_shape_QuadraticBezier.prototype = {
-	translate: function(vector) {
-		this.x1 += vector.x;
-		this.x2 += vector.x;
-		this.cx += vector.x;
-		this.cy += vector.y;
-		this.y1 += vector.y;
-		this.y2 += vector.y;
-	}
-	,rasterize: function() {
+	rasterize: function() {
 		var lines = [];
 		var points = [];
 		var pointCount = 20;
@@ -1863,6 +2054,14 @@ geometrize_shape_QuadraticBezier.prototype = {
 	,getSvgShapeData: function() {
 		return "<path d=\"M" + this.x1 + " " + this.y1 + " Q " + this.cx + " " + this.cy + " " + this.x2 + " " + this.y2 + "\" " + geometrize_exporter_SvgExporter.SVG_STYLE_HOOK + " />";
 	}
+	,translate: function(vector) {
+		this.x1 += vector.x;
+		this.x2 += vector.x;
+		this.cx += vector.x;
+		this.cy += vector.y;
+		this.y1 += vector.y;
+		this.y2 += vector.y;
+	}
 	,__class__: geometrize_shape_QuadraticBezier
 };
 var geometrize_shape_Rectangle = function(xBound,yBound) {
@@ -1886,13 +2085,7 @@ var geometrize_shape_Rectangle = function(xBound,yBound) {
 geometrize_shape_Rectangle.__name__ = true;
 geometrize_shape_Rectangle.__interfaces__ = [geometrize_shape_Shape];
 geometrize_shape_Rectangle.prototype = {
-	translate: function(vector) {
-		this.x1 += vector.x;
-		this.x2 += vector.x;
-		this.y1 += vector.y;
-		this.y2 += vector.y;
-	}
-	,rasterize: function() {
+	rasterize: function() {
 		var lines = [];
 		var first = this.y1;
 		var second = this.y2;
@@ -2002,6 +2195,12 @@ geometrize_shape_Rectangle.prototype = {
 		var second5 = this.y2;
 		return "<rect x=\"" + (first < second ? first : second) + "\" y=\"" + (first1 < second1 ? first1 : second1) + "\" width=\"" + ((first2 > second2 ? first2 : second2) - (first3 < second3 ? first3 : second3)) + "\" height=\"" + ((first4 > second4 ? first4 : second4) - (first5 < second5 ? first5 : second5)) + "\" " + geometrize_exporter_SvgExporter.SVG_STYLE_HOOK + " />";
 	}
+	,translate: function(vector) {
+		this.x1 += vector.x;
+		this.x2 += vector.x;
+		this.y1 += vector.y;
+		this.y2 += vector.y;
+	}
 	,__class__: geometrize_shape_Rectangle
 };
 var geometrize_shape_RotatedEllipse = function(xBound,yBound) {
@@ -2016,9 +2215,7 @@ var geometrize_shape_RotatedEllipse = function(xBound,yBound) {
 geometrize_shape_RotatedEllipse.__name__ = true;
 geometrize_shape_RotatedEllipse.__interfaces__ = [geometrize_shape_Shape];
 geometrize_shape_RotatedEllipse.prototype = {
-	translate: function(vector) {
-	}
-	,rasterize: function() {
+	rasterize: function() {
 		var pointCount = 20;
 		var points = [];
 		var rads = this.angle * (Math.PI / 180.0);
@@ -2115,6 +2312,12 @@ geometrize_shape_RotatedEllipse.prototype = {
 		s += "</g>";
 		return s;
 	}
+	,translate: function(vector) {
+		this.x += vector.x;
+		this.rx += vector.x;
+		this.y += vector.y;
+		this.ry += vector.y;
+	}
 	,__class__: geometrize_shape_RotatedEllipse
 };
 var geometrize_shape_RotatedRectangle = function(xBound,yBound) {
@@ -2140,9 +2343,7 @@ var geometrize_shape_RotatedRectangle = function(xBound,yBound) {
 geometrize_shape_RotatedRectangle.__name__ = true;
 geometrize_shape_RotatedRectangle.__interfaces__ = [geometrize_shape_Shape];
 geometrize_shape_RotatedRectangle.prototype = {
-	translate: function(vector) {
-	}
-	,rasterize: function() {
+	rasterize: function() {
 		var first = this.x1;
 		var second = this.x2;
 		var xm1 = first < second ? first : second;
@@ -2328,6 +2529,12 @@ geometrize_shape_RotatedRectangle.prototype = {
 		var bry = ox2 * s + oy2 * c + cy | 0;
 		return [{ x : ulx, y : uly},{ x : urx, y : ury},{ x : brx, y : bry},{ x : blx, y : bly}];
 	}
+	,translate: function(vector) {
+		this.x1 += vector.x;
+		this.x2 += vector.x;
+		this.y1 += vector.y;
+		this.y2 += vector.y;
+	}
 	,__class__: geometrize_shape_RotatedRectangle
 };
 var geometrize_shape_ShapeFactory = function() { };
@@ -2400,15 +2607,7 @@ var geometrize_shape_Triangle = function(xBound,yBound) {
 geometrize_shape_Triangle.__name__ = true;
 geometrize_shape_Triangle.__interfaces__ = [geometrize_shape_Shape];
 geometrize_shape_Triangle.prototype = {
-	translate: function(vector) {
-		this.x1 += vector.x;
-		this.x2 += vector.x;
-		this.x3 += vector.x;
-		this.y1 += vector.y;
-		this.y2 += vector.y;
-		this.y3 += vector.y;
-	}
-	,rasterize: function() {
+	rasterize: function() {
 		return geometrize_rasterizer_Scanline.trim(geometrize_rasterizer_Rasterizer.scanlinesForPolygon([{ x : this.x1, y : this.y1},{ x : this.x2, y : this.y2},{ x : this.x3, y : this.y3}]),this.xBound,this.yBound);
 	}
 	,mutate: function() {
@@ -2494,6 +2693,14 @@ geometrize_shape_Triangle.prototype = {
 	}
 	,getSvgShapeData: function() {
 		return "<polygon points=\"" + this.x1 + "," + this.y1 + " " + this.x2 + "," + this.y2 + " " + this.x3 + "," + this.y3 + "\" " + geometrize_exporter_SvgExporter.SVG_STYLE_HOOK + "/>";
+	}
+	,translate: function(vector) {
+		this.x1 += vector.x;
+		this.x2 += vector.x;
+		this.x3 += vector.x;
+		this.y1 += vector.y;
+		this.y2 += vector.y;
+		this.y3 += vector.y;
 	}
 	,__class__: geometrize_shape_Triangle
 };

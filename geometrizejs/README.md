@@ -169,27 +169,27 @@ That should re-generate `geometrizejs/src/geometrize.js`.
 ## TODO / Roadmap
 - [ ] research wasm build using haxe
 - [ ] browser tests
+- [x] support bitmap-regions branch
 - [x] sourcemaps https://haxe.org/manual/debugging-source-map.html
 - [x] bitmap output tests
 - [x] JSON output tests
+ 
+### Extras / ideas 
+
+The following are features not supported by haxe implementation. If implemented it will be in a separate project so this project keeps being zero-implementation:
+- [ ] configuration to limit the are/length of shapes
 - [ ] performance tests. use different options and input image sizes and generate timings and output image diffs (as numbers - for example using imagemagick) - so we can better understand how options/image size/output quality relationships are. See https://github.com/Tw1ddle/geometrize-haxe-web/issues/3#issuecomment-504424092
 - performance on haxe lib: 
   * explicit option to not copy buffers
   * https://stackoverflow.com/a/16679447/1179379 - seems transforming u8int to u32int array is faster to extract colors ? maybe even in haxe
   * use Uint8ClampedArray ? 
-  
- 
-### Extras / ideas 
-
-The following are features not supported by haxe implementation. If implemented it will be in a separate project so this project keeps being zero-implementation:
-
 - [ ] high level API to export current models to svg, png/jpg, json (so users dont have to build bitmap and iterate manually)
 - [ ] geometrize - a new shape "text" - equivalent to rotated rectangle ? User can provide list of words - configure font style - letter vs word vs paragraph
 - [ ] notify listeners between N iterations passing current models  (format agnostic) (so they can take interval screenshots)
-- [ ] Be able to change options while the iteration is still running
-- [ ] be able to change iterations value ( while is running)
+- [x] Be able to change options while the iteration is still running
+- [x] be able to change iterations value ( while is running)
 - [ ] Be able to pause an iteration and serialize its state (options and model, current iteration, iterations value) so later, in another process, we can load it and resume it (even increase iterations value)
-- [ ] implement quadratic blezier curves based on https://github.com/Tw1ddle/geometrize-lib/blob/be14f7bf0d183faa03127c6500c6194877b3ee3d/geometrize/geometrize/rasterizer/rasterizer.cpp#L308 ? 
+- [x] implement quadratic blezier curves based on https://github.com/Tw1ddle/geometrize-lib/blob/be14f7bf0d183faa03127c6500c6194877b3ee3d/geometrize/geometrize/rasterizer/rasterizer.cpp#L308 ? 
 - [ ] Research SVG post processing
   - [ ] document that big SVGs can be reduced up to 50% size with svgo which supports node and browser (js)
   - [ ] SVG paths can be transformed with "simplify" (sharpen  by reducing nodes) and with smothing (adds nodes and transform ) 

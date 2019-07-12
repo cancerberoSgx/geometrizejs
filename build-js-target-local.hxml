@@ -1,6 +1,6 @@
 -lib sure 
 
--cp geometrize-haxe
+-cp /Users/sebastiangurin/git/geometrize-haxe
 
 geometrize.bitmap.Bitmap
 geometrize.bitmap.Rgba
