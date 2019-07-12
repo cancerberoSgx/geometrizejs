@@ -1,12 +1,12 @@
 import test from 'ava'
 import { mkdirSync, writeFileSync } from 'fs'
 import Jimp from 'jimp'
-import { Bitmap, ImageRunner, ShapeTypes, ImageRunnerOptions, ShapeResult , SvgExporter } from '../src'
-import { Rect } from '../src/bitmap';
+import { Bitmap, ImageRunner, ImageRunnerOptions, ShapeResult, ShapeTypes, SvgExporter } from '../src'
+import { Rect } from '../src/bitmap'
 
 interface Serie extends ImageRunnerOptions {
   iterations: number
-  bitmapOffset?: Rect  
+  bitmapOffset?: Rect
 }
 
 test('should change working offset in the bitmap', async t => {
@@ -14,28 +14,28 @@ test('should change working offset in the bitmap', async t => {
   const bitmap = Bitmap.createFromByteArray(image.bitmap.width, image.bitmap.height, image.bitmap.data)
   const series: Serie[] = [
     {
-    iterations: 55,
-    shapeTypes: [ShapeTypes.ROTATED_ELLIPSE, ShapeTypes.TRIANGLE],
-    alpha: 62,
-    candidateShapesPerStep: 42,
-    shapeMutationsPerStep: 44,
-  }, 
-  {
-    iterations: 55,
-    bitmapOffset: { x: 0, y: 0, width: 333, height: 220 },
-    shapeTypes: [ShapeTypes.RECTANGLE],
-  }, 
-  {
-    iterations: 55,
-    shapeTypes: [ShapeTypes.TRIANGLE],
-    bitmapOffset: { x:  444, y: 0, width: 311, height: 220 },
-  },
-  {
-    iterations: 255,
-    shapeTypes: [ShapeTypes.QUADRATIC_BEZIER],
-    bitmapOffset: { x:  0, y: 300, width: 688, height: 200 },
-    alpha: 196
-  }
+      iterations: 2,
+      shapeTypes: [ShapeTypes.ROTATED_ELLIPSE, ShapeTypes.TRIANGLE],
+      alpha: 62,
+      candidateShapesPerStep: 42,
+      shapeMutationsPerStep: 44,
+    },
+    {
+      iterations: 2,
+      bitmapOffset: { x: 0, y: 0, width: 333, height: 220 },
+      shapeTypes: [ShapeTypes.RECTANGLE],
+    },
+    {
+      iterations: 2,
+      shapeTypes: [ShapeTypes.TRIANGLE],
+      bitmapOffset: { x: 444, y: 0, width: 311, height: 220 },
+    },
+    {
+      iterations: 3,
+      shapeTypes: [ShapeTypes.QUADRATIC_BEZIER],
+      bitmapOffset: { x: 0, y: 300, width: 688, height: 200 },
+      alpha: 196
+    }
   ]
   const results: ShapeResult[] = []
   const runner = new ImageRunner(bitmap)
@@ -45,7 +45,7 @@ test('should change working offset in the bitmap', async t => {
     } else {
       runner.setOffset()
     }
-    for (let i = 0; i < serie.iterations; i++) {
+    for (let i = 0;i < serie.iterations;i++) {
       results.push(...runner.step(serie))
     }
   })
@@ -59,7 +59,7 @@ test('should change working offset in the bitmap', async t => {
   mkdirSync('tmp/bitmap/', { recursive: true })
   await out.writeAsync('tmp/bitmap/parrots.png')
 
-  const svg = SvgExporter.export(results, image.bitmap.width, image.bitmap.height);
+  const svg = SvgExporter.export(results, image.bitmap.width, image.bitmap.height)
   const expected = ['<?xml', '<svg xmlns="http://www.w3.org/2000/svg"', '</svg>']
   mkdirSync('tmp/svg/', { recursive: true })
   writeFileSync('tmp/svg/parrots.svg', svg)

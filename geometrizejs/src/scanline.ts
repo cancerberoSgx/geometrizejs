@@ -2,7 +2,7 @@
  * Represents a scanline, a row of pixels running across a bitmap.
  */
 export interface Scanline {
-  
+
 	/**
 	 * The y-coordinate of the scanline.
 	 */

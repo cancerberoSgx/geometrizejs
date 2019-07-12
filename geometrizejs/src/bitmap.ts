@@ -42,7 +42,7 @@ export declare class Bitmap {
   /**
    * Convert coordinates relative to the offset into absolute coordinates in array index coordinates.
    **/
-  public getCoordsIndex(x:number, y:number) : number
+  public getCoordsIndex(x: number, y: number): number
 
 	/**
 	 * Creates a new bitmap, filled with the given color.

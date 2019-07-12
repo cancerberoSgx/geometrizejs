@@ -1,12 +1,12 @@
 import test from 'ava'
-import { mkdirSync, writeFileSync } from 'fs'
+import { mkdirSync } from 'fs'
 import Jimp from 'jimp'
 import { Bitmap, ImageRunner, ShapeTypes } from '../src'
 
 test('should export bitmap', async t => {
   const image = await Jimp.read('test/assets/logo.png')
-  const bitmap = Bitmap.createFromByteArray(image.bitmap.width,  image.bitmap.height, image.bitmap.data)
-  bitmap.setOffset({x: 120, y: 50, width:210, height: 70})
+  const bitmap = Bitmap.createFromByteArray(image.bitmap.width, image.bitmap.height, image.bitmap.data)
+  bitmap.setOffset({ x: 120, y: 50, width: 210, height: 70 })
 
   const runner = new ImageRunner(bitmap)
   const options = {
