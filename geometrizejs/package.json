@@ -13,7 +13,7 @@
     "test-debug": "node --inspect-brk node_modules/ava/cli.js --serial",
     "clean": "rm -rf tmp* dist",
     "build": "npm run clean && npx tsc && npm run copy",
-    "copy": "cp src/geometrize.js dist/src",
+    "copy": "cp src/geometrize.js assets/geometrize.js.map dist/src",
     "format": "npx ts-refactor format \"src/**/*.ts*\" \"test/**/*.ts*\" ./formatCodeSettings.json --tsConfigPath ./tsconfig.json --dontAsk",
     "organizeImports": "npx ts-refactor organizeImports \"src/**/*.ts*\" \"test/**/*.ts*\" ./formatCodeSettings.json --tsConfigPath ./tsconfig.json --dontAsk ",
     "lint": "npm run organizeImports && npm run format",

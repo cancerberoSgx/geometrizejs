@@ -33,4 +33,6 @@ geometrize.ArraySet
 geometrize.Model
 geometrize.Util
 
+-debug
+
 -js geometrize.js    

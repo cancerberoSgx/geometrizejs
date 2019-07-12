@@ -13,6 +13,9 @@ export declare class Bitmap {
 	 * The height of the bitmap.
 	 */
   height: number
+  
+  public setOffset(offset?:Rect):void
+
 
 	/**
 	 * Creates a new bitmap, filled with the given color.
@@ -22,7 +25,6 @@ export declare class Bitmap {
 	 * @return	The new bitmap.
 	 */
   static create(w: number, h: number, color: Rgba): Bitmap
-
 	/**
 	 * Creates a new bitmap from the supplied byte data.
 	 * @param	w		The width of the bitmap.
@@ -88,3 +90,9 @@ export interface Bytes {
  * Color representation in red, green, blue, alpha format. 
  */
 export type Rgba = number
+export interface Rect {
+  x:number
+  y:number
+  width:number
+  height:number
+}

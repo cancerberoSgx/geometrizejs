@@ -167,9 +167,9 @@ That should re-generate `geometrizejs/src/geometrize.js`.
  * `shapeMutationsPerStep: number`: The number of times to mutate each candidate shape.
 
 ## TODO / Roadmap
-
-- [ ] sourcemaps https://haxe.org/manual/debugging-source-map.html
+- [ ] research wasm build using haxe
 - [ ] browser tests
+- [x] sourcemaps https://haxe.org/manual/debugging-source-map.html
 - [x] bitmap output tests
 - [x] JSON output tests
 - [ ] performance tests. use different options and input image sizes and generate timings and output image diffs (as numbers - for example using imagemagick) - so we can better understand how options/image size/output quality relationships are. See https://github.com/Tw1ddle/geometrize-haxe-web/issues/3#issuecomment-504424092
