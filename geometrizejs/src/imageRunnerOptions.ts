@@ -1,4 +1,4 @@
-import { ShapeTypes } from "./shapeTypes"
+import { ShapeTypes } from './shapeTypes'
 
 /**
  * Encapsulates the parameters that may be passed to an image runner.
@@ -10,19 +10,19 @@ export interface ImageRunnerOptions {
    */
   shapeTypes?: Array<ShapeTypes>
 
-	/**
-	 * The opacity of the shapes (0-255). By default `128`.
-	 */
+  /**
+   * The opacity of the shapes (0-255). By default `128`.
+   */
   alpha?: number
 
-	/**
-	 * The number of candidate shapes to try per model step. By default `50`.
-	 */
+  /**
+   * The number of candidate shapes to try per model step. By default `50`.
+   */
   candidateShapesPerStep?: number
 
-	/**
-	 * The number of times to mutate each candidate shape. By default `100`.
-	 */
+  /**
+   * The number of times to mutate each candidate shape. By default `100`.
+   */
   shapeMutationsPerStep?: number
 
   // /**

@@ -34,7 +34,7 @@
   "homepage": "https://www.npmjs.com/package/geometrizejs-extra",
   "dependencies": {
     "cross-fetch": "^3.0.4",
-    "geometrizejs": "0.0.15",
+    "geometrizejs": "0.0.17",
     "jimp": "^0.6.4",
     "misc-utils-of-mine-generic": "^0.2.15",
     "mujer": "0.0.5",

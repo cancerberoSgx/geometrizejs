@@ -1,3 +1,5 @@
+You probably want to go to [Geometrizejs library home page](geometrizejs), or see its [playgroud](playground) 
+
 Projects:
 
  * [geometrizejs](geometrizejs)

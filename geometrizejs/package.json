@@ -1,6 +1,6 @@
 {
   "name": "geometrizejs",
-  "version": "0.0.16",
+  "version": "0.0.17",
   "description": "Geometrize JavaScript API. Generated from geometrize-haxe library directly. Zero dependencies. No implementation, just typings. For node.js and browsers.",
   "main": "dist/src/index.js",
   "types": "dist/src/index.d.ts",
@@ -14,9 +14,7 @@
     "clean": "rm -rf tmp* dist",
     "build": "npm run clean && npx tsc && npm run copy",
     "copy": "cp src/geometrize.js assets/geometrize.js.map dist/src",
-    "format": "npx ts-refactor format \"src/**/*.ts*\" \"test/**/*.ts*\" ./formatCodeSettings.json --tsConfigPath ./tsconfig.json --dontAsk",
-    "organizeImports": "npx ts-refactor organizeImports \"src/**/*.ts*\" \"test/**/*.ts*\" ./formatCodeSettings.json --tsConfigPath ./tsconfig.json --dontAsk ",
-    "lint": "npm run organizeImports && npm run format",
+    "lint": " npx ts-refactor format \"src/**/*.ts*\" \"spec/**/*.ts*\" ./formatCodeSettings.json --tsConfigPath ./tsconfig.json --dontAsk",
     "docs-readme-toc": "npx markdown-toc README.md -i",
     "docs": "npm run docs-readme-toc",
     "all": "npm run clean && npm run lint && npm run build && npm run test && npm run test-js && npm run test-browser",
@@ -24,19 +22,21 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "ava": "^2.2.0",
-    "jimp": "^0.6.4",
+    "ava": "^2.4.0",
+    "jimp": "^0.8.5",
     "markdown-toc": "^1.2.0",
-    "ts-node": "^8.3.0",
-    "ts-refactor": "0.0.6",
-    "typescript": "^3.5.3"
+    "ts-node": "^8.4.1",
+    "ts-refactor": "0.0.11",
+    "typescript": "^3.6.4"
   },
   "keywords": [
     "geometrize",
     "JavaScript",
     "browser",
     "Node.js",
-    "API"
+    "API",
+    "image",
+    "TypeScript"
   ],
   "author": {
     "name": "Sebastian Gurin",

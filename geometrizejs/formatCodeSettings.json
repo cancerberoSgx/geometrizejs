@@ -1,7 +1,7 @@
 {
   "insertSpaceBeforeAndAfterBinaryOperators": true,
   "insertSpaceAfterCommaDelimiter": true,
-  "insertSpaceAfterSemicolonInForStatements": false,
+  "insertSpaceAfterSemicolonInForStatements": true,
   "insertSpaceAfterConstructor": false,
   "insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis": false,
   "insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets": false,
@@ -15,11 +15,14 @@
   "insertSpaceBeforeTypeAnnotation": false,
   "indentMultiLineObjectLiteralBeginningOnBlankLine": true,
   "indentSize": 2,
-  "tabSize": 2,
   "convertTabsToSpaces": true,
   "quotePreference": "single",
   "importModuleSpecifierPreference": "relative",
   "importModuleSpecifierEnding": "minimal",
   "allowTextChangesInNewFiles": true,
-  "trailingSemicolon": false
+  "trailingSemicolons": "never",
+  "trailingSemicolon": "never",
+  "formatJsdocs": true,
+  "organizeImports": true,
+  "jsdocLineMaxLength": 110
 }

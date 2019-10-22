@@ -41,3 +41,4 @@ svg-png-converter
 /tmp*
 .cache
 build
+assets

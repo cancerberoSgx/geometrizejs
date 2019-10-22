@@ -1,4 +1,4 @@
-import { Bitmap, Rect } from "./bitmap"
+import { Bitmap, Rect } from './bitmap'
 import { ImageRunnerOptions } from './imageRunnerOptions'
 import { ShapeResult } from './model'
 
@@ -31,7 +31,8 @@ export interface ImageRunner {
    * The algorithm will only consider a region of the entire bitmap. 
    * If null is passed it will reset the offset (default behaviour)
    * New shapes will be generated randombly but only inside this region.
-  **/
+   * 
+   */
   setOffset(offset?: Rect): void
 
 }

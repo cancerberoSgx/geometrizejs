@@ -3,19 +3,19 @@
  */
 export interface Scanline {
 
-	/**
-	 * The y-coordinate of the scanline.
-	 */
+  /**
+   * The y-coordinate of the scanline.
+   */
   y: number
 
-	/**
-	 * The leftmost x-coordinate of the scanline.
-	 */
+  /**
+   * The leftmost x-coordinate of the scanline.
+   */
   x1: number
 
-	/**
-	 * The rightmost x-coordinate of the scanline.
-	 */
+  /**
+   * The rightmost x-coordinate of the scanline.
+   */
   x2: number
 
 }
