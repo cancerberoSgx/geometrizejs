@@ -1,6 +1,6 @@
 import * as React from 'react'
 
-export const ForkRibbon = () => <div className="forkRibbon" dangerouslySetInnerHTML={getRibbonHtml()} />
+export const ForkRibbon = () => <div className='forkRibbon' dangerouslySetInnerHTML={getRibbonHtml()} />
 
 function getRibbonHtml() {
   return {

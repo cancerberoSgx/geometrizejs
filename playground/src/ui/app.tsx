@@ -16,7 +16,7 @@ export class App extends AbstractComponent {
   }
 
   render() {
-    return <Container fluid textAlign="left">
+    return <Container fluid textAlign='left'>
       <Header />
       <Body />
       <ForkRibbon />

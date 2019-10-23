@@ -1,4 +1,5 @@
 import { Bitmap, ImageRunner, ShapeTypes, SvgExporter } from 'geometrizejs'
+import { ShapeResult } from 'geometrizer-js'
 import Jimp from 'jimp'
 import { enumNoValueKeys, sleep } from 'misc-utils-of-mine-generic'
 import * as React from 'react'
@@ -6,7 +7,6 @@ import { Button, Segment } from 'semantic-ui-react'
 import { blobToBuffer, BufferClass } from '../../app/buffer'
 import { getStore } from '../../app/store'
 import { AbstractComponent } from '../component'
-import { ShapeResult } from 'geometrizer-js'
 
 enum ShapeTypesEnum {
   Circle = ShapeTypes.CIRCLE,
@@ -23,9 +23,9 @@ export class Options extends AbstractComponent {
   svg: string = ''
   render() {
     return (
-      <Segment basic className="loadImage">
+      <Segment basic className='loadImage'>
         <label>Choose file
-        <input type="file" onChange={async e => {
+        <input type='file' onChange={async e => {
             if (e.currentTarget.files && e.currentTarget.files.length) {
               const size = e.currentTarget.files[0].size
               const name = e.currentTarget.files[0].name
@@ -35,19 +35,19 @@ export class Options extends AbstractComponent {
             }
           }}></input>
         </label><br />
-        <label>Iterations<input type="number" min="1" value={this.state.iterations} onChange={e => {
+        <label>Iterations<input type='number' min='1' value={this.state.iterations} onChange={e => {
           this.setState({ iterations: e.currentTarget.valueAsNumber })
         }} /></label><br />
-        <label>candidateShapesPerStep<input type="number" min="1" value={this.state.candidateShapesPerStep} onChange={e => {
+        <label>candidateShapesPerStep<input type='number' min='1' value={this.state.candidateShapesPerStep} onChange={e => {
           this.setState({ candidateShapesPerStep: e.currentTarget.valueAsNumber })
         }} /></label><br />
-        <label>Alpha<input type="number" min="1" value={this.state.alpha} onChange={e => {
+        <label>Alpha<input type='number' min='1' value={this.state.alpha} onChange={e => {
           this.setState({ alpha: e.currentTarget.valueAsNumber })
         }} /></label><br />
-        <label>shapeMutationsPerStep<input type="number" min="1" value={this.state.shapeMutationsPerStep} onChange={e => {
+        <label>shapeMutationsPerStep<input type='number' min='1' value={this.state.shapeMutationsPerStep} onChange={e => {
           this.setState({ shapeMutationsPerStep: e.currentTarget.valueAsNumber })
         }} /></label><br />
-        <label>stepInterval<input type="number" min="1" value={this.state.stepInterval} onChange={e => {
+        <label>stepInterval<input type='number' min='1' value={this.state.stepInterval} onChange={e => {
           this.setState({ stepInterval: e.currentTarget.valueAsNumber })
         }} /></label><br />
         <label>Shapes: <br /><select multiple onChange={e => {

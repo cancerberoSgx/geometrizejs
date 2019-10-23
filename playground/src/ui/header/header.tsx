@@ -7,7 +7,7 @@ import { About } from './about'
 export class Header extends AbstractComponent {
   render() {
     return (<Menu>
-      <Menu.Menu position="right">
+      <Menu.Menu position='right'>
         <Dropdown item text='Examples' >
           <Dropdown.Menu>
             <Dropdown.Item text='TODO' onClick={e => { }} />
@@ -16,7 +16,7 @@ export class Header extends AbstractComponent {
         <Dropdown item text='More'>
           <Dropdown.Menu>
             <Dropdown.Item icon='edit' text='Create Url' onClick={createUrl} />
-            <Modal trigger={<Dropdown.Item icon="help circle" text="About" />}>
+            <Modal trigger={<Dropdown.Item icon='help circle' text='About' />}>
               <Modal.Header>About</Modal.Header>
               <Modal.Content>
                 <About />

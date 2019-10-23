@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { State } from "../app/state"
+import { State } from '../app/state'
 import { getStore } from '../app/store'
 
 export interface AbstractProps {
