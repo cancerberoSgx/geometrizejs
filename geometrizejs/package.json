@@ -7,7 +7,7 @@
   "scripts": {
     "test": "npm run build && ava",
     "test-browser": "exit 0; npx ava test-browser/*Test.ts",
-    "test-js": "npm run build && npx ava ./dist/test/*Test.js",
+    "test-js": "npm run build && npx ava --config ava.config-js.js",
     "test-watch": "ava -w",
     "prepare": "npm run build",
     "test-debug": "node --inspect-brk node_modules/ava/cli.js --serial",
@@ -22,12 +22,12 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "ava": "^2.4.0",
-    "jimp": "^0.8.5",
+    "ava": "^3.15.0",
+    "jimp": "^0.16.1",
     "markdown-toc": "^1.2.0",
-    "ts-node": "^8.4.1",
+    "ts-node": "^9.1.1",
     "ts-refactor": "0.0.11",
-    "typescript": "^3.6.4"
+    "typescript": "^4.2.3"
   },
   "keywords": [
     "geometrize",

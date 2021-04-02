@@ -1,11 +1,11 @@
 export default {
-	"files": [
+	files: [
     "test/*Test.ts*"
   ],
-  "extensions": ['ts'],
-  "compileEnhancements": false,
-  failFast:true,
-  "require": [
+  extensions: ['ts'],
+  failFast: true,
+  require: [
     "ts-node/register"
-  ]
+  ],
 };
+
