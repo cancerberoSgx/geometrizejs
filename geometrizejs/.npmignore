@@ -25,6 +25,7 @@ zangano
 zangano-demo
 astq-query*
 ava.config.js
+ava.config-js.js
 nyc.config.js
 TODO.md
 ts-ast
