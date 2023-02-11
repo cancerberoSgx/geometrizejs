@@ -22,7 +22,7 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "ava": "^3.15.0",
+    "ava": "^5.2.0",
     "jimp": "^0.16.1",
     "markdown-toc": "^1.2.0",
     "ts-node": "^9.1.1",
